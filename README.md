@@ -1,5 +1,5 @@
 # SCADA system
-## Project for SCADA Software (VI Semester)
+## Project for course SCADA Software (VI Semester)
 
 ## Team members
 - [Anastasija Savić](https://github.com/savic-a) SV7/2020
