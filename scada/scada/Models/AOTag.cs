@@ -1,5 +1,7 @@
 ﻿namespace scada.Models
 {
+
+    // should be loaded from CONFIG file, not DB
     public class AOTag : Tag
     {
         public string Units { get; set; }
