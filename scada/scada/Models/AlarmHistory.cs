@@ -1,5 +1,6 @@
 ﻿namespace scada.Models
 {
+    // should be saved to DB
     public class AlarmHistory
     {
         public int Id { get; set; }
