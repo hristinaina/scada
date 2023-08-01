@@ -6,11 +6,11 @@
         public int Id { get; set; }
         public double Value { get; set; }
         public DateTime Timestamp { get; set; }
-        public Tag Tag { get; set; }
+        public int TagId { get; set; }
 
-        public TagHistory(Tag tag, double value) 
+        public TagHistory(int tagId, double value) 
         {
-            Tag = tag;
+            TagId = tagId;
             Value = value;
             Timestamp = DateTime.Now;
         }

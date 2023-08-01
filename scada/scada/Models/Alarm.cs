@@ -6,7 +6,7 @@
         public int Id { get; set; }
         public AlarmType Type { get; set; }
         public int Priority { get; set; }
-        public double Limit { get; set; }
+        public double Border { get; set; }
 
     }
 
