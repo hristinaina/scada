@@ -1,4 +1,5 @@
 using scada.Database;
+using scada.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,16 +8,6 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
-
-using (var dbContext = new ApplicationDbContext())
-{
-    // Perform database operations using dbContext
-    var alarmHistory = dbContext.AlarmHistory.ToList();
-    Console.WriteLine(alarmHistory.Count);
-
-    // Do something with the retrieved products...
-}
-
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
