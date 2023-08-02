@@ -8,16 +8,11 @@ builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
-Console.WriteLine("Jadni pokusaj");
-
-Console.WriteLine("Testttt");
-
 using (var dbContext = new ApplicationDbContext())
 {
-    Console.WriteLine("Stigli");
     // Perform database operations using dbContext
-    var products = dbContext.AlarmHistories.ToList();
-    Console.WriteLine(products.Count);
+    var alarmHistory = dbContext.AlarmHistory.ToList();
+    Console.WriteLine(alarmHistory.Count);
 
     // Do something with the retrieved products...
 }

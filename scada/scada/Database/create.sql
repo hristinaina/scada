@@ -2,14 +2,14 @@ create database scada;
 
 use scada;
 
-CREATE TABLE AlarmHistories (
+CREATE TABLE AlarmHistory (
     Id INT PRIMARY KEY AUTO_INCREMENT,
     Timestamp DATETIME NOT NULL,
     TagId INT NOT NULL,
     AlarmId INT NOT NULL
 );
 
-CREATE TABLE TagHistories (
+CREATE TABLE TagHistory (
     Id INT PRIMARY KEY AUTO_INCREMENT,
     Value DOUBLE NOT NULL,
     Timestamp DATETIME NOT NULL,

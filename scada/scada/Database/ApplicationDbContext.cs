@@ -7,9 +7,10 @@ namespace scada.Database
 {
     public class ApplicationDbContext : DbContext
     {
-        public DbSet<AlarmHistory> AlarmHistories { get; set; }
+        // this name needs to be the same as the name of the table in db
+        public DbSet<AlarmHistory> AlarmHistory { get; set; }
 
-        public DbSet<TagHistory> TagHistories { get; set; }
+        public DbSet<TagHistory> TagHistory { get; set; }
 
         public DbSet<User> Users { get; set; }
 
