@@ -1,10 +1,10 @@
-INSERT INTO User (Email, Password, Role)
+INSERT INTO Users (Email, Password, Role)
 VALUES
     ('pera@gmail.com', '123', 'Admin'),
     ('mira@gmail.com', '123', 'Client'),
     ('jova@gmail.com', '123', 'Client');
     
-INSERT INTO AlarmHistory (Timestamp, TagId, AlarmId)
+INSERT INTO AlarmHistories (Timestamp, TagId, AlarmId)
 VALUES
     ('2023-08-01 10:00:00', 1, 2),
     ('2023-08-01 11:30:00', 2, 3),
@@ -17,7 +17,7 @@ VALUES
     ('2023-08-03 11:30:00', 3, 3),
     ('2023-08-03 15:15:00', 1, 2);
     
-INSERT INTO TagHistory (Value, Timestamp, TagId)
+INSERT INTO TagHistories (Value, Timestamp, TagId)
 VALUES
     (123.45, '2023-08-01 10:00:00', 1),
     (67.89, '2023-08-01 11:30:00', 2),
