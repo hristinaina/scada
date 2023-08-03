@@ -1,0 +1,34 @@
+﻿#container {
+    text-align: center;
+    margin-top: 20%;
+
+}
+
+.label {
+    display: inline-block;
+    width: 10em;
+    font-size: larger;
+    text-align: left;
+    font-weight: bold;
+    margin-bottom: 2em;
+}
+
+.input {
+    display: inline-block;
+    margin-left: 5em;
+}
+
+#login {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 2em;
+    width: 10em;
+    height: 2.2em;
+    background: #618aa8;
+    border-radius: 5px;
+    color: white;
+    border: none;
+    text-align: center;
+    font-weight: bold;
+}
