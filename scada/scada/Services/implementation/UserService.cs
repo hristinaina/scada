@@ -13,5 +13,15 @@ namespace scada.Services
                 return users;
             }
         }
+
+        public bool login(string email, string password)
+        {
+            List<User> users = get();
+            foreach (var user in users)
+            {
+                if (user.Email == email && user.Password == password) return true;
+            }
+            return false;
+        }
     }
 }

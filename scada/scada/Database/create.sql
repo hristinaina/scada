@@ -20,5 +20,5 @@ CREATE TABLE Users (
     Id INT PRIMARY KEY AUTO_INCREMENT,
     Email VARCHAR(255) NOT NULL,
     Password VARCHAR(255) NOT NULL,
-    Role ENUM('Admin', 'Client') NOT NULL
+    Role INT NOT NULL
 );

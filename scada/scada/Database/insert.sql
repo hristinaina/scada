@@ -1,8 +1,8 @@
 INSERT INTO Users (Email, Password, Role)
 VALUES
-    ('pera@gmail.com', '123', 'Admin'),
-    ('mira@gmail.com', '123', 'Client'),
-    ('jova@gmail.com', '123', 'Client');
+    ('pera@gmail.com', '123', 0),
+    ('mira@gmail.com', '123', 1),
+    ('jova@gmail.com', '123', 1);
     
 INSERT INTO AlarmHistory (Timestamp, TagId, AlarmId)
 VALUES
