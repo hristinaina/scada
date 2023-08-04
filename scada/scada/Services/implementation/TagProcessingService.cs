@@ -10,7 +10,7 @@ namespace scada.Services
             1. for input tags = in trending app after scanning 
             2. for output tags = when value is changed (manually)
         */
-        public void SaveTagValue(Tag tag, double value)
+        public void SaveTagValue(int tag, double value)
         {
             TagHistory tagHistory = new TagHistory(tag, value);
             //todo save tagHistory to db
