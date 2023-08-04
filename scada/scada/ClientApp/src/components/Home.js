@@ -15,7 +15,7 @@ export class Home extends Component {
         };
 
         try {
-            const response = await axios.post('api/user/login', loginData);
+            const response = await axios.post('http://localhost:5083/api/user/login', loginData);
 
             console.log("Login successful!!!", response.data);
         }

@@ -8,17 +8,25 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowMyFrontend", builder =>
+    {
+        builder.WithOrigins("*")
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
+
 var app = builder.Build();
+
+app.UseCors("AllowMyFrontend");
+
+app.MapGet("/", () => "Hello World!");
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
-}
-
-using (var dbContext = new ApplicationDbContext())
-{
-    List<User> users = dbContext.Users.ToList();
-    Console.WriteLine(users[0].Email);
 }
 
 app.UseStaticFiles();
