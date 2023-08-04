@@ -1,9 +1,19 @@
-import React, { Component } from 'react';
+import React, { Component, } from 'react';
 import './Home.css';
 import axios from 'axios';
+import { Counter } from './Counter';
+
 
 export class Home extends Component {
     static displayName = Home.name;
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            loggedIn: false,
+        };
+    }
 
     handleLogin = async () => {
         const email = document.getElementsByName('email')[0].value;
@@ -18,6 +28,7 @@ export class Home extends Component {
             const response = await axios.post('http://localhost:5083/api/user/login', loginData);
 
             console.log("Login successful!!!", response.data);
+            this.setState({ loggedIn: true });
         }
         catch (error) {
             console.log("Login failed: ", error);
@@ -25,7 +36,12 @@ export class Home extends Component {
     };
 
     render() {
+        if (this.state.loggedIn) {
+            // TODO : change this later
+            return <Counter />;
+        }
         return (
+
             <div id="container">
                 <p
                     class="label">Email: </p>
