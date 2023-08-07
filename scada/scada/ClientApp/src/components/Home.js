@@ -14,7 +14,12 @@ export class Home extends Component {
 
         this.state = {
             loggedIn: false,
+            showSignUp: false,
         };
+    }
+
+    signUp = () => {
+        this.setState({ loggedIn: false, showSignUp: true, });
     }
 
     handleLogin = async () => {
@@ -40,7 +45,11 @@ export class Home extends Component {
     render() {
         if (this.state.loggedIn) {
             // TODO : change this later
-            return <Counter />;
+            return <Counter/>;
+        }
+        else if (this.state.showSignUp) {
+            // TODO : change this after sign up implementation
+            return <Counter/>
         }
         return (
 
@@ -68,7 +77,7 @@ export class Home extends Component {
                 >Log in</button>
 
                 <p id="account">No account?</p>
-                <p id="signup">Sign up</p>
+                <p id="sign-up" onClick={this.signUp}>Sign up</p>
           </div>
         );
   }

@@ -53,11 +53,12 @@
     width: 40%;
 }
 
-#signup {
+#sign-up {
     display: inline-block;
     width: 40%;
     text-align: right;
     margin-right: 2em;
     font-weight: bold;
     text-decoration: underline;
+    cursor: pointer;
 }
