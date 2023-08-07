@@ -1,4 +1,12 @@
-﻿#container {
+﻿* {
+    font-family: 'Poppins';
+}
+
+#title {
+    font-size: 3em;
+}
+
+#container {
     text-align: center;
     margin-top: 20%;
 

@@ -1,5 +1,6 @@
 import React, { Component, } from 'react';
 import './Home.css';
+import '../fonts.css';
 import axios from 'axios';
 import { Counter } from './Counter';
 import { NavMenu } from './NavMenu';
@@ -44,6 +45,7 @@ export class Home extends Component {
         return (
 
             <div id="container">
+                <p id="title">Login</p>
                 <NavMenu showNavbar={false} />
                 <p
                     class="label">Email: </p>
