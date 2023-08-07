@@ -1,9 +1,15 @@
-import React, { Component, } from 'react';
+import React, { Component } from 'react';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
 import './Home.css';
 import '../fonts.css';
 import axios from 'axios';
 import { Counter } from './Counter';
 import { NavMenu } from './NavMenu';
+
+function Alert(props) {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
 
 export class Home extends Component {
@@ -15,8 +21,25 @@ export class Home extends Component {
         this.state = {
             loggedIn: false,
             showSignUp: false,
+            showSnackbar: false,
+            snackbarSeverity: 'success', // 'success' or 'error'
+            snackbarMessage: '',
+            open: false,
+            setOpen: false,
         };
+
     }
+    handleClick = () => {
+        this.setOpen(true);
+    };
+
+    handleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        this.setOpen(false);
+    };
 
     signUp = () => {
         this.setState({ loggedIn: false, showSignUp: true, });
@@ -35,12 +58,21 @@ export class Home extends Component {
             const response = await axios.post('http://localhost:5083/api/user/login', loginData);
 
             console.log("Login successful!!!", response.data);
-            this.setState({ loggedIn: true });
+            this.setState({ loggedIn: true, showSnackbar: true, snackbarSeverity: 'success', snackbarMessage: 'Login successful!' });
         }
         catch (error) {
             console.log("Login failed: ", error);
+            this.setState({ showSnackbar: true, snackbarSeverity: 'error', snackbarMessage: 'Login failed. Please check your credentials.' });
         }
     };
+
+    handleSnackbarClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        this.setState({ showSnackbar: false });
+    };
+
 
     render() {
         if (this.state.loggedIn) {
@@ -48,7 +80,7 @@ export class Home extends Component {
             return <Counter/>;
         }
         else if (this.state.showSignUp) {
-            // TODO : change this after sign up implementation
+            // TODO : change this after sign up component implementation
             return <Counter/>
         }
         return (
@@ -78,6 +110,12 @@ export class Home extends Component {
 
                 <p id="account">No account?</p>
                 <p id="sign-up" onClick={this.signUp}>Sign up</p>
+{/*                <Snackbar open={this.state.showSnackbar} autoHideDuration={6000} onClose={this.handleSnackbarClose}>
+                    <Alert onClose={this.handleSnackbarClose} severity={this.state.snackbarSeverity}>
+                        {this.state.snackbarMessage}
+                    </Alert>
+                </Snackbar>*/}
+
           </div>
         );
   }
