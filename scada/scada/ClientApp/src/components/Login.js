@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
-import './Home.css';
+import './Login.css';
 import '../fonts.css';
 import axios from 'axios';
 import { Counter } from './Counter';
@@ -12,8 +12,8 @@ function Alert(props) {
 }
 
 
-export class Home extends Component {
-    static displayName = Home.name;
+export class Login extends Component {
+    static displayName = Login.name;
 
     constructor(props) {
         super(props);
