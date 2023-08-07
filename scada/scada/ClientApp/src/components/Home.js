@@ -45,7 +45,7 @@ export class Home extends Component {
         return (
 
             <div id="container">
-                <p id="title">Login</p>
+                <p id="title" class="label">Login</p>
                 <NavMenu showNavbar={false} />
                 <p
                     class="label">Email: </p>
@@ -53,6 +53,7 @@ export class Home extends Component {
                     class="input"
                     type="email"
                     name="email"
+                    placeholder="example@domain.com"
                 ></input>
                 <br></br>
                 <p class="label">Password: </p>
@@ -65,6 +66,9 @@ export class Home extends Component {
                     id="login"
                     onClick={this.handleLogin}
                 >Log in</button>
+
+                <p id="account">No account?</p>
+                <p id="signup">Sign up</p>
           </div>
         );
   }
