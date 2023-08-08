@@ -4,8 +4,8 @@ namespace scada.Services
 {
     public interface IUserService
     {
-        public List<User> get();
+        public List<User> Get();
 
-        public bool login(string email, string password);
+        public bool Login(string email, string password);
     }
 }

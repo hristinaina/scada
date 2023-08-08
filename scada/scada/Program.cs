@@ -18,6 +18,8 @@ builder.Services.AddCors(options =>
     });
 });
 
+builder.Services.AddTransient<IUserService, UserService>();
+
 var app = builder.Build();
 
 app.UseCors("AllowMyFrontend");

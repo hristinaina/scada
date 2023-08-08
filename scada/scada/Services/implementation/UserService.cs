@@ -5,7 +5,7 @@ namespace scada.Services
 {
     public class UserService : IUserService
     {
-        public List<User> get()
+        public List<User> Get()
         {
             using (var dbContext = new ApplicationDbContext())
             {
@@ -14,9 +14,9 @@ namespace scada.Services
             }
         }
 
-        public bool login(string email, string password)
+        public bool Login(string email, string password)
         {
-            List<User> users = get();
+            List<User> users = Get();
             foreach (var user in users)
             {
                 if (user.Email == email && user.Password == password) return true;
