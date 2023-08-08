@@ -1,5 +1,3 @@
-using scada.Database;
-using scada.Models;
 using scada.Services;
 
 var builder = WebApplication.CreateBuilder(args);
