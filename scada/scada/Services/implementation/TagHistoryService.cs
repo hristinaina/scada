@@ -6,7 +6,7 @@ namespace scada.Services
     public class TagHistoryService : ITagHistoryService
     {
 
-        public List<TagHistory> get()
+        public List<TagHistory> Get()
         {
             using (var dbContext = new ApplicationDbContext())
             {

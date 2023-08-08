@@ -19,6 +19,8 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddTransient<IUserService, UserService>();
+builder.Services.AddTransient<IAlarmHistoryService, AlarmHistoryService>();
+builder.Services.AddTransient<ITagHistoryService, TagHistoryService>();
 
 var app = builder.Build();
 

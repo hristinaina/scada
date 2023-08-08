@@ -4,6 +4,6 @@ namespace scada.Services
 {
     public interface ITagHistoryService
     {
-        public List<TagHistory> get();
+        public List<TagHistory> Get();
     }
 }

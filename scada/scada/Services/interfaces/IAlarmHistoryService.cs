@@ -4,6 +4,6 @@ namespace scada.Services
 {
     public interface IAlarmHistoryService
     {
-        public List<AlarmHistory> get();
+        public List<AlarmHistory> Get();
     }
 }
