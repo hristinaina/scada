@@ -1,0 +1,64 @@
+﻿* {
+    font-family: 'Poppins';
+}
+
+#container {
+    margin-top: 5%;
+    margin-left: auto;
+    margin-right: auto;
+    width: 25em;
+}
+
+#title {
+    font-size: 3em;
+    margin-bottom: 1.2em;
+
+}
+
+.label {
+    font-size: larger;
+    font-weight: bold;
+    text-align: left;
+    margin-top: 2em;
+}
+
+.input {
+    text-align: left;
+    padding-left: 15px;
+    width: 25em;
+    height: 40px;
+    border-radius: 10px;
+}
+
+#login {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 3em;
+    width: 25em;
+    height: 2.2em;
+    background: #000000;
+    border-radius: 20px;
+    color: white;
+    border: none;
+    text-align: center;
+    font-weight: bold;
+}
+
+#account {
+    display: inline-block;
+    color: gray;
+    margin-left: 2em;
+    margin-top: 1.5em;
+    width: 40%;
+}
+
+#sign-up {
+    display: inline-block;
+    width: 40%;
+    text-align: right;
+    margin-right: 2em;
+    font-weight: bold;
+    text-decoration: underline;
+    cursor: pointer;
+}

@@ -6,7 +6,7 @@ namespace scada.Services
 {
     public class AlarmHistoryService : IAlarmHistoryService
     {
-        public List<AlarmHistory> get()
+        public List<AlarmHistory> Get()
         {
             using (var dbContext = new ApplicationDbContext())
             {
