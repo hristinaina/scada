@@ -1,19 +1,20 @@
 import { Counter } from "./components/Counter";
-import { FetchData } from "./components/FetchData";
-import { Login } from "./components/Login";
+import { Trending } from "./components/Trending/Trending";
+import { Login } from "./components/Login/Login";
 
 const AppRoutes = [
   {
+    path: '/',
     index: true,
     element: <Login />
   },
   {
     path: '/counter',
-    element: <Counter />
+      element: <Counter />
   },
   {
-    path: '/fetch-data',
-    element: <FetchData />
+      path: '/trending',
+      element: <Trending />
   }
 ];
 
