@@ -2,10 +2,11 @@ import React, { Component } from 'react';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 import './Login.css';
-import '../fonts.css';
+import '../../fonts.css';
 import axios from 'axios';
-import { Counter } from './Counter';
-import { NavMenu } from './NavMenu';
+import { Counter } from '../Counter';
+import { NavMenu } from '../Nav/NavMenu';
+import { Navigate } from 'react-router-dom';
 
 function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -77,7 +78,7 @@ export class Login extends Component {
     render() {
         if (this.state.loggedIn) {
             // TODO : change this later
-            return <Counter/>;
+            return <Navigate to="/trending" replace/>;
         }
         else if (this.state.showSignUp) {
             // TODO : change this after sign up component implementation
@@ -86,20 +87,20 @@ export class Login extends Component {
         return (
 
             <div id="container">
-                <p id="title" class="label">Login</p>
+                <p id="title" className="label">Login</p>
                 <NavMenu showNavbar={false} />
                 <p
-                    class="label">Email: </p>
+                    className="label">Email: </p>
                 <input
-                    class="input"
+                    className="input"
                     type="email"
                     name="email"
                     placeholder="example@domain.com"
                 ></input>
                 <br></br>
-                <p class="label">Password: </p>
+                <p className="label">Password: </p>
                 <input
-                    class="input"
+                    className="input"
                     type="password"
                     name="password"></input>
                 <button
