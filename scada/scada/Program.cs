@@ -7,12 +7,13 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-// Saving AITags to XML
 List<AITag> aiTags = new List<AITag>();
-AITag tag = new AITag();
-// Populate your aiTags list here...
+AITag tag = new AITag(true, 1000, DriverEnum.SIM, "celzius", 10, 25, new List<Alarm>());
+AITag tag2 = new AITag(true, 500, DriverEnum.SIM, "celzius", 0, 15, new List<Alarm>());
+aiTags.Add(tag);
+aiTags.Add(tag2);
 
-string filePath = "config.xml";
+string filePath = "Data/Config/config.xml";
 XmlSerializationHelper.SaveToXml(aiTags, filePath);
 
 // Loading AITags from XML

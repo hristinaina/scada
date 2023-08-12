@@ -22,6 +22,7 @@ namespace scada.Data
             using (TextWriter writer = new StreamWriter(filePath))
             {
                 serializer.Serialize(writer, objects);
+                //writer.Flush();
             }
         }
     }

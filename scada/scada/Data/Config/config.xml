@@ -1,24 +1,23 @@
-﻿<AITags>
-	<AITag>
-		<Id>1</Id>
-		<TagName>Temperature</TagName>
-		<Description>Temperature sensor</Description>
-		<Address>1</Address>
-		<IsScanning>true</IsScanning>
-		<ScanTime>1000</ScanTime>
-		<Driver>SIM</Driver>
-		<Units>Celsius</Units>
-		<LowLimit>0</LowLimit>
-		<HighLimit>100</HighLimit>
-		<Alarms>
-			<Alarm>
-				<Type>High</Type>
-				<Value>90</Value>
-			</Alarm>
-			<Alarm>
-				<Type>Low</Type>
-				<Value>10</Value>
-			</Alarm>
-		</Alarms>
-	</AITag>
-</AITags>
+<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfAITag xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <AITag>
+    <Id>0</Id>
+    <IsScanning>true</IsScanning>
+    <ScanTime>1000</ScanTime>
+    <Driver>SIM</Driver>
+    <Units>celzius</Units>
+    <LowLimit>10</LowLimit>
+    <HighLimit>25</HighLimit>
+    <Alarms />
+  </AITag>
+  <AITag>
+    <Id>0</Id>
+    <IsScanning>true</IsScanning>
+    <ScanTime>500</ScanTime>
+    <Driver>SIM</Driver>
+    <Units>celzius</Units>
+    <LowLimit>0</LowLimit>
+    <HighLimit>15</HighLimit>
+    <Alarms />
+  </AITag>
+</ArrayOfAITag>
