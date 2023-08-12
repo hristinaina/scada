@@ -1,0 +1,24 @@
+﻿<AITags>
+	<AITag>
+		<Id>1</Id>
+		<TagName>Temperature</TagName>
+		<Description>Temperature sensor</Description>
+		<Address>1</Address>
+		<IsScanning>true</IsScanning>
+		<ScanTime>1000</ScanTime>
+		<Driver>SIM</Driver>
+		<Units>Celsius</Units>
+		<LowLimit>0</LowLimit>
+		<HighLimit>100</HighLimit>
+		<Alarms>
+			<Alarm>
+				<Type>High</Type>
+				<Value>90</Value>
+			</Alarm>
+			<Alarm>
+				<Type>Low</Type>
+				<Value>10</Value>
+			</Alarm>
+		</Alarms>
+	</AITag>
+</AITags>

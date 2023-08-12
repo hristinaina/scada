@@ -1,8 +1,25 @@
+using scada.Data;
+using scada.Models;
 using scada.Services;
+using System.Collections.Generic;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
+// Saving AITags to XML
+List<AITag> aiTags = new List<AITag>();
+AITag tag = new AITag();
+// Populate your aiTags list here...
+
+string filePath = "config.xml";
+XmlSerializationHelper.SaveToXml(aiTags, filePath);
+
+// Loading AITags from XML
+List<AITag> loadedAITags = XmlSerializationHelper.LoadFromXml<AITag>(filePath);
+// Now you have your AITags loaded from the XML file.
+Console.WriteLine("Ucitavam...");
+Console.WriteLine(loadedAITags.Count);
 
 builder.Services.AddControllersWithViews();
 
