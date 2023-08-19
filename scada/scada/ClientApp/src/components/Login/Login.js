@@ -7,6 +7,7 @@ import axios from 'axios';
 import { Counter } from '../Counter';
 import { NavMenu } from '../Nav/NavMenu';
 import { Navigate } from 'react-router-dom';
+import userService from '../../services/UserService';
 
 function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -59,6 +60,7 @@ export class Login extends Component {
             const response = await axios.post('http://localhost:5083/api/user/login', loginData);
 
             console.log("Login successful!!!", response.data);
+            userService.setRole(response.data['message'])
             this.setState({ loggedIn: true, showSnackbar: true, snackbarSeverity: 'success', snackbarMessage: 'Login successful!' });
         }
         catch (error) {
@@ -77,7 +79,6 @@ export class Login extends Component {
 
     render() {
         if (this.state.loggedIn) {
-            // TODO : change this later
             return <Navigate to="/trending" replace/>;
         }
         else if (this.state.showSignUp) {
