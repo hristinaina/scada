@@ -13,8 +13,6 @@ namespace RTUSimulator
         public int LowLimit { get; set; }
         public int HighLimit { get; set; }
 
-        public RTU() { }
-
         public RTU(string address, int lowLimit, int highLimit)
         {
             Address = address;
