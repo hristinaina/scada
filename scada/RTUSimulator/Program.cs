@@ -1,24 +1,67 @@
-﻿using System;
+﻿using RTUSimulator;
+using System;
 using System.Net.Http;
 using System.Net.Http.Json;
+using System.Threading;
 using System.Threading.Tasks;
 
 class Program
 {
-    static async Task Main(string[] args)
-    {
-        var httpClient = new HttpClient();
-        var sensorData = new { email = "pera@gmail.com", password = "123" }; // Example sensor data
+    Random timeRandom = new Random();
+    List<RTU> rtuData = new List<RTU>();
+    List<Task> tasks = new List<Task>();
 
-        try
+    async Task Main(string[] args)
+    {
+        createRTUData();
+        createThreads();
+    }
+
+    void createRTUData()
+    {
+        rtuData.Add(new RTU("a1", 0, 100));
+        rtuData.Add(new RTU("a2", 0, 100));
+        rtuData.Add(new RTU("a3", -100, 50));
+        rtuData.Add(new RTU("a4", -100, 50));
+        rtuData.Add(new RTU("a5", -100, 50));
+
+        rtuData.Add(new RTU("d1", 0, 1));
+        rtuData.Add(new RTU("d2", 0, 1));
+        rtuData.Add(new RTU("d3", 0, 1));
+        rtuData.Add(new RTU("d4", 0, 1));
+        rtuData.Add(new RTU("d5", 0, 1));
+    }
+
+    void createThreads() {
+        foreach (RTU rtu in rtuData)
         {
-            var response = await httpClient.PostAsJsonAsync("http://localhost:5083/api/user/login", sensorData); // Replace with your API endpoint
-            response.EnsureSuccessStatusCode();
-            Console.WriteLine("Sensor data sent successfully.");
+            int awaitTime = timeRandom.Next(1, 4);
+            tasks.Add(SimulateSensorAsync(rtu, awaitTime));
         }
-        catch (Exception ex)
+
+    }
+
+    static async Task SimulateSensorAsync(RTU rtu, double awaitTime)
+    {
+        Random random = new Random();
+        HttpClient httpClient = new HttpClient();
+
+        while (true)
         {
-            Console.WriteLine($"Error sending sensor data: {ex.Message}");
+            rtu.Value = random.Next(rtu.LowLimit, rtu.HighLimit + 1);
+
+            try
+            {
+                var response = await httpClient.PostAsJsonAsync("http://localhost:5083/api/tag/rtu", rtu);
+                response.EnsureSuccessStatusCode();
+                Console.WriteLine($"Sensor data sent successfully - Sensor: {rtu.Address}, Value: {rtu.Value}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error sending sensor data - Sensor: {rtu.Address}, Value: {rtu.Value}, Error: {ex.Message}");
+            }
+
+            await Task.Delay(TimeSpan.FromSeconds(awaitTime));
         }
     }
 }
