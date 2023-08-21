@@ -1,0 +1,9 @@
+﻿@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.box-shadow {
+    background-color: #06191D;
+}

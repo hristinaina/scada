@@ -1,7 +1,11 @@
 import React, { Component } from 'react';
+import { NavMenu } from '../Nav/NavMenu';
+import './Trending.css';
+import '../../fonts.css';
 
-export class FetchData extends Component {
-  static displayName = FetchData.name;
+
+export class Trending extends Component {
+  static displayName = Trending.name;
 
   constructor(props) {
     super(props);
@@ -17,10 +21,15 @@ export class FetchData extends Component {
       <table className="table table-striped" aria-labelledby="tableLabel">
         <thead>
           <tr>
-            <th>Date</th>
-            <th>Temp. (C)</th>
-            <th>Temp. (F)</th>
-            <th>Summary</th>
+            <th>ID</th>
+            <th>Type</th>
+            <th>Description</th>
+            <th>Scan Time</th>
+            <th>Scan</th>
+            <th>Low Limit</th>
+            <th>High Limit</th>
+            <th>Value</th>
+            <th>ALARM</th>
           </tr>
         </thead>
         <tbody>
@@ -40,12 +49,12 @@ export class FetchData extends Component {
   render() {
     let contents = this.state.loading
       ? <p><em>Loading...</em></p>
-      : FetchData.renderForecastsTable(this.state.forecasts);
+      : Trending.renderForecastsTable(this.state.forecasts);
 
     return (
-      <div>
-        <h1 id="tableLabel">Weather forecast</h1>
-        <p>This component demonstrates fetching data from the server.</p>
+        <div>
+        <NavMenu showNavbar={true} />
+            <h1 id="tableLabel">Trending</h1>
         {contents}
       </div>
     );
