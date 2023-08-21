@@ -16,7 +16,7 @@ namespace scada.Controllers
         }
 
         [HttpPost("rtu")]
-        public IActionResult ReceiveRtu([FromBody] RTU rtu)
+        public IActionResult ReceiveRtu([FromBody] RTUData rtu)
         {
             _tagProcessingService.ReceiveRTUValue(rtu);
             return Ok(new { Message = "Value changed." });

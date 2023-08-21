@@ -17,7 +17,7 @@ namespace scada.Services
             //todo save tagHistory to db
         }
 
-        public void ReceiveRTUValue(RTU rtu)
+        public void ReceiveRTUValue(RTUData rtu)
         {
             RTUDriver.SetValue(rtu.Address, rtu.Value);
         }

@@ -6,6 +6,6 @@ namespace scada.Services
     public interface ITagProcessingService
     {
         public void SaveTagValue(int tag, double value);
-        public void ReceiveRTUValue(RTU rtu);
+        public void ReceiveRTUValue(RTUData rtu);
     }
 }
