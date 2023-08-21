@@ -14,6 +14,15 @@
             lock (Locker)
             {
                 AddressValues[address] = value;
+                /*Console.WriteLine("START");
+                foreach (var kvp in AddressValues)
+                {
+                    Console.Write(kvp.Key);
+                    Console.Write("|");
+                    Console.Write(kvp.Value);
+                    Console.WriteLine();
+                }
+                Console.WriteLine("END");*/
             }
         }
     }
