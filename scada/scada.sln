@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.6.33829.357
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "scada", "scada\scada.csproj", "{80A80219-7DCF-41F2-8BF3-EDAE2242F811}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "scada", "scada\scada.csproj", "{80A80219-7DCF-41F2-8BF3-EDAE2242F811}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RTUSimulator", "RTUSimulator\RTUSimulator.csproj", "{B9B3C825-00AF-4DF6-8F41-EDB86566929F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{80A80219-7DCF-41F2-8BF3-EDAE2242F811}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{80A80219-7DCF-41F2-8BF3-EDAE2242F811}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{80A80219-7DCF-41F2-8BF3-EDAE2242F811}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B9B3C825-00AF-4DF6-8F41-EDB86566929F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B9B3C825-00AF-4DF6-8F41-EDB86566929F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B9B3C825-00AF-4DF6-8F41-EDB86566929F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B9B3C825-00AF-4DF6-8F41-EDB86566929F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

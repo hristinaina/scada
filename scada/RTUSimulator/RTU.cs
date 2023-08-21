@@ -1,6 +1,11 @@
-﻿namespace scada.Models
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace RTUSimulator
 {
-    // will be created from program.cs file
     public class RTU
     {
         public int Id { get; set; }
