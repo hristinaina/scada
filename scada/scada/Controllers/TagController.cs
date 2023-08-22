@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc;
 using scada.Models;
 using scada.Services.interfaces;
+using Newtonsoft.Json;
+using scada.Data;
 
 namespace scada.Controllers
 {
@@ -40,5 +40,32 @@ namespace scada.Controllers
             if (isDeleted) { return Ok("Successfully deleted!"); }
             else return NotFound("Tag not found!");
         }
+
+        [HttpPost]
+        public IActionResult Insert([FromBody] TagInputModel tagInput)
+        {
+            Tag tag = tagInput.Type switch
+            {
+                "DOTag" => JsonConvert.DeserializeObject<DOTag>(tagInput.Data.ToString()),
+                "DITag" => JsonConvert.DeserializeObject<DITag>(tagInput.Data.ToString()),
+                "AOTag" => JsonConvert.DeserializeObject<AOTag>(tagInput.Data.ToString()),
+                "AITag" => JsonConvert.DeserializeObject<AITag>(tagInput.Data.ToString()),
+                _ => null // Handle unknown types
+            };
+
+            if (tag != null)
+            {
+                _tagService.Insert(tag);
+                return Ok(tag);
+            }
+
+            return BadRequest("Invalid tag data");
+        }
     }
+}
+
+public class TagInputModel
+{
+    public string Type { get; set; }
+    public object Data { get; set; }
 }

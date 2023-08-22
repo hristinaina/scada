@@ -9,5 +9,7 @@ namespace scada.Services.interfaces
         public Tag? Get(int id);
 
         public bool Delete(int id);
+
+        public Tag Insert(Tag tag);
     }
 }
