@@ -1,10 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ArrayOfTag xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <Tag xsi:type="DOTag">
-    <Id>1</Id>
-    <TagName>DO_Tag</TagName>
-    <Value>1</Value>
-  </Tag>
   <Tag xsi:type="DITag">
     <Id>2</Id>
     <TagName>DI_Tag</TagName>
