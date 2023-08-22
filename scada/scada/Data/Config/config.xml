@@ -1,23 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ArrayOfAITag xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <AITag>
-    <Id>0</Id>
+<ArrayOfTag xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Tag xsi:type="DOTag">
+    <Id>1</Id>
+    <TagName>DO_Tag</TagName>
+    <Value>1</Value>
+  </Tag>
+  <Tag xsi:type="DITag">
+    <Id>2</Id>
+    <TagName>DI_Tag</TagName>
     <IsScanning>true</IsScanning>
     <ScanTime>1000</ScanTime>
     <Driver>SIM</Driver>
-    <Units>celzius</Units>
-    <LowLimit>10</LowLimit>
-    <HighLimit>25</HighLimit>
-    <Alarms />
-  </AITag>
-  <AITag>
-    <Id>0</Id>
-    <IsScanning>true</IsScanning>
-    <ScanTime>500</ScanTime>
-    <Driver>SIM</Driver>
-    <Units>celzius</Units>
+  </Tag>
+  <Tag xsi:type="AOTag">
+    <Id>3</Id>
+    <TagName>AO_Tag</TagName>
+    <Units>V</Units>
     <LowLimit>0</LowLimit>
-    <HighLimit>15</HighLimit>
-    <Alarms />
-  </AITag>
-</ArrayOfAITag>
+    <HighLimit>10</HighLimit>
+    <Value>5.5</Value>
+  </Tag>
+  <Tag xsi:type="AITag">
+    <Id>4</Id>
+    <TagName>AI_Tag</TagName>
+    <IsScanning>true</IsScanning>
+    <ScanTime>2000</ScanTime>
+    <Driver>RTU</Driver>
+    <Units>C</Units>
+    <LowLimit>-10</LowLimit>
+    <HighLimit>50</HighLimit>
+    <Alarms>
+      <Alarm>
+        <Id>1</Id>
+        <Type>HIGH</Type>
+        <Priority>1</Priority>
+        <Border>40</Border>
+      </Alarm>
+      <Alarm>
+        <Id>2</Id>
+        <Type>LOW</Type>
+        <Priority>2</Priority>
+        <Border>-5</Border>
+      </Alarm>
+    </Alarms>
+  </Tag>
+</ArrayOfTag>

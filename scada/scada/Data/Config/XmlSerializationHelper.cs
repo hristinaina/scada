@@ -1,4 +1,5 @@
-﻿using System.Xml.Serialization;
+﻿using scada.Models;
+using System.Xml.Serialization;
 
 namespace scada.Data
 {
@@ -18,11 +19,9 @@ namespace scada.Data
         public static void SaveToXml<T>(List<T> objects, string filePath)
         {
             XmlSerializer serializer = new XmlSerializer(typeof(List<T>));
-
             using (TextWriter writer = new StreamWriter(filePath))
             {
                 serializer.Serialize(writer, objects);
-                //writer.Flush();
             }
         }
     }
