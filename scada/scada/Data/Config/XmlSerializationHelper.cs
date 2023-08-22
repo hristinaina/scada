@@ -8,12 +8,14 @@ namespace scada.Data
 
         public static List<T> LoadFromXml<T>(string filePath)
         {
-            XmlSerializer serializer = new XmlSerializer(typeof(List<T>));
+            List<T> loadedObjects;
+            XmlSerializer serializer = new XmlSerializer(typeof(List<T>), new XmlRootAttribute("ArrayOfTag"));
 
-            using (TextReader reader = new StreamReader(filePath))
+            using (FileStream fileStream = new FileStream(filePath, FileMode.Open))
             {
-                return (List<T>)serializer.Deserialize(reader);
+                loadedObjects = (List<T>)serializer.Deserialize(fileStream);
             }
+            return loadedObjects;
         }
 
         public static void SaveToXml<T>(List<T> objects, string filePath)
