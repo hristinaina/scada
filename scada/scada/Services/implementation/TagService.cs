@@ -40,16 +40,9 @@ namespace scada.Services.implementation
             throw new NotFoundException("Tag not found!");
         }
 
-        public Tag Insert(TagDTO tagInput)
+        public Tag Insert(TagDTO tagDTO)
         {
-            Tag tag = tagInput.Type switch
-            {
-                "DOTag" => JsonConvert.DeserializeObject<DOTag>(tagInput.Data.ToString()),
-                "DITag" => JsonConvert.DeserializeObject<DITag>(tagInput.Data.ToString()),
-                "AOTag" => JsonConvert.DeserializeObject<AOTag>(tagInput.Data.ToString()),
-                "AITag" => JsonConvert.DeserializeObject<AITag>(tagInput.Data.ToString()),
-                _ => null // handle unknown types
-            };
+            Tag tag = convert(tagDTO);
 
             if (tag != null)
             {
@@ -60,6 +53,18 @@ namespace scada.Services.implementation
             }
 
             throw new BadRequestException("Invalid tag data"); ;
+        }
+
+        private Tag convert(TagDTO tagDTO)
+        {
+            return tagDTO.Type switch
+            {
+                "DOTag" => JsonConvert.DeserializeObject<DOTag>(tagDTO.Data.ToString()),
+                "DITag" => JsonConvert.DeserializeObject<DITag>(tagDTO.Data.ToString()),
+                "AOTag" => JsonConvert.DeserializeObject<AOTag>(tagDTO.Data.ToString()),
+                "AITag" => JsonConvert.DeserializeObject<AITag>(tagDTO.Data.ToString()),
+                _ => null // handle unknown types
+            };
         }
 
         private int generateId()
