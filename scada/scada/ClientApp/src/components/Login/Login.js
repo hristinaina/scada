@@ -109,15 +109,6 @@ export class Login extends Component {
                     id="login"
                     onClick={this.handleLogin}
                 >Log in</button>
-
-                <p id="account">No account?</p>
-                <p id="sign-up" onClick={this.signUp}>Sign up</p>
-{/*                <Snackbar open={this.state.showSnackbar} autoHideDuration={6000} onClose={this.handleSnackbarClose}>
-                    <Alert onClose={this.handleSnackbarClose} severity={this.state.snackbarSeverity}>
-                        {this.state.snackbarMessage}
-                    </Alert>
-                </Snackbar>*/}
-
           </div>
         );
   }

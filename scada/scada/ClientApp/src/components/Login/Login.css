@@ -44,21 +44,3 @@
     text-align: center;
     font-weight: bold;
 }
-
-#account {
-    display: inline-block;
-    color: gray;
-    margin-left: 2em;
-    margin-top: 1.5em;
-    width: 40%;
-}
-
-#sign-up {
-    display: inline-block;
-    width: 40%;
-    text-align: right;
-    margin-right: 2em;
-    font-weight: bold;
-    text-decoration: underline;
-    cursor: pointer;
-}
