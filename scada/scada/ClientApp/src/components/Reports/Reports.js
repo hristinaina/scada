@@ -4,6 +4,7 @@ import './Reports.css';
 import '../../fonts.css';
 import axios from 'axios';
 import AlarmsTable, { FilterAlarmTime, FilterAlarmPriority } from './AlarmsTable';
+import TagsTable, { FilterTagTime, FilterTagId, FilterInputTag } from './TagsTable';
 
 export default function Reports() {
     const [selectedTable, setSelectedTable] = useState('Table A');
@@ -22,6 +23,32 @@ export default function Reports() {
             return <div><FilterAlarmPriority onFilter={handleFilter} />
                         <AlarmsTable data={tableData} />
                    </div>;
+        } else if (selectedTable === 'Table C') {
+            return <div><FilterTagTime onFilter={handleFilter} />
+                <TagsTable data={tableData} />
+            </div>;
+        } else if (selectedTable === 'Table D') {
+            const filterProps = {
+                onFilter: handleFilter,
+                type: 'AI',
+            };
+            return <div><FilterInputTag filterProps={filterProps} />
+                <TagsTable data={tableData} />
+            </div>;
+        }
+        else if (selectedTable === 'Table E') {
+            const filterProps = {
+                onFilter: handleFilter,
+                type: 'DI',
+            };
+            return <div><FilterInputTag filterProps={filterProps} />
+                <TagsTable data={tableData} />
+            </div>;
+        }
+        else if (selectedTable === 'Table F') {
+            return <div><FilterTagId onFilter={handleFilter} />
+                <TagsTable data={tableData} />
+            </div>;
         }
     };
 
@@ -35,7 +62,7 @@ export default function Reports() {
 }
 
 function Dropdown({ onSelect }) {
-    const options = ['Table A', 'Table B'];
+    const options = ['Table A', 'Table B', 'Table C', 'Table D', 'Table E', 'Table F'];
     const [selectedOption, setSelectedOption] = useState(options[0]);
 
     const handleSelect = (event) => {
