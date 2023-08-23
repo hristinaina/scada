@@ -1,34 +1,23 @@
 import React, { Component, useState, useEffect } from 'react';
 import { NavMenu } from '../Nav/NavMenu';
-import axios from 'axios';
 import './Reports.css';
 import '../../fonts.css';
+import axios from 'axios';
+import TableA, { FilterTableA } from './TableA';
 
 export default function Reports() {
     const [selectedTable, setSelectedTable] = useState('Table A');
     const [tableData, setTableData] = useState([]);
 
-    useEffect(() => {
-        fetchData();
-    }, [selectedTable]);
-
-    const fetchData = async () => {
-        try {
-            //1. real data:
-            //const response = await axios.get(`/api/${selectedTable.toLowerCase()}`);
-            //setTableData(response.data);
-            //2. test data:
-            const response = await fetch('weatherforecast');
-            const data = await response.json();
-            setTableData(data);
-        } catch (error) {
-            console.error('Error fetching data:', error);
-        }
+    const handleFilter = data => {
+        setTableData(data); // Update filtered data based on the filter API response
     };
 
     const renderTable = () => {
         if (selectedTable === 'Table A') {
-            return <TableA data={tableData} />;
+            return <div><FilterTableA onFilter={handleFilter} />
+                        <TableA data={tableData} />
+                   </div>;
         } else if (selectedTable === 'Table B') {
             return <TableB data={tableData} />;
         }
@@ -37,7 +26,6 @@ export default function Reports() {
     return (
         <div>
             <NavMenu showNavbar={true}></NavMenu>
-            <h1>Dynamic Table Example</h1>
             <Dropdown onSelect={setSelectedTable} />
             {renderTable()}
         </div>
@@ -63,27 +51,6 @@ function Dropdown({ onSelect }) {
                 ))}
             </select>
         </div>
-    );
-}
-
-function TableA({ data }) {
-    return (
-        <table>
-            <thead>
-                <tr>
-                    <th>Column A</th>
-                    <th>Column B</th>
-                </tr>
-            </thead>
-            <tbody>
-                {data.map((item, index) => (
-                    <tr key={index}>
-                        <td>{item.date}</td>
-                        <td>{item.temperatureF}</td>
-                    </tr>
-                ))}
-            </tbody>
-        </table>
     );
 }
 
