@@ -3,8 +3,7 @@ import { NavMenu } from '../Nav/NavMenu';
 import './Reports.css';
 import '../../fonts.css';
 import axios from 'axios';
-import TableA, { FilterTableA } from './TableA';
-import TableB, { FilterTableB } from './TableB';
+import AlarmsTable, { FilterAlarmTime, FilterAlarmPriority } from './AlarmsTable';
 
 export default function Reports() {
     const [selectedTable, setSelectedTable] = useState('Table A');
@@ -16,12 +15,12 @@ export default function Reports() {
 
     const renderTable = () => {
         if (selectedTable === 'Table A') {
-            return <div><FilterTableA onFilter={handleFilter} />
-                        <TableA data={tableData} />
+            return <div><FilterAlarmTime onFilter={handleFilter} />
+                        <AlarmsTable data={tableData} />
                    </div>;
         } else if (selectedTable === 'Table B') {
-            return <div><FilterTableB onFilter={handleFilter} />
-                        <TableB data={tableData} />
+            return <div><FilterAlarmPriority onFilter={handleFilter} />
+                        <AlarmsTable data={tableData} />
                    </div>;
         }
     };
