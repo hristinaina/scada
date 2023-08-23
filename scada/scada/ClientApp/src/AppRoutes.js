@@ -1,7 +1,7 @@
 import { Counter } from "./components/Counter";
 import { Trending } from "./components/Trending/Trending";
 import { Login } from "./components/Login/Login";
-import { Reports } from "./components/Reports/Reports";
+import Reports from "./components/Reports/Reports";
 
 const AppRoutes = [
   {
