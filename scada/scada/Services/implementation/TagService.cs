@@ -1,18 +1,21 @@
 ﻿using scada.Data;
 using scada.Models;
 using scada.Services.interfaces;
+using scada.Exceptions;
+using Newtonsoft.Json;
+using scada.DTO;
 
 namespace scada.Services.implementation
 {
     public class TagService : ITagService
     {
-        // TODO : create exception classes
         private List<Tag> _tags;
 
         public TagService() 
         {
             _tags = Get();    
         }
+
         public List<Tag> Get()
         {
             return XmlSerializationHelper.LoadFromXml<Tag>();
@@ -20,11 +23,8 @@ namespace scada.Services.implementation
 
         public Tag? Get(int id)
         {
-            foreach (Tag tag in _tags)
-            {
-                if (tag.Id == id) { return tag; }
-            }
-            return null;
+            foreach (Tag tag in _tags) if (tag.Id == id)  return tag; 
+            throw new NotFoundException("Tag not found!");
         }
 
         public bool Delete(int id)
@@ -37,15 +37,29 @@ namespace scada.Services.implementation
                     return true; 
                 }
             }
-            return false;
+            throw new NotFoundException("Tag not found!");
         }
 
-        public Tag Insert(Tag tag)
+        public Tag Insert(TagDTO tagInput)
         {
-            tag.Id = generateId();
-            _tags.Add(tag);
-            XmlSerializationHelper.SaveToXml(_tags);
-            return tag;
+            Tag tag = tagInput.Type switch
+            {
+                "DOTag" => JsonConvert.DeserializeObject<DOTag>(tagInput.Data.ToString()),
+                "DITag" => JsonConvert.DeserializeObject<DITag>(tagInput.Data.ToString()),
+                "AOTag" => JsonConvert.DeserializeObject<AOTag>(tagInput.Data.ToString()),
+                "AITag" => JsonConvert.DeserializeObject<AITag>(tagInput.Data.ToString()),
+                _ => null // handle unknown types
+            };
+
+            if (tag != null)
+            {
+                tag.Id = generateId();
+                _tags.Add(tag);
+                XmlSerializationHelper.SaveToXml(_tags);
+                return tag;
+            }
+
+            throw new BadRequestException("Invalid tag data"); ;
         }
 
         private int generateId()

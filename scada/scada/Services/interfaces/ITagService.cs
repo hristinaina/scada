@@ -1,4 +1,5 @@
-﻿using scada.Models;
+﻿using scada.DTO;
+using scada.Models;
 
 namespace scada.Services.interfaces
 {
@@ -10,6 +11,6 @@ namespace scada.Services.interfaces
 
         public bool Delete(int id);
 
-        public Tag Insert(Tag tag);
+        public Tag Insert(TagDTO tag);
     }
 }

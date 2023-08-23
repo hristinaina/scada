@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using scada.Models;
 using scada.Services.interfaces;
-using Newtonsoft.Json;
-using scada.Data;
+using scada.Exceptions;
+using scada.DTO;
 
 namespace scada.Controllers
 {
@@ -11,61 +11,59 @@ namespace scada.Controllers
     public class TagController : ControllerBase
     {
 
-        private readonly ITagService _tagService;
+        private readonly ITagService _service;
 
         public TagController(ITagService tagService)
         {
-            _tagService = tagService;
+            _service = tagService;
         }
 
         [HttpGet()]
         public IActionResult Get()
         {
-            List<Tag> tags = _tagService.Get();
+            List<Tag> tags = _service.Get();
             return Ok(tags);
         }
 
         [HttpGet("{id}")]
         public IActionResult Get([FromRoute] int id)
         {
-            Tag tag = _tagService.Get(id);
-            if (tag != null) return Ok(tag);
-            return NotFound("Tag not found!");
+            try
+            {
+                Tag tag = _service.Get(id);
+                return Ok(tag);
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(new { error = ex.Message });
+            }
         }
 
         [HttpDelete("{id}")]
         public IActionResult Delete([FromRoute] int id)
         {
-            bool isDeleted = _tagService.Delete(id);
-            if (isDeleted) { return Ok("Successfully deleted!"); }
-            else return NotFound("Tag not found!");
+            try { 
+                _service.Delete(id);
+                return Ok("Successfully deleted!"); 
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(new { error = ex.Message });
+            }
         }
 
         [HttpPost]
-        public IActionResult Insert([FromBody] TagInputModel tagInput)
+        public IActionResult Insert([FromBody] TagDTO tagInput)
         {
-            Tag tag = tagInput.Type switch
+            try
             {
-                "DOTag" => JsonConvert.DeserializeObject<DOTag>(tagInput.Data.ToString()),
-                "DITag" => JsonConvert.DeserializeObject<DITag>(tagInput.Data.ToString()),
-                "AOTag" => JsonConvert.DeserializeObject<AOTag>(tagInput.Data.ToString()),
-                "AITag" => JsonConvert.DeserializeObject<AITag>(tagInput.Data.ToString()),
-                _ => null // Handle unknown types
-            };
-
-            if (tag != null)
-            {
-                _tagService.Insert(tag);
+                Tag tag = _service.Insert(tagInput);
                 return Ok(tag);
             }
-
-            return BadRequest("Invalid tag data");
+            catch (BadRequestException ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
         }
     }
-}
-
-public class TagInputModel
-{
-    public string Type { get; set; }
-    public object Data { get; set; }
 }
