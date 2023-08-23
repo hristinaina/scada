@@ -1,25 +1,17 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import './Reports.css';
 import '../../fonts.css';
 import axios from 'axios';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
-export function FilterTableA({ onFilter }) {
-    const [startDate, setStartDate] = useState(null);
-    const [endDate, setEndDate] = useState(null);
-    const [sortingType, setSortingType] = useState('time');
+export function FilterTableB({ onFilter }) {
+    const [priority, setPriority] = useState('');
 
     const handleFilterClick = async () => {
-        const filterOptions = {
-            startDate,
-            endDate,
-            sortingType,
-        };
-
         try {
-            //1. real data:
-           /* const response = await axios.post('/api/filter', filterOptions); // Modify the API endpoint as needed
+            //1. real data
+            /*const response = await axios.post('/api/filter', { priority });
             onFilter(response.data); // Pass the filtered data to the parent component*/
             //2. test data:
             const response = await fetch('weatherforecast');
@@ -37,32 +29,27 @@ export function FilterTableA({ onFilter }) {
     return (
         <div>
             <div>
-                <label>Start date: </label>
-                <DatePicker selected={startDate} onChange={date => setStartDate(date)} />
-            </div>
-            <div>
-                <label>End date: </label>
-                <DatePicker selected={endDate} onChange={date => setEndDate(date)} />
-            </div>
-            <div>
-                <label>Sort by: </label>
-                <select value={sortingType} onChange={e => setSortingType(e.target.value)}>
-                    <option value="time">Time</option>
-                    <option value="priority">Priority</option>
-                </select>
+                <label>Priority: </label>
+                <input
+                    type="text"
+                    value={priority}
+                    onChange={e => setPriority(e.target.value)}
+                />
             </div>
             <button onClick={handleFilterClick}>Apply Filter</button>
         </div>
     );
 }
 
-export default function TableA({ data }) {
+
+export default function TableB({ data }) {
     return (
         <table>
             <thead>
                 <tr>
-                    <th>Column A</th>
-                    <th>Column B</th>
+                    <th>Column X</th>
+                    <th>Column Y</th>
+                    <th>Column Z</th>
                 </tr>
             </thead>
             <tbody>
@@ -70,6 +57,7 @@ export default function TableA({ data }) {
                     <tr key={index}>
                         <td>{item.date}</td>
                         <td>{item.temperatureF}</td>
+                        <td>{item.temperatureC}</td>
                     </tr>
                 ))}
             </tbody>

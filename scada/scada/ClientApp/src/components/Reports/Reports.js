@@ -1,9 +1,10 @@
-import React, { Component, useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { NavMenu } from '../Nav/NavMenu';
 import './Reports.css';
 import '../../fonts.css';
 import axios from 'axios';
 import TableA, { FilterTableA } from './TableA';
+import TableB, { FilterTableB } from './TableB';
 
 export default function Reports() {
     const [selectedTable, setSelectedTable] = useState('Table A');
@@ -19,7 +20,9 @@ export default function Reports() {
                         <TableA data={tableData} />
                    </div>;
         } else if (selectedTable === 'Table B') {
-            return <TableB data={tableData} />;
+            return <div><FilterTableB onFilter={handleFilter} />
+                        <TableB data={tableData} />
+                   </div>;
         }
     };
 
@@ -54,25 +57,3 @@ function Dropdown({ onSelect }) {
     );
 }
 
-function TableB({ data }) {
-    return (
-        <table>
-            <thead>
-                <tr>
-                    <th>Column X</th>
-                    <th>Column Y</th>
-                    <th>Column Z</th>
-                </tr>
-            </thead>
-            <tbody>
-                {data.map((item, index) => (
-                    <tr key={index}>
-                        <td>{item.date}</td>
-                        <td>{item.temperatureF}</td>
-                        <td>{item.temperatureC}</td>
-                    </tr>
-                ))}
-            </tbody>
-        </table>
-    );
-}
