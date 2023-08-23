@@ -6,13 +6,14 @@ namespace scada.Data
     public class XmlSerializationHelper
     {
 
+        private static String _filePath = "Data/Config/config.xml";
+
         public static List<T> LoadFromXml<T>()
         {
-            String filePath = "Data/Config/config.xml";
             List<T> loadedObjects;
             XmlSerializer serializer = new XmlSerializer(typeof(List<T>), new XmlRootAttribute("ArrayOfTag"));
 
-            using (FileStream fileStream = new FileStream(filePath, FileMode.Open))
+            using (FileStream fileStream = new FileStream(_filePath, FileMode.Open))
             {
                 loadedObjects = (List<T>)serializer.Deserialize(fileStream);
             }
@@ -21,12 +22,11 @@ namespace scada.Data
 
         public static void SaveToXml<T>(List<T> objects)
         {
-            String filePath = "Data/Config/config.xml";
             // clearing xml file before writing anything to it
-            File.WriteAllText(filePath, string.Empty);
+            File.WriteAllText(_filePath, string.Empty);
 
             XmlSerializer serializer = new XmlSerializer(typeof(List<T>));
-            using (TextWriter writer = new StreamWriter(filePath))
+            using (TextWriter writer = new StreamWriter(_filePath))
             {
                 serializer.Serialize(writer, objects);
             }

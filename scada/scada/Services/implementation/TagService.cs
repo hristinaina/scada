@@ -6,9 +6,13 @@ namespace scada.Services.implementation
 {
     public class TagService : ITagService
     {
-        // TODO : add property _tags to reduce number of Get() method calls
-        // also add filePath variable
-        // in constructor with no parameters populate _tags
+        // TODO : create exception classes
+        private List<Tag> _tags;
+
+        public TagService() 
+        {
+            _tags = Get();    
+        }
         public List<Tag> Get()
         {
             return XmlSerializationHelper.LoadFromXml<Tag>();
@@ -16,8 +20,7 @@ namespace scada.Services.implementation
 
         public Tag? Get(int id)
         {
-            List<Tag> tags = Get();
-            foreach (Tag tag in tags)
+            foreach (Tag tag in _tags)
             {
                 if (tag.Id == id) { return tag; }
             }
@@ -26,12 +29,11 @@ namespace scada.Services.implementation
 
         public bool Delete(int id)
         {
-            List<Tag> tags = Get();
-            foreach (Tag tag in tags)
+            foreach (Tag tag in _tags)
             {
                 if (tag.Id == id) { 
-                    tags.Remove(tag);
-                    XmlSerializationHelper.SaveToXml(tags);
+                    _tags.Remove(tag);
+                    XmlSerializationHelper.SaveToXml(_tags);
                     return true; 
                 }
             }
@@ -40,18 +42,16 @@ namespace scada.Services.implementation
 
         public Tag Insert(Tag tag)
         {
-            List<Tag> tags = Get();
             tag.Id = generateId();
-            tags.Add(tag);
-            XmlSerializationHelper.SaveToXml(tags);
+            _tags.Add(tag);
+            XmlSerializationHelper.SaveToXml(_tags);
             return tag;
         }
 
         private int generateId()
         {
             int id = 1;
-            List<Tag> tags = Get();
-            foreach (Tag tag in tags) if (tag.Id > id) id = tag.Id;
+            foreach (Tag tag in _tags) if (tag.Id > id) id = tag.Id;
             return ++id;
         }
     }
