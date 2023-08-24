@@ -9,3 +9,32 @@
 #add-tag:hover {
     cursor: pointer;
 }
+
+#dropdown {
+    position: relative; /* Position the dropdown relative to the container */
+    display: flex; /* Use flexbox to control alignment and positioning */
+    justify-content: flex-end; /* Align the dropdown to the right */
+}
+
+#dropdown-tags {
+    list-style: none;
+    background-color: #d8d8d8;
+    border-radius: 10px;
+    padding: 1em;
+}
+
+.tag {
+    padding: 2px;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-radius: 10px;
+    background-color: #E8E4E4;
+}
+
+.bottom-margin {
+    margin-bottom: .5em;
+}
+
+.tag:hover {
+    cursor: pointer;
+}
