@@ -29,8 +29,12 @@
 
   <ItemGroup>
     <!-- Don't publish the SPA source files, but do show them in the project files list -->
+    <Compile Remove="ClientApp\src\NewFolder1\**" />
     <Content Remove="$(SpaRoot)**" />
+    <Content Remove="ClientApp\src\NewFolder1\**" />
+    <EmbeddedResource Remove="ClientApp\src\NewFolder1\**" />
     <None Remove="$(SpaRoot)**" />
+    <None Remove="ClientApp\src\NewFolder1\**" />
     <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
   </ItemGroup>
 
