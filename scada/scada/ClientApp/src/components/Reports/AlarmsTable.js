@@ -18,13 +18,8 @@ export function FilterAlarmTime({ onFilter }) {
         };
 
         try {
-            //1. real data:
-           /* const response = await axios.post('/api/filter', filterOptions); // Modify the API endpoint as needed
-            onFilter(response.data); // Pass the filtered data to the parent component*/
-            //2. test data:
-            const response = await fetch('weatherforecast');
-            const data = await response.json();
-            onFilter(data);
+            const response = await axios.post('/api/report/alarmTime', filterOptions); 
+            onFilter(response.data); // Pass the filtered data to the parent component
         } catch (error) {
             console.error('Error fetching filtered data:', error);
         }
@@ -61,21 +56,16 @@ export function FilterAlarmPriority({ onFilter }) {
 
     const handleFilterClick = async () => {
         try {
-            //1. real data
-            /*const response = await axios.post('/api/filter', { priority });
-            onFilter(response.data); // Pass the filtered data to the parent component*/
-            //2. test data:
-            const response = await fetch('weatherforecast');
-            const data = await response.json();
-            onFilter(data);
+            const response = await axios.post('/api/report/alarmPriority', { priority });
+            onFilter(response.data); // Pass the filtered data to the parent component
         } catch (error) {
             console.error('Error fetching filtered data:', error);
         }
     };
 
     useEffect(() => {
-        handleFilterClick(); // Call the function on page load
-    }, []); // Empty dependency array means it runs only on mount
+        handleFilterClick();
+    }, []); 
 
     return (
         <div className="filterContainer">

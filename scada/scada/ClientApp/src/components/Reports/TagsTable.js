@@ -16,13 +16,8 @@ export function FilterTagTime({ onFilter }) {
         };
 
         try {
-            //1. real data:
-            /* const response = await axios.post('/api/filter', filterOptions); // Modify the API endpoint as needed
-             onFilter(response.data); // Pass the filtered data to the parent component*/
-            //2. test data:
-            const response = await fetch('weatherforecast');
-            const data = await response.json();
-            onFilter(data);
+             const response = await axios.post('/api/report/tagTime', filterOptions); 
+             onFilter(response.data); // Pass the filtered data to the parent component
         } catch (error) {
             console.error('Error fetching filtered data:', error);
         }
@@ -52,21 +47,16 @@ export function FilterTagId({ onFilter }) {
 
     const handleFilterClick = async () => {
         try {
-            //1. real data
-            /*const response = await axios.post('/api/filter', { identifier });
-            onFilter(response.data); // Pass the filtered data to the parent component*/
-            //2. test data:
-            const response = await fetch('weatherforecast');
-            const data = await response.json();
-            onFilter(data);
+            const response = await axios.post('/api/report/tagId', { identifier });
+            onFilter(response.data); // Pass the filtered data to the parent component
         } catch (error) {
             console.error('Error fetching filtered data:', error);
         }
     };
 
     useEffect(() => {
-        handleFilterClick(); // Call the function on page load
-    }, []); // Empty dependency array means it runs only on mount
+        handleFilterClick(); 
+    }, []); 
 
     return (
         <div className="filterContainer">
@@ -88,19 +78,14 @@ export function FilterInputTag({ filterProps }) {
 
     const handleFilterClick = async () => {
         try {
-            //1. real data
-            /*if (type === "AI") {
-                const response = await axios.post('/api/filter');
-                onFilter(response.data); // Pass the filtered data to the parent component
+            if (type === "AI") {
+                const response = await axios.post('/api/report/tagAI');
+                onFilter(response.data); 
             }
             else if (type === "DI") {
-                const response = await axios.post('/api/filter');
-                onFilter(response.data); // Pass the filtered data to the parent component
-            }*/
-            //2. test data:
-            const response = await fetch('weatherforecast');
-            const data = await response.json();
-            onFilter(data);
+                const response = await axios.post('/api/report/tagDI');
+                onFilter(response.data);
+            }
         } catch (error) {
             console.error('Error fetching filtered data:', error);
         }
