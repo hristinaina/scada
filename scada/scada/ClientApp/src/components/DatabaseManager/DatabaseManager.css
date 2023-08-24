@@ -11,15 +11,15 @@
 }
 
 #dropdown {
-    position: relative; /* Position the dropdown relative to the container */
-    display: flex; /* Use flexbox to control alignment and positioning */
-    justify-content: flex-end; /* Align the dropdown to the right */
+    position: relative;
+    display: flex;
+    justify-content: flex-end;
 }
 
 #dropdown-tags {
     list-style: none;
     background-color: #d8d8d8;
-    border-radius: 10px;
+    border-radius: 8px;
     padding: 1em;
 }
 
@@ -27,8 +27,8 @@
     padding: 2px;
     padding-left: 10px;
     padding-right: 10px;
-    border-radius: 10px;
-    background-color: #E8E4E4;
+    border-radius: 5px;
+    border-bottom: 1px solid #c3c2c2;
 }
 
 .bottom-margin {
@@ -37,4 +37,5 @@
 
 .tag:hover {
     cursor: pointer;
+    background-color: #E8E4E4;
 }

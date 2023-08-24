@@ -31,10 +31,10 @@ export class DatabaseManager extends Component {
                 {isDropdownOpen && (
                     <div id="dropdown">
                         <ul id="dropdown-tags">
-                            <li className="tag bottom-margin">ANALOG OUTPUT TAG</li>
-                            <li className="tag bottom-margin">ANALOG INPUT TAG</li>
-                            <li className="tag bottom-margin">DIGITAL OUTPUT TAG</li>
-                            <li className="tag">DIGITAL INPUT TAG</li>
+                            <li className="tag bottom-margin">ANALOG OUTPUT</li>
+                            <li className="tag bottom-margin">ANALOG INPUT</li>
+                            <li className="tag bottom-margin">DIGITAL OUTPUT</li>
+                            <li className="tag">DIGITAL INPUT</li>
                         </ul>
                     </div>
                 )}
