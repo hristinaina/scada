@@ -52,3 +52,17 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     z-index: 1000;
 }
+
+#output-tags {
+    background: #E5E4E2;
+    border-radius: 10px;
+    width: 50%;
+    padding: 5px;
+}
+
+#output-tag {
+    border: 1px solid white; 
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+}

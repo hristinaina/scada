@@ -29,14 +29,21 @@
         <Id>1</Id>
         <Type>HIGH</Type>
         <Priority>1</Priority>
-        <Border>40</Border>
+        <Limit>0</Limit>
       </Alarm>
       <Alarm>
         <Id>2</Id>
         <Type>LOW</Type>
         <Priority>2</Priority>
-        <Border>-5</Border>
+        <Limit>0</Limit>
       </Alarm>
     </Alarms>
+  </Tag>
+  <Tag xsi:type="DOTag">
+    <Id>5</Id>
+    <TagName>New_DOTag</TagName>
+    <Description>A new DOTag</Description>
+    <Address>Some address</Address>
+    <Value>0</Value>
   </Tag>
 </ArrayOfTag>
