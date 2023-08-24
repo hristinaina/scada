@@ -33,7 +33,7 @@ namespace scada.Data.Config
             return tags;
         }
 
-        public static List<T> ParseLoadedObjects<T> (List<Tag> tags) where T : Tag
+        public static List<T> ParseTags<T> (List<Tag> tags) where T : Tag
         {
             List<T> tTags = new List<T>();
             foreach (Tag tag in tags)
