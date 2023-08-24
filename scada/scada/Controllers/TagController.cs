@@ -27,6 +27,21 @@ namespace scada.Controllers
             return Ok(tags);
         }
 
+        [HttpGet("do")]
+        public IActionResult GetDOTags()
+        {
+            List<DOTag> tags = _service.GetDOTags();
+            return Ok(tags);
+        }
+
+        [HttpGet("ao")]
+        public IActionResult GetAOTags()
+        {
+            List<AOTag> tags = _service.GetAOTags();
+            return Ok(tags);
+        }
+
+
         [HttpGet("{id}")]
         public IActionResult Get([FromRoute] int id)
         {

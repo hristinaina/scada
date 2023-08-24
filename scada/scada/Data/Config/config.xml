@@ -15,6 +15,13 @@
     <HighLimit>10</HighLimit>
     <Value>5.5</Value>
   </Tag>
+  <Tag xsi:type="DOTag">
+    <Id>6</Id>
+    <TagName>Neki tag</TagName>
+    <Description>alalala</Description>
+    <Address>Some address</Address>
+    <Value>1</Value>
+  </Tag>
   <Tag xsi:type="AITag">
     <Id>4</Id>
     <TagName>AI_Tag</TagName>

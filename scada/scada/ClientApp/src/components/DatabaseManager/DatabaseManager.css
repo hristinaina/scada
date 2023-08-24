@@ -52,7 +52,7 @@
     z-index: 1000;
 }
 
-#output-tags {
+#output-container {
     background: #E5E4E2;
     border-radius: 10px;
     width: 45%;
@@ -60,11 +60,15 @@
     float:left;
 }
 
-#output-tag {
-    border: 1px solid white; 
+.output-tag {
+    border: 1px solid white;
     padding: 10px;
     margin-bottom: 10px;
     border-radius: 10px;
+    display: flex;
+    align-items: center; /* Poravnanje elemenata po vrhu */
+    justify-content: space-between; /* Poravnanje na kraju reda */
+    gap: 10px; /* Razmak između elemenata */
 }
 
 #input-tags {
@@ -82,8 +86,39 @@
     border-radius: 10px;
 }
 
+.tag-description {
+    display: flex;
+    flex-direction: column;
+}
 
+.description 
+{
+    font-size: 12px;
+    float: left;
+}
 
+.value
+{
+    font-size:35px;
+}
+
+.edit-delete-icons {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end; /* Poravnanje na desno */
+    gap: 5px; /* Razmak između ikonica */
+}
+
+.icon {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    transition: box-shadow 0.3s;
+}
+
+.icon:hover {
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+}
 
 
 

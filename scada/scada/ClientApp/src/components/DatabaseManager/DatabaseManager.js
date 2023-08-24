@@ -1,10 +1,10 @@
 ﻿import { Component } from "react";
-import axios from 'axios';
 import '../../fonts.css';
 import AITag from "../dialogs/AITag/AITag";
 import AOTag from "../dialogs/AOTag/AOTag";
 import { NavMenu } from "../Nav/NavMenu";
 import './DatabaseManager.css';
+import TagService from "../../services/TagService";
 
 
 export class DatabaseManager extends Component {
@@ -14,7 +14,8 @@ export class DatabaseManager extends Component {
         this.state = {
             isDropdownOpen: false,
             selectedItem: null,
-            data: [],
+            AOData: [],
+            DOData: [],
             isDO: false,
             isDI: true,
         };
@@ -44,21 +45,15 @@ export class DatabaseManager extends Component {
         });
     };
 
-    componentDidMount() {
-        // Poziv API-ja nakon što se komponenta montira
-        axios.get('http://localhost:5083/api/tag')
-            .then(response => {
-                this.setState({ data: response.data }); // Postavi dobijene podatke u stanje
-                console.log(response.data);
-            })
-            .catch(error => {
-                console.error('Error fetching data:', error);
-            });
+    async componentDidMount() {
+        const AOData = await TagService.getAOData(); // Zamisljena metoda za dohvatanje analognih podataka
+        const DOData = await TagService.getDOData(); // Zamisljena metoda za dohvatanje digitalnih podataka
+        this.setState({ AOData, DOData });
     }
 
 
     render() {
-        const { isDropdownOpen, selectedItem, data, isDO } = this.state;
+        const { isDropdownOpen, selectedItem, data, isDO, AOData, DOData } = this.state;
 
         return (
             <div>
@@ -83,30 +78,50 @@ export class DatabaseManager extends Component {
                 {selectedItem === "AI" && <AITag onClose={this.closeDialog} />}
                 {selectedItem === "AO" && <AOTag onClose={this.closeDialog} />}
 
-                <div id="output-tags">
+                <div id="output-container">
                     <h3 style={{ margin: '15px' }}>Outputs</h3>
                     <div className={`toggle-switch ${isDO ? 'on' : ''}`} onClick={this.toggle}>
                         <div className="toggle-slider"></div>
                         <div className={`toggle-text digital ${isDO ? '' : 'active'}`}>Digital</div>
                         <div className={`toggle-text analog ${isDO ? 'active' : ''}`}>Analog</div>
                     </div>
-                    {data.map(item => (
-                        <div id='output-tag' key={item.id}>
-                            <h6>{item.tagName}</h6>
-                            <p>{item.description}</p>
-                        </div>
-                    ))} 
+                    <div className="object-list">
+                        {isDO ? (
+                            AOData.map(item => (
+                                <div key={item.id} className="output-tag">
+                                    <h6>{item.tagName}</h6>
+                                    {/*<p>Attribute 1: {item.attribute1}</p>*/}
+                                    {/*<p>Attribute 2: {item.attribute2}</p>*/}
+                                    {/* Dodajte više atributa po potrebi */}
+                                </div>
+                            ))
+                        ) : (
+                            DOData.map(item => (
+                                <div key={item.id} className="output-tag">
+                                    <div className="tag-description">
+                                        <h6 style={{ float: 'left' }}>{item.tagName}</h6>
+                                        <p className="description">Description: {item.description}</p>
+                                    </div>
+                                    <p className="value">{item.value === 0 ? 'Off' : 'On'}</p>
+                                    <div className="edit-delete-icons">
+                                        <img src="/images/delete.png" alt="Delete" className="icon" />
+                                        <img src="/images/pencil.png" alt="Edit" className="icon" />
+                                    </div>
+                                </div>
+                            ))
+                        )}
+                    </div>
                 </div>
 
-                <div id="input-tags">
-                    <h3 style={{ margin: '15px' }}>Inputs</h3>
-                    {data.map(item => (
-                        <div id='input-tag' key={item.id}>
-                            <h6>{item.tagName}</h6>
-                            <p>{item.description}</p>
-                        </div>
-                    ))}
-                </div>
+                {/*<div id="input-tags">*/}
+                {/*    <h3 style={{ margin: '15px' }}>Inputs</h3>*/}
+                {/*    {data.map(item => (*/}
+                {/*        <div id='input-tag' key={item.id}>*/}
+                {/*            <h6>{item.tagName}</h6>*/}
+                {/*            <p>{item.description}</p>*/}
+                {/*        </div>*/}
+                {/*    ))}*/}
+                {/*</div>*/}
             </div>
         );
     }
