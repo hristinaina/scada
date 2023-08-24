@@ -96,9 +96,10 @@
 .tag-description {
     display: flex;
     flex-direction: column;
+    margin: 0px;
 }
 
-.description 
+.attribute
 {
     font-size: 12px;
     float: left;

@@ -80,7 +80,7 @@ export class DatabaseManager extends Component {
 
                 <div id="output-container">
                     <div className="header">
-                        <p style={{ margin: '0px', fontSize: '26px' }}>Outputs</p>
+                        <h3>Outputs</h3>
                         <div className={`toggle-switch ${isDO ? 'on' : ''}`} onClick={this.toggle}>
                             <div className="toggle-slider"></div>
                             <div className={`toggle-text digital ${isDO ? '' : 'active'}`}>Digital</div>
@@ -91,10 +91,16 @@ export class DatabaseManager extends Component {
                         {isDO ? (
                             AOData.map(item => (
                                 <div key={item.id} className="output-tag">
-                                    <h6>{item.tagName}</h6>
-                                    {/*<p>Attribute 1: {item.attribute1}</p>*/}
-                                    {/*<p>Attribute 2: {item.attribute2}</p>*/}
-                                    {/* Dodajte više atributa po potrebi */}
+                                    <div className="tag-description">
+                                        <h6 style={{ float: 'left' }}>{item.tagName}</h6>
+                                        <p className="attribute" style={{ margin:"0px" }}>Description: {item.description}</p>
+                                        <p className="attribute">Range: ({item.lowLimit},{item.highLimit})</p>
+                                    </div>
+                                    <p className="value">{item.value} {item.units}</p>
+                                    <div className="edit-delete-icons">
+                                        <img src="/images/delete.png" alt="Delete" className="icon" />
+                                        <img src="/images/pencil.png" alt="Edit" className="icon" />
+                                    </div>
                                 </div>
                             ))
                         ) : (
@@ -102,7 +108,7 @@ export class DatabaseManager extends Component {
                                 <div key={item.id} className="output-tag">
                                     <div className="tag-description">
                                         <h6 style={{ float: 'left' }}>{item.tagName}</h6>
-                                        <p className="description">Description: {item.description}</p>
+                                        <p className="attribute">Description: {item.description}</p>
                                     </div>
                                     <p className="value">{item.value === 0 ? 'Off' : 'On'}</p>
                                     <div className="edit-delete-icons">

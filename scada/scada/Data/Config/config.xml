@@ -13,6 +13,7 @@
     <Units>V</Units>
     <LowLimit>0</LowLimit>
     <HighLimit>10</HighLimit>
+    <Description>ao tag jeeeee</Description>
     <Value>5.5</Value>
   </Tag>
   <Tag xsi:type="DOTag">
