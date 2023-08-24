@@ -2,6 +2,7 @@
 import '../../fonts.css';
 import AITag from "../dialogs/AITag/AITag";
 import AOTag from "../dialogs/AOTag/AOTag";
+import DOTag from "../dialogs/DOTag/DOTag";
 import { NavMenu } from "../Nav/NavMenu";
 import './DatabaseManager.css';
 
@@ -58,6 +59,7 @@ export class DatabaseManager extends Component {
                 {/* Dialogs */}
                 {selectedItem === "AI" && <AITag onClose={this.closeDialog} />}
                 {selectedItem === "AO" && <AOTag onClose={this.closeDialog} />}
+                {selectedItem === "DO" && <DOTag onClose={this.closeDialog} />}
             </div>
         );
     }
