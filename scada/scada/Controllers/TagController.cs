@@ -14,12 +14,10 @@ namespace scada.Controllers
 
         private readonly ITagService _service;
 
-        private readonly ITagProcessingService _tagProcessingService;
 
-        public TagController(ITagService tagService, ITagProcessingService tagProcessingService)
+        public TagController(ITagService tagService)
         {
             _service = tagService;
-            _tagProcessingService = tagProcessingService;
         }
 
         [HttpGet()]
@@ -73,7 +71,7 @@ namespace scada.Controllers
         [HttpPost("rtu")]
         public IActionResult ReceiveRtu([FromBody] RTUData rtu)
         {
-            _tagProcessingService.ReceiveRTUValue(rtu);
+            _service.ReceiveRTUValue(rtu);
             return Ok(new { Message = "Value changed." });
         }
     }

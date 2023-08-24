@@ -7,15 +7,20 @@ namespace scada.Data
     {
 
         private static String _filePath = "Data/Config/config.xml";
+        private static object fileLock = new object(); // Shared lock object
+
 
         public static List<T> LoadFromXml<T>()
         {
             List<T> loadedObjects;
             XmlSerializer serializer = new XmlSerializer(typeof(List<T>), new XmlRootAttribute("ArrayOfTag"));
 
-            using (FileStream fileStream = new FileStream(_filePath, FileMode.Open))
+            lock (fileLock)
             {
-                loadedObjects = (List<T>)serializer.Deserialize(fileStream);
+                using (FileStream fileStream = new FileStream(_filePath, FileMode.Open))
+                {
+                    loadedObjects = (List<T>)serializer.Deserialize(fileStream);
+                }
             }
             return loadedObjects;
         }

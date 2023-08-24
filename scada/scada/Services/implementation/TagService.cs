@@ -4,6 +4,7 @@ using scada.Services.interfaces;
 using scada.Exceptions;
 using Newtonsoft.Json;
 using scada.DTO;
+using scada.Drivers;
 
 namespace scada.Services.implementation
 {
@@ -72,6 +73,22 @@ namespace scada.Services.implementation
             int id = 1;
             foreach (Tag tag in _tags) if (tag.Id > id) id = tag.Id;
             return ++id;
+        }
+
+        /*
+         should be called when tag value changes:
+            1. for input tags = in trending app after scanning 
+            2. for output tags = when value is changed (manually)
+        */
+        public void SaveTagValue(int tag, double value)
+        {
+            TagHistory tagHistory = new TagHistory(tag, value);
+            //todo save tagHistory to db
+        }
+
+        public void ReceiveRTUValue(RTUData rtu)
+        {
+            RTUDriver.SetValue(rtu.Address, rtu.Value);
         }
     }
 }
