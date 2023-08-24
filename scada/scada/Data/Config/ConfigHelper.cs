@@ -24,8 +24,8 @@ namespace scada.Data.Config
                     HighLimit = 50,
                     Alarms = new List<Alarm>
                     {
-                        new Alarm { Id = 1, Type = AlarmType.HIGH, Priority = 1, Border = 40 },
-                        new Alarm { Id = 2, Type = AlarmType.LOW, Priority = 2, Border = -5 }
+                        new Alarm { Id = 1, Type = AlarmType.HIGH, Priority = 1, Limit = 40 },
+                        new Alarm { Id = 2, Type = AlarmType.LOW, Priority = 2, Limit = -5 }
                     }
                 }
             };
