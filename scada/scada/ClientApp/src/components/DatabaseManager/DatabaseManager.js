@@ -79,11 +79,13 @@ export class DatabaseManager extends Component {
                 {selectedItem === "AO" && <AOTag onClose={this.closeDialog} />}
 
                 <div id="output-container">
-                    <h3 style={{ margin: '15px' }}>Outputs</h3>
-                    <div className={`toggle-switch ${isDO ? 'on' : ''}`} onClick={this.toggle}>
-                        <div className="toggle-slider"></div>
-                        <div className={`toggle-text digital ${isDO ? '' : 'active'}`}>Digital</div>
-                        <div className={`toggle-text analog ${isDO ? 'active' : ''}`}>Analog</div>
+                    <div className="header">
+                        <p style={{ margin: '0px', fontSize: '26px' }}>Outputs</p>
+                        <div className={`toggle-switch ${isDO ? 'on' : ''}`} onClick={this.toggle}>
+                            <div className="toggle-slider"></div>
+                            <div className={`toggle-text digital ${isDO ? '' : 'active'}`}>Digital</div>
+                            <div className={`toggle-text analog ${isDO ? 'active' : ''}`}>Analog</div>
+                        </div>
                     </div>
                     <div className="object-list">
                         {isDO ? (

@@ -57,7 +57,14 @@
     border-radius: 10px;
     width: 45%;
     padding: 5px;
-    float:left;
+    float: left;
+}
+
+.header {
+    display: flex;
+    align-items: center; /* Poravnanje elemenata po vertikali */
+    justify-content: space-between; /* Poravnanje elemenata po horizontali */
+    margin: 15px;
 }
 
 .output-tag {
