@@ -152,12 +152,18 @@ export class DatabaseManager extends Component {
                                     <div className="tag-description">
                                         <h6 style={{ float: 'left' }}>{item.tagName}</h6>
                                         <p className="attribute" style={{ margin: "0px" }}>Description: {item.description}</p>
-                                        <p className="attribute">Range: ({item.lowLimit},{item.highLimit})</p>
+                                        <p className="attribute" style={{ margin: "0px" }}>Range: ({item.lowLimit},{item.highLimit})</p>
+                                        <p className="attribute" style={{ margin: "0px" }}>Scan Time: {item.scanTime} ms</p>
+                                        <p className="attribute">Units: {item.units}</p>
                                     </div>
-                                    <p className="value">{item.value} {item.units}</p>
+                                    <p className="value">{item.driver === 0 ? 'SIMULATION' : 'RTU'}</p>
                                     <div className="edit-delete-icons">
-                                        <img src="/images/delete.png" alt="Delete" className="icon" />
-                                        {/*<img src="/images/pencil.png" alt="Edit" className="icon" />*/}
+                                        <img style={{ marginRight:'15px' }} src="/images/delete.png" alt="Delete" className="icon" />
+                                        <div
+                                            className={`toggle-button ${item.isScanning ? 'on' : ''}`}
+                                            onClick={() => this.toggleValue(item.id)}>
+                                            {item.isScanning ? 'on' : 'off'}
+                                        </div>
                                     </div>
                                 </div>
                             ))
@@ -170,10 +176,13 @@ export class DatabaseManager extends Component {
                                         <p className="attribute">Scan Time: {item.scanTime} ms</p>
                                     </div>
                                     <p className="value">{item.driver === 0 ? 'SIMULATION' : 'RTU'}</p>
-                                    <div
-                                        className={`toggle-button ${item.isScanning ? 'on' : ''}`}
-                                        onClick={() => this.toggleValue(item.id)}>
-                                        {item.isScanning ? 'on' : 'off'}
+                                    <div className="edit-delete-icons">
+                                        <img style={{ marginRight: '15px' }} src="/images/delete.png" alt="Delete" className="icon" />
+                                        <div
+                                            className={`toggle-button ${item.isScanning ? 'on' : ''}`}
+                                            onClick={() => this.toggleValue(item.id)}>
+                                            {item.isScanning ? 'on' : 'off'}
+                                        </div>
                                     </div>
                                 </div>
                             ))
