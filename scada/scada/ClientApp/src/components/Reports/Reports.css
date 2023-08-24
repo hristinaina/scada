@@ -1,2 +1,62 @@
-﻿body {
+﻿* {
+    font-family: 'Poppins';
+}
+
+.center {
+    width: 100%;
+    text-align: center;
+}
+
+#dropdown {
+    margin-top: 30px;
+    width: 50em;
+    height: 55px;
+    border-radius: 10px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.filterContainer {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.inline {
+    display: inline-block;
+}
+
+#filterButton {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
+    width: 11em;
+    height: 40px;
+    background: #6c757d;
+    border-radius: 10px;
+    color: white;
+    border: none;
+    text-align: center;
+    font-weight: 600;
+}
+
+.labelR {
+    margin-left: 16px;
+    margin-right: 7px;
+}
+
+.inputR {
+    margin-right: 16px;
+    padding-left: 10px;
+    width: 8em;
+    height: 40px;
+    border-radius: 10px;
+}
+
+.inputOne {
+    padding-left: 10px;
+    width: 6em;
+    height: 40px;
+    border-radius: 10px;
 }

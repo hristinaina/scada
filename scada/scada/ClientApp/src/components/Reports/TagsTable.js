@@ -33,16 +33,16 @@ export function FilterTagTime({ onFilter }) {
     }, []); // Empty dependency array means it runs only on mount
 
     return (
-        <div>
-            <div>
-                <label>Start date: </label>
-                <DatePicker selected={startDate} onChange={date => setStartDate(date)} />
+        <div className="filterContainer">
+            <div className="inline">
+                <label className="labelR">Start date: </label>
+                <DatePicker className="inputR" selected={startDate} onChange={date => setStartDate(date)} />
             </div>
-            <div>
-                <label>End date: </label>
-                <DatePicker selected={endDate} onChange={date => setEndDate(date)} />
+            <div className="inline">
+                <label className="labelR">End date: </label>
+                <DatePicker className="inputR" selected={endDate} onChange={date => setEndDate(date)} />
             </div>
-            <button onClick={handleFilterClick}>Apply Filter</button>
+            <button id="filterButton" onClick={handleFilterClick}>Apply Filter</button>
         </div>
     );
 }
@@ -69,16 +69,16 @@ export function FilterTagId({ onFilter }) {
     }, []); // Empty dependency array means it runs only on mount
 
     return (
-        <div>
+        <div className="filterContainer">
             <div>
-                <label>Tag id: </label>
-                <input
+                <label className="labelR">Tag id: </label>
+                <input className="inputOne"
                     type="text"
                     value={identifier}
                     onChange={e => setIdentifier(e.target.value)}
                 />
             </div>
-            <button onClick={handleFilterClick}>Apply Filter</button>
+            <button id="filterButton" onClick={handleFilterClick}>Apply Filter</button>
         </div>
     );
 }
@@ -111,7 +111,7 @@ export function FilterInputTag({ filterProps }) {
     }, [type]); // it runs also whenever type is changed 
 
     return (
-        <div>
+        <div className="filterContainer">
         </div>
     );
 }

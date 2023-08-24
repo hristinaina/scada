@@ -72,8 +72,8 @@ function Dropdown({ onSelect }) {
     };
 
     return (
-        <div>
-            <select value={selectedOption} onChange={handleSelect}>
+        <div className="center">
+            <select id="dropdown" value={selectedOption} onChange={handleSelect}>
                 {options.map((option, index) => (
                     <option key={index} value={option}>
                         {option}
