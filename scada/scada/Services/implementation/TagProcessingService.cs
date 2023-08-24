@@ -1,9 +1,10 @@
 ﻿using scada.Drivers;
+using scada.DTO;
 using scada.Models;
 
 namespace scada.Services
 {
-  
+
     public class TagProcessingService : ITagProcessingService
     {
         /*

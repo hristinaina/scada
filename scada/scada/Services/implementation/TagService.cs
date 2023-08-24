@@ -14,12 +14,17 @@ namespace scada.Services.implementation
 
         public TagService() 
         {
-            _tags = Get();    
+            _tags = Load();    
+        }
+
+        private List<Tag> Load()
+        {
+            return XmlSerializationHelper.LoadFromXml<Tag>();
         }
 
         public List<Tag> Get()
         {
-            return XmlSerializationHelper.LoadFromXml<Tag>();
+            return _tags;
         }
 
         public Tag? Get(int id)

@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using scada.DTO;
+using scada.Exceptions;
 using scada.Models;
 using scada.Services;
 
@@ -17,18 +19,18 @@ namespace scada.Controllers
             _alarmHistoryService = alarmHistoryService;
         }
 
-/*        [HttpGet("{id}")]
+        [HttpGet("tagId/{id}")]
         public IActionResult Get([FromRoute] int id)
         {
             try
             {
-                Tag tag = _tagHistoryService.Get(id);
-                return Ok(tag);
+                List<TagHistoryDTO> tagsDTO = _tagHistoryService.GetByTagId(id);
+                return Ok(tagsDTO);
             }
             catch (NotFoundException ex)
             {
                 return NotFound(new { error = ex.Message });
             }
-        }*/
+        }
     }
 }

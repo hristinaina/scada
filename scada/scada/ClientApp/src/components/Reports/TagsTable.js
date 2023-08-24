@@ -45,17 +45,25 @@ export function FilterTagTime({ onFilter }) {
 export function FilterTagId({ onFilter }) {
     const [identifier, setIdentifier] = useState('');
 
-    const handleFilterClick = async () => {
+    const handleFilterClick = async (flag) => {
         try {
-            const response = await axios.post('/api/report/tagId', { identifier });
-            onFilter(response.data); // Pass the filtered data to the parent component
+            if (flag === "load") {
+                const response = await axios.get('http://localhost:5083/api/report/tagId/2');
+                onFilter(response.data); // Pass the filtered data to the parent component
+            }
+            else {
+                const response = await axios.get('http://localhost:5083/api/report/tagId/' + identifier);
+                onFilter(response.data); // Pass the filtered data to the parent component
+            }
         } catch (error) {
             console.error('Error fetching filtered data:', error);
+            onFilter([]);
         }
     };
 
     useEffect(() => {
-        handleFilterClick(); 
+        setIdentifier(2);
+        handleFilterClick("load"); 
     }, []); 
 
     return (
@@ -117,11 +125,11 @@ export default function TagsTable({ data }) {
             <tbody>
                 {data.map((item, index) => (
                     <tr key={index}>
-                        <td>{item.temperatureF}</td>
-                        <td>{item.temperatureF}</td>
-                        <td>{item.temperatureC}</td>
-                        <td>{item.temperatureC}</td>
-                        <td></td>
+                        <td>{item.tagId}</td>
+                        <td>{item.name}</td>
+                        <td>{item.type}</td>
+                        <td>{item.value}</td>
+                        <td>{item.units}</td>
                         <td>{item.date}</td>
                     </tr>
                 ))}
