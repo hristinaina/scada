@@ -25,6 +25,7 @@ export class DatabaseManager extends Component {
     openDialog = (selectedItem) => {
         this.setState({
             selectedItem: selectedItem,
+            isDropdownOpen: false,
         });
     };
 
