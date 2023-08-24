@@ -118,20 +118,26 @@ export function FilterInputTag({ filterProps }) {
 
 export default function TagsTable({ data }) {
     return (
-        <table>
+        <table className="table table-striped" aria-labelledby="tableLabel">
             <thead>
                 <tr>
-                    <th>Column A</th>
-                    <th>Column B</th>
-                    <th>Column C</th>
+                    <th>Tag Id</th>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>Value</th>
+                    <th>Units</th>
+                    <th>Date</th>
                 </tr>
             </thead>
             <tbody>
                 {data.map((item, index) => (
                     <tr key={index}>
-                        <td>{item.date}</td>
+                        <td>{item.temperatureF}</td>
                         <td>{item.temperatureF}</td>
                         <td>{item.temperatureC}</td>
+                        <td>{item.temperatureC}</td>
+                        <td></td>
+                        <td>{item.date}</td>
                     </tr>
                 ))}
             </tbody>

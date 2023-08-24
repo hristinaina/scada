@@ -94,19 +94,25 @@ export function FilterAlarmPriority({ onFilter }) {
 
 export default function AlarmsTable({ data }) {
     return (
-        <table>
+        <table className="table table-striped" aria-labelledby="tableLabel">
             <thead>
                 <tr>
-                    <th>Column A</th>
-                    <th>Column B</th>
-                    <th>Column C</th>
+                    <th>Alarm Id</th>
+                    <th>Type</th>
+                    <th>Limit</th>
+                    <th>Priority</th>
+                    <th>Date</th>
+                    <th>Tag name</th>
                 </tr>
             </thead>
             <tbody>
                 {data.map((item, index) => (
                     <tr key={index}>
-                        <td>{item.date}</td>
                         <td>{item.temperatureF}</td>
+                        <td>{item.temperatureF}</td>
+                        <td>{item.temperatureC}</td>
+                        <td>{item.temperatureC}</td>
+                        <td>{item.date}</td>
                         <td>{item.temperatureC}</td>
                     </tr>
                 ))}
