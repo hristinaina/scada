@@ -1,4 +1,6 @@
 using scada.Services;
+using scada.Services.implementation;
+using scada.Services.interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,7 +21,7 @@ builder.Services.AddCors(options =>
 builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<IAlarmHistoryService, AlarmHistoryService>();
 builder.Services.AddTransient<ITagHistoryService, TagHistoryService>();
-builder.Services.AddTransient<ITagProcessingService, TagProcessingService>();
+builder.Services.AddTransient<ITagService, TagService>();
 
 var app = builder.Build();
 
