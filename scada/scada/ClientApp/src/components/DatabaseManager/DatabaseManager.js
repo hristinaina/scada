@@ -1,5 +1,7 @@
 ﻿import { Component } from "react";
 import '../../fonts.css';
+import AITag from "../dialogs/AITag/AITag";
+import AOTag from "../dialogs/AOTag/AOTag";
 import { NavMenu } from "../Nav/NavMenu";
 import './DatabaseManager.css';
 
@@ -9,7 +11,8 @@ export class DatabaseManager extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            isDropdownOpen: false, // Initialize dropdown state as closed
+            isDropdownOpen: false,
+            selectedItem: null,
         };
     }
 
@@ -19,8 +22,20 @@ export class DatabaseManager extends Component {
         }));
     };
 
+    openDialog = (selectedItem) => {
+        this.setState({
+            selectedItem: selectedItem,
+        });
+    };
+
+    closeDialog = () => {
+        this.setState({
+            selectedItem: null,
+        });
+    };
+
     render() {
-        const { isDropdownOpen } = this.state;
+        const { isDropdownOpen, selectedItem } = this.state;
         return (
             <div>
                 <NavMenu showNavbar={true} />
@@ -31,13 +46,17 @@ export class DatabaseManager extends Component {
                 {isDropdownOpen && (
                     <div id="dropdown">
                         <ul id="dropdown-tags">
-                            <li className="tag bottom-margin">ANALOG OUTPUT</li>
-                            <li className="tag bottom-margin">ANALOG INPUT</li>
-                            <li className="tag bottom-margin">DIGITAL OUTPUT</li>
-                            <li className="tag">DIGITAL INPUT</li>
+                            <li onClick={() => this.openDialog("AO")} className="tag bottom-margin">ANALOG OUTPUT</li>
+                            <li onClick={() => this.openDialog("AI")} className="tag bottom-margin">ANALOG INPUT</li>
+                            <li onClick={() => this.openDialog("DO")} className="tag bottom-margin">DIGITAL OUTPUT</li>
+                            <li onClick={() => this.openDialog("DI")} className="tag">DIGITAL INPUT</li>
                         </ul>
                     </div>
                 )}
+
+                {/* Dialogs */}
+                {selectedItem === "AI" && <AITag onClose={this.closeDialog} />}
+                {selectedItem === "AO" && <AOTag onClose={this.closeDialog} />}
             </div>
         );
     }
