@@ -25,13 +25,13 @@ export class DatabaseManager extends Component {
 
     toggleOutput = () => {
         this.setState(prevState => ({
-            isDO: !prevState.isDO, // Promeni stanje na suprotno
+            isDO: !prevState.isDO, 
         }));
     };
 
     toggleInput = () => {
         this.setState(prevState => ({
-            isDI: !prevState.isDI, // Promeni stanje na suprotno
+            isDI: !prevState.isDI, 
         }));
     };
 
@@ -68,7 +68,7 @@ export class DatabaseManager extends Component {
 
 
     render() {
-        const { isDropdownOpen, selectedItem, isDO, isDI, AOData, DOData, AIData, DIData, isScanning } = this.state;
+        const { isDropdownOpen, selectedItem, isDO, isDI, AOData, DOData, AIData, DIData } = this.state;
 
         return (
             <div>
@@ -192,6 +192,4 @@ export class DatabaseManager extends Component {
             </div>
         );
     }
-
 }
-

@@ -62,8 +62,8 @@
 
 .header {
     display: flex;
-    align-items: center; /* Poravnanje elemenata po vertikali */
-    justify-content: space-between; /* Poravnanje elemenata po horizontali */
+    align-items: center; 
+    justify-content: space-between;
     margin: 15px;
 }
 
@@ -73,9 +73,9 @@
     margin-bottom: 10px;
     border-radius: 10px;
     display: flex;
-    align-items: center; /* Poravnanje elemenata po vrhu */
-    justify-content: space-between; /* Poravnanje na kraju reda */
-    gap: 10px; /* Razmak između elemenata */
+    align-items: center; 
+    justify-content: space-between; 
+    gap: 10px;
 }
 
 .tag-description {
@@ -98,8 +98,8 @@
 .edit-delete-icons {
     display: flex;
     flex-direction: column;
-    align-items: flex-end; /* Poravnanje na desno */
-    gap: 5px; /* Razmak između ikonica */
+    align-items: flex-end; 
+    gap: 5px; 
 }
 
 .icon {
@@ -128,10 +128,6 @@
     border-radius: 10px;
 }
 
-
-
-
-/* Stil za prekidač */
 .toggle-switch {
     position: relative;
     display: inline-block;
@@ -151,7 +147,7 @@
     height: 100%;
     background-color: black;
     border-radius: 20px;
-    transition: transform 0.3s; /* Koristimo transform umesto left */
+    transition: transform 0.3s; 
 }
 
 .toggle-text {
@@ -174,7 +170,7 @@
     }
 
 .toggle-switch.on .toggle-slider {
-    transform: translateX(100%); /* Pomeranje za 100% širine roditelja */
+    transform: translateX(100%);
 }
 
 .toggle-button {
