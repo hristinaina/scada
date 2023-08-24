@@ -78,21 +78,6 @@
     gap: 10px; /* Razmak između elemenata */
 }
 
-#input-tags {
-    background: #E5E4E2;
-    border-radius: 10px;
-    width: 45%;
-    padding: 5px;
-    float: right;
-}
-
-#input-tag {
-    border: 1px solid white;
-    padding: 10px;
-    margin-bottom: 10px;
-    border-radius: 10px;
-}
-
 .tag-description {
     display: flex;
     flex-direction: column;
@@ -107,7 +92,7 @@
 
 .value
 {
-    font-size:35px;
+    font-size:30px;
 }
 
 .edit-delete-icons {
@@ -126,6 +111,21 @@
 
 .icon:hover {
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+}
+
+#input-container {
+    background: #E5E4E2;
+    border-radius: 10px;
+    width: 45%;
+    padding: 5px;
+    float: right;
+}
+
+#input-tag {
+    border: 1px solid white;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 10px;
 }
 
 
@@ -176,5 +176,22 @@
 .toggle-switch.on .toggle-slider {
     transform: translateX(100%); /* Pomeranje za 100% širine roditelja */
 }
+
+.toggle-button {
+    display: inline-block;
+    width: 50px;
+    height: 20px;
+    background-color: #ccc;
+    border-radius: 20px;
+    text-align: center;
+    line-height: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+    .toggle-button.on {
+        background-color: green;
+        color: white;
+    }
 
 

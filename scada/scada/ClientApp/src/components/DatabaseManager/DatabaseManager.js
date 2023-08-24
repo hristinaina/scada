@@ -16,16 +16,28 @@ export class DatabaseManager extends Component {
             selectedItem: null,
             AOData: [],
             DOData: [],
+            AIData: [],
+            DIData: [],
             isDO: false,
-            isDI: true,
+            isDI: false,
         };
     }
 
-    toggle = () => {
+    toggleOutput = () => {
         this.setState(prevState => ({
             isDO: !prevState.isDO, // Promeni stanje na suprotno
         }));
     };
+
+    toggleInput = () => {
+        this.setState(prevState => ({
+            isDI: !prevState.isDI, // Promeni stanje na suprotno
+        }));
+    };
+
+    toggleValue = (itemId) => {
+        // TODO Implementirati logiku za promenu isScanning atributa sa dati itemId
+    }
 
     toggleDropdown = () => {
         this.setState((prevState) => ({
@@ -46,14 +58,17 @@ export class DatabaseManager extends Component {
     };
 
     async componentDidMount() {
-        const AOData = await TagService.getAOData(); // Zamisljena metoda za dohvatanje analognih podataka
-        const DOData = await TagService.getDOData(); // Zamisljena metoda za dohvatanje digitalnih podataka
-        this.setState({ AOData, DOData });
+        const AOData = await TagService.getAOData(); 
+        const DOData = await TagService.getDOData(); 
+        const AIData = await TagService.getAIData();
+        const DIData = await TagService.getDIData();
+        console.log(DIData)
+        this.setState({ AOData, DOData, AIData, DIData });
     }
 
 
     render() {
-        const { isDropdownOpen, selectedItem, data, isDO, AOData, DOData } = this.state;
+        const { isDropdownOpen, selectedItem, isDO, isDI, AOData, DOData, AIData, DIData, isScanning } = this.state;
 
         return (
             <div>
@@ -81,7 +96,7 @@ export class DatabaseManager extends Component {
                 <div id="output-container">
                     <div className="header">
                         <h3>Outputs</h3>
-                        <div className={`toggle-switch ${isDO ? 'on' : ''}`} onClick={this.toggle}>
+                        <div className={`toggle-switch ${isDO ? 'on' : ''}`} onClick={this.toggleOutput}>
                             <div className="toggle-slider"></div>
                             <div className={`toggle-text digital ${isDO ? '' : 'active'}`}>Digital</div>
                             <div className={`toggle-text analog ${isDO ? 'active' : ''}`}>Analog</div>
@@ -121,15 +136,50 @@ export class DatabaseManager extends Component {
                     </div>
                 </div>
 
-                {/*<div id="input-tags">*/}
-                {/*    <h3 style={{ margin: '15px' }}>Inputs</h3>*/}
-                {/*    {data.map(item => (*/}
-                {/*        <div id='input-tag' key={item.id}>*/}
-                {/*            <h6>{item.tagName}</h6>*/}
-                {/*            <p>{item.description}</p>*/}
-                {/*        </div>*/}
-                {/*    ))}*/}
-                {/*</div>*/}
+                <div id="input-container">
+                    <div className="header">
+                        <h3>Inputs</h3>
+                        <div className={`toggle-switch ${isDI ? 'on' : ''}`} onClick={this.toggleInput}>
+                            <div className="toggle-slider"></div>
+                            <div className={`toggle-text digital ${isDI ? '' : 'active'}`}>Digital</div>
+                            <div className={`toggle-text analog ${isDI ? 'active' : ''}`}>Analog</div>
+                        </div>
+                    </div>
+                    <div className="object-list">
+                        {isDI ? (
+                            AIData.map(item => (
+                                <div key={item.id} className="output-tag">
+                                    <div className="tag-description">
+                                        <h6 style={{ float: 'left' }}>{item.tagName}</h6>
+                                        <p className="attribute" style={{ margin: "0px" }}>Description: {item.description}</p>
+                                        <p className="attribute">Range: ({item.lowLimit},{item.highLimit})</p>
+                                    </div>
+                                    <p className="value">{item.value} {item.units}</p>
+                                    <div className="edit-delete-icons">
+                                        <img src="/images/delete.png" alt="Delete" className="icon" />
+                                        {/*<img src="/images/pencil.png" alt="Edit" className="icon" />*/}
+                                    </div>
+                                </div>
+                            ))
+                        ) : (
+                            DIData.map(item => (
+                                <div key={item.id} className="output-tag">
+                                    <div className="tag-description">
+                                        <h6 style={{ float: 'left' }}>{item.tagName}</h6>
+                                        <p className="attribute" style={{ margin: "0px" }}>Description: {item.description}</p>
+                                        <p className="attribute">Scan Time: {item.scanTime} ms</p>
+                                    </div>
+                                    <p className="value">{item.driver === 0 ? 'SIMULATION' : 'RTU'}</p>
+                                    <div
+                                        className={`toggle-button ${item.isScanning ? 'on' : ''}`}
+                                        onClick={() => this.toggleValue(item.id)}>
+                                        {item.isScanning ? 'on' : 'off'}
+                                    </div>
+                                </div>
+                            ))
+                        )}
+                    </div>
+                </div>
             </div>
         );
     }

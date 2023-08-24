@@ -13,6 +13,10 @@ namespace scada.Services.interfaces
 
         public List<AOTag> GetAOTags();
 
+        public List<DITag> GetDITags();
+
+        public List<AITag> GetAITags();
+
         public bool Delete(int id);
 
         public Tag Insert(TagDTO tag);

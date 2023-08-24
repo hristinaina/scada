@@ -39,6 +39,16 @@ namespace scada.Services.implementation
             return ConfigHelper.ParseLoadedObjects<AOTag>(_tags);
         }
 
+        public List<DITag> GetDITags()
+        {
+            return ConfigHelper.ParseLoadedObjects<DITag>(_tags);
+        }
+
+        public List<AITag> GetAITags()
+        {
+            return ConfigHelper.ParseLoadedObjects<AITag>(_tags);
+        }
+
         public bool Delete(int id)
         {
             foreach (Tag tag in _tags)
