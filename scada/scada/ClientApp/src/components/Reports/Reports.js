@@ -7,7 +7,7 @@ import AlarmsTable, { FilterAlarmTime, FilterAlarmPriority } from './AlarmsTable
 import TagsTable, { FilterTagTime, FilterTagId, FilterInputTag } from './TagsTable';
 
 export default function Reports() {
-    const [selectedTable, setSelectedTable] = useState('Table A');
+    const [selectedTable, setSelectedTable] = useState('Show alarm history by date');
     const [tableData, setTableData] = useState([]);
 
     const handleFilter = data => {
@@ -15,19 +15,19 @@ export default function Reports() {
     };
 
     const renderTable = () => {
-        if (selectedTable === 'Table A') {
+        if (selectedTable === 'Show alarm history by date') {
             return <div><FilterAlarmTime onFilter={handleFilter} />
                         <AlarmsTable data={tableData} />
                    </div>;
-        } else if (selectedTable === 'Table B') {
+        } else if (selectedTable === 'Show alarm history by priority') {
             return <div><FilterAlarmPriority onFilter={handleFilter} />
                         <AlarmsTable data={tableData} />
                    </div>;
-        } else if (selectedTable === 'Table C') {
+        } else if (selectedTable === 'Show tag history by date') {
             return <div><FilterTagTime onFilter={handleFilter} />
                 <TagsTable data={tableData} />
             </div>;
-        } else if (selectedTable === 'Table D') {
+        } else if (selectedTable === 'Show last value of all AI tags') {
             const filterProps = {
                 onFilter: handleFilter,
                 type: 'AI',
@@ -36,7 +36,7 @@ export default function Reports() {
                 <TagsTable data={tableData} />
             </div>;
         }
-        else if (selectedTable === 'Table E') {
+        else if (selectedTable === 'Show last value of all DI tags') {
             const filterProps = {
                 onFilter: handleFilter,
                 type: 'DI',
@@ -45,7 +45,7 @@ export default function Reports() {
                 <TagsTable data={tableData} />
             </div>;
         }
-        else if (selectedTable === 'Table F') {
+        else if (selectedTable === 'Show tag history by identifier') {
             return <div><FilterTagId onFilter={handleFilter} />
                 <TagsTable data={tableData} />
             </div>;
@@ -62,7 +62,8 @@ export default function Reports() {
 }
 
 function Dropdown({ onSelect }) {
-    const options = ['Table A', 'Table B', 'Table C', 'Table D', 'Table E', 'Table F'];
+    const options = ['Show alarm history by date', 'Show alarm history by priority', 'Show tag history by date',
+        'Show last value of all AI tags', 'Show last value of all DI tags', 'Show tag history by identifier'];
     const [selectedOption, setSelectedOption] = useState(options[0]);
 
     const handleSelect = (event) => {

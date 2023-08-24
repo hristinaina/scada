@@ -48,12 +48,12 @@ export function FilterTagTime({ onFilter }) {
 }
 
 export function FilterTagId({ onFilter }) {
-    const [identificator, setIdentificator] = useState('');
+    const [identifier, setIdentifier] = useState('');
 
     const handleFilterClick = async () => {
         try {
             //1. real data
-            /*const response = await axios.post('/api/filter', { identificator });
+            /*const response = await axios.post('/api/filter', { identifier });
             onFilter(response.data); // Pass the filtered data to the parent component*/
             //2. test data:
             const response = await fetch('weatherforecast');
@@ -74,8 +74,8 @@ export function FilterTagId({ onFilter }) {
                 <label>Tag id: </label>
                 <input
                     type="text"
-                    value={identificator}
-                    onChange={e => setIdentificator(e.target.value)}
+                    value={identifier}
+                    onChange={e => setIdentifier(e.target.value)}
                 />
             </div>
             <button onClick={handleFilterClick}>Apply Filter</button>
