@@ -161,7 +161,8 @@ export class DatabaseManager extends Component {
                                     </div>
                                     <p className="value">{item.driver === 0 ? 'SIMULATION' : 'RTU'}</p>
                                     <div className="edit-delete-icons">
-                                        <img style={{ marginRight:'15px' }} src="/images/delete.png" alt="Delete" className="icon" />
+                                        <img style={{ marginRight: '15px' }} src="/images/delete.png" alt="Delete" className="icon" />
+                                        <img style={{ marginRight: '15px', marginBottom: '2px', marginTop: '2px' }} src="/images/bell.png" alt="Alarm" className="icon" />
                                         <div
                                             className={`toggle-button ${item.isScanning ? 'on' : ''}`}
                                             onClick={() => this.toggleValue(item.id)}>
