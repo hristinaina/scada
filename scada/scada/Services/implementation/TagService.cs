@@ -5,6 +5,7 @@ using scada.Exceptions;
 using Newtonsoft.Json;
 using scada.DTO;
 using scada.Drivers;
+using scada.Data.Config;
 
 namespace scada.Services.implementation
 {
@@ -94,6 +95,16 @@ namespace scada.Services.implementation
         public void ReceiveRTUValue(RTUData rtu)
         {
             RTUDriver.SetValue(rtu.Address, rtu.Value);
+        }
+
+        public List<DITag> GetDITags()
+        {
+            return ConfigHelper.ParseLoadedObjects<DITag>(_tags);
+        }
+
+        public List<AITag> GetAITags()
+        {
+            return ConfigHelper.ParseLoadedObjects<AITag>(_tags);
         }
     }
 }

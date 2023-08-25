@@ -17,10 +17,10 @@ namespace scada.DTO
             TagId = tag.Id;
             Name = tag.TagName;
             Type = getType(tag);
-            Value = tagHistory.Value;
+            if (tagHistory != null) Value = tagHistory.Value;
+            if (tagHistory != null) Date = tagHistory.Timestamp;
             if (tag is AITag aiTag) Units = aiTag.Units;
             if (tag is AOTag aoTag) Units = aoTag.Units;
-            Date = tagHistory.Timestamp;
         }
 
         private string getType(Tag tag)

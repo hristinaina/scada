@@ -7,6 +7,10 @@ namespace scada.Services.interfaces
     {
         public List<Tag> Get();
 
+        public List<DITag> GetDITags();
+
+        public List<AITag> GetAITags();
+
         public Tag? Get(int id);
 
         public bool Delete(int id);

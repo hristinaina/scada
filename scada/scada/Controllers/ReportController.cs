@@ -20,11 +20,39 @@ namespace scada.Controllers
         }
 
         [HttpGet("tagId/{id}")]
-        public IActionResult Get([FromRoute] int id)
+        public IActionResult GetTagHistoryByTagId([FromRoute] int id)
         {
             try
             {
                 List<TagHistoryDTO> tagsDTO = _tagHistoryService.GetByTagId(id);
+                return Ok(tagsDTO);
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(new { error = ex.Message });
+            }
+        }
+
+        [HttpGet("tagAI")]
+        public IActionResult GetLastValueOfAITags()
+        {
+            try
+            {
+                List<TagHistoryDTO> tagsDTO = _tagHistoryService.GetLastValueOfAITags();
+                return Ok(tagsDTO);
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(new { error = ex.Message });
+            }
+        }
+
+        [HttpGet("tagDI")]
+        public IActionResult GetLastValueOfDITags()
+        {
+            try
+            {
+                List<TagHistoryDTO> tagsDTO = _tagHistoryService.GetLastValueOfDITags();
                 return Ok(tagsDTO);
             }
             catch (NotFoundException ex)

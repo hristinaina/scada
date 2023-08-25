@@ -33,5 +33,50 @@ namespace scada.Services
             }
         }
 
+        List<TagHistoryDTO> ITagHistoryService.GetLastValueOfAITags()
+        {
+            List<AITag> tags = new TagService().GetAITags();
+
+            using (var dbContext = new ApplicationDbContext())
+            {
+                var result = tags.GroupJoin(
+                        dbContext.TagHistory.ToList(),
+                        aitag => aitag.Id,
+                        tagHistory => tagHistory.TagId,
+                        (aitag, tagHistoryGroup) => new
+                        {
+                            AITag = aitag,
+                            LastTagHistory = tagHistoryGroup
+                                .OrderBy(th => th.Timestamp)
+                                .LastOrDefault() // Get the last TagHistory with the least Timestamp value
+                        })
+                    .Select(result => new TagHistoryDTO(result.AITag, result.LastTagHistory))
+                    .ToList();
+                return result;
+            }
+        }
+
+        List<TagHistoryDTO> ITagHistoryService.GetLastValueOfDITags()
+        {
+            List<DITag> tags = new TagService().GetDITags();
+
+            using (var dbContext = new ApplicationDbContext())
+            {
+                var result = tags.GroupJoin(
+                        dbContext.TagHistory.ToList(),
+                        ditag => ditag.Id,
+                        tagHistory => tagHistory.TagId,
+                        (ditag, tagHistoryGroup) => new
+                        {
+                            DITag = ditag,
+                            LastTagHistory = tagHistoryGroup
+                                .OrderBy(th => th.Timestamp)
+                                .LastOrDefault() // Get the last TagHistory with the least Timestamp value
+                        })
+                    .Select(result => new TagHistoryDTO(result.DITag, result.LastTagHistory))
+                    .ToList();
+                return result;
+            }
+        }
     }
 }

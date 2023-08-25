@@ -87,15 +87,16 @@ export function FilterInputTag({ filterProps }) {
     const handleFilterClick = async () => {
         try {
             if (type === "AI") {
-                const response = await axios.post('/api/report/tagAI');
+                const response = await axios.get('http://localhost:5083/api/report/tagAI');
                 onFilter(response.data); 
             }
             else if (type === "DI") {
-                const response = await axios.post('/api/report/tagDI');
+                const response = await axios.get('http://localhost:5083/api/report/tagDI');
                 onFilter(response.data);
             }
         } catch (error) {
             console.error('Error fetching filtered data:', error);
+            onFilter([]);
         }
     };
 
