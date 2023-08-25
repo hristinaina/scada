@@ -32,5 +32,10 @@ namespace scada.DTO
             else return "Unknow type";
         }
 
+        public override string ToString()
+        {
+            return $"AlarmId: {TagId}, Type: {Type}, TagName: {Name}";
+        }
+
     }
 }
