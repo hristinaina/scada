@@ -21,10 +21,18 @@ const DOTag = ({ onClose }) => {
             />
 
             <p className="label">Address</p>
+            <input
+                className="input"
+                type="text"
+                name="address"
+                maxLength="20"
+                placeholder="Type address here..."
+            ></input>
+
+            <p className="label">Value</p>
             <select className="input">
-                <option value="fruit">Fruit</option>
-                <option value="vegetable">Vegetable</option>
-                <option value="meat">Meat</option>
+                <option value="0">0</option>
+                <option value="1">1</option>
             </select>
 
 

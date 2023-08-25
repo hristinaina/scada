@@ -21,11 +21,13 @@ const DITag = ({ onClose }) => {
             />
 
             <p className="label">Address</p>
-            <select className="input">
-                <option value="fruit">Fruit</option>
-                <option value="vegetable">Vegetable</option>
-                <option value="meat">Meat</option>
-            </select>
+            <input
+                className="input"
+                type="text"
+                name="address"
+                maxLength="20"
+                placeholder="Type address here..."
+            ></input>
 
             <p
                 className="label">Scan time</p>

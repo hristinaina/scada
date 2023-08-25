@@ -21,11 +21,13 @@ const AOTag = ({ onClose }) => {
             />
 
             <p className="label">Address</p>
-            <select className="input">
-                <option value="fruit">Fruit</option>
-                <option value="vegetable">Vegetable</option>
-                <option value="meat">Meat</option>
-            </select>
+            <input
+                className="input"
+                type="text"
+                name="address"
+                maxLength="10"
+                placeholder="Type address here..."
+            ></input>
 
             <p
                 className="label">Unit</p>
@@ -44,7 +46,7 @@ const AOTag = ({ onClose }) => {
                 type="number"
                 name="low-limit"
                 maxLength="10"
-                placeholder="Type low limit here"
+                placeholder="Type low limit here..."
             ></input>
 
             <p
@@ -55,6 +57,16 @@ const AOTag = ({ onClose }) => {
                 name="high-limit"
                 maxLength="10"
                 placeholder="Type high limit here..."
+            ></input>
+
+            <p
+                className="label">Value</p>
+            <input
+                className="input"
+                type="number"
+                name="high-limit"
+                maxLength="15"
+                placeholder="Type value here..."
             ></input>
 
 
