@@ -74,5 +74,20 @@ namespace scada.Controllers
                 return NotFound(new { error = ex.Message });
             }
         }
+
+        [HttpPut("alarmTime")]
+        public IActionResult GetAlarmsByTime([FromBody] FilterDTO filterDTO)
+        {
+            try
+            {
+                List<AlarmHistoryDTO> alarmsDTO = _alarmHistoryService.GetAlarmsByTime(filterDTO);
+                foreach(AlarmHistoryDTO a in alarmsDTO) Console.WriteLine(a);
+                return Ok(alarmsDTO);
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(new { error = ex.Message });
+            }
+        }
     }
 }

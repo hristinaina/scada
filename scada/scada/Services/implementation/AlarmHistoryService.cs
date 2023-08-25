@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using scada.Database;
+using scada.DTO;
 using scada.Models;
+using scada.Services.implementation;
 
 namespace scada.Services
 {
@@ -13,6 +15,25 @@ namespace scada.Services
                 var alarmHistory = dbContext.AlarmHistory.ToList();
                 return alarmHistory;
             }
+        }
+
+        List<AlarmHistoryDTO> IAlarmHistoryService.GetAlarmsByTime(FilterDTO filter)
+        {
+            List<AlarmHistoryDTO> dto = new List<AlarmHistoryDTO>();
+
+            using (var dbContext = new ApplicationDbContext())
+            {
+                List<AlarmHistory> filteredAlarmHistories = dbContext.AlarmHistory.ToList()
+                .Where(ah => ah.Timestamp >= filter.StartDate && ah.Timestamp <= filter.EndDate)
+                .ToList();
+
+                foreach (AlarmHistory ah in filteredAlarmHistories)
+                {
+                    dto.Add(new AlarmHistoryDTO(new TagService().GetAlarmById(ah.AlarmId), ah, new TagService().GetTagByAlarmId(ah.AlarmId)));
+                }
+            }
+
+            return dto;
         }
     }
 }

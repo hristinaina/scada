@@ -20,5 +20,10 @@ namespace scada.Services.interfaces
         public void SaveTagValue(int tag, double value);
         
         public void ReceiveRTUValue(RTUData rtu);
+
+        public List<Alarm> GetAllAlarms();
+
+        public Alarm GetAlarmById(int id);
+        public AITag GetTagByAlarmId(int id);
     }
 }
