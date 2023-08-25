@@ -4,7 +4,7 @@
     {
         public DateTime StartDate { get; set; } 
         public DateTime EndDate { get; set; }
-        public int Priority { get; set; }
+        public string SortingType { get; set; }
 
         public override string ToString()
         {
