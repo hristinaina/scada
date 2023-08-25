@@ -62,7 +62,7 @@ export function FilterTagId({ onFilter }) {
     const handleFilterClick = async (flag) => {
         try {
             if (flag === "load") {
-                const response = await axios.get('http://localhost:5083/api/report/tagId/2');
+                const response = await axios.get('http://localhost:5083/api/report/tagId/1');
                 onFilter(response.data); // Pass the filtered data to the parent component
             }
             else {
@@ -76,7 +76,7 @@ export function FilterTagId({ onFilter }) {
     };
 
     useEffect(() => {
-        setIdentifier(2);
+        setIdentifier(1);
         handleFilterClick("load"); 
     }, []); 
 
