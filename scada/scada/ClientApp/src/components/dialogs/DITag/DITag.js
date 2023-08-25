@@ -1,5 +1,4 @@
-﻿import './DITag.css';
-
+﻿
 
 const DITag = ({ onClose }) => {
     return (

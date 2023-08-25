@@ -1,5 +1,4 @@
-﻿import './AOTag.css';
-
+﻿
 
 const AOTag = ({ onClose }) => {
     return (
