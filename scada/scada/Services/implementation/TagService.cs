@@ -32,22 +32,22 @@ namespace scada.Services.implementation
 
         public List<DOTag> GetDOTags() 
         {
-            return ConfigHelper.ParseLoadedObjects<DOTag>(_tags); 
+            return ConfigHelper.ParseTags<DOTag>(_tags); 
         }
 
         public List<AOTag> GetAOTags()
         {
-            return ConfigHelper.ParseLoadedObjects<AOTag>(_tags);
+            return ConfigHelper.ParseTags<AOTag>(_tags);
         }
 
         public List<DITag> GetDITags()
         {
-            return ConfigHelper.ParseLoadedObjects<DITag>(_tags);
+            return ConfigHelper.ParseTags<DITag>(_tags);
         }
 
         public List<AITag> GetAITags()
         {
-            return ConfigHelper.ParseLoadedObjects<AITag>(_tags);
+            return ConfigHelper.ParseTags<AITag>(_tags);
         }
 
         public bool Delete(int id)
