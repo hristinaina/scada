@@ -9,22 +9,36 @@ export function FilterTagTime({ onFilter }) {
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
 
-    const handleFilterClick = async () => {
-        const filterOptions = {
-            startDate,
-            endDate,
-        };
-
+    const handleFilterClick = async (flag) => {
         try {
-             const response = await axios.post('/api/report/tagTime', filterOptions); 
-             onFilter(response.data); // Pass the filtered data to the parent component
+            if (flag === "load") {
+                const startDate = new Date("11/14/2022 11:00:00 PM");
+                const endDate = new Date("11/14/2024 11:00:00 PM");
+                const filterOptions = {
+                    startDate,
+                    endDate,
+                };
+                const response = await axios.put('http://localhost:5083/api/report/tagTime', filterOptions);
+                onFilter(response.data);
+            }
+            else {
+                const filterOptions = {
+                    startDate,
+                    endDate,
+                };
+                const response = await axios.put('http://localhost:5083/api/report/tagTime', filterOptions);
+                onFilter(response.data);
+            }
         } catch (error) {
             console.error('Error fetching filtered data:', error);
+            onFilter([]);
         }
     };
 
     useEffect(() => {
-        handleFilterClick(); // Call the function on page load
+        setStartDate(new Date("11/14/2022 11:00:00 PM"));
+        setEndDate(new Date("11/14/2024 11:00:00 PM"));
+        handleFilterClick("load"); // Call the function on page load
     }, []); // Empty dependency array means it runs only on mount
 
     return (

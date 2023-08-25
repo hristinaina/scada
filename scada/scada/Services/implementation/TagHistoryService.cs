@@ -78,5 +78,24 @@ namespace scada.Services
                 return result;
             }
         }
+
+        List<TagHistoryDTO> ITagHistoryService.GetTagsByTime(FilterDTO filter)
+        {
+            List<TagHistoryDTO> dto = new List<TagHistoryDTO>();
+
+            using (var dbContext = new ApplicationDbContext())
+            {
+                List<TagHistory> filteredTagHistories = dbContext.TagHistory.ToList()
+                .Where(th => th.Timestamp >= filter.StartDate && th.Timestamp <= filter.EndDate)
+                .ToList();
+
+                foreach (TagHistory th in filteredTagHistories)
+                {
+                    dto.Add(new TagHistoryDTO(new TagService().Get(th.TagId), th));
+                }
+            }
+
+            return dto;
+        }
     }
 }

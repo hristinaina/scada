@@ -9,5 +9,6 @@ namespace scada.Services
         public List<TagHistoryDTO> GetByTagId(int id);
         List<TagHistoryDTO> GetLastValueOfAITags();
         List<TagHistoryDTO> GetLastValueOfDITags();
+        List<TagHistoryDTO> GetTagsByTime(FilterDTO filterDTO);
     }
 }

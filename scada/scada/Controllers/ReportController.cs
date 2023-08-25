@@ -60,5 +60,19 @@ namespace scada.Controllers
                 return NotFound(new { error = ex.Message });
             }
         }
+
+        [HttpPut("tagTime")]
+        public IActionResult GetTagsByTime([FromBody] FilterDTO filterDTO)
+        {
+            try
+            {
+                List<TagHistoryDTO> tagsDTO = _tagHistoryService.GetTagsByTime(filterDTO);
+                return Ok(tagsDTO);
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(new { error = ex.Message });
+            }
+        }
     }
 }
