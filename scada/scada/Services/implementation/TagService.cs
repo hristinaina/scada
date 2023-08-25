@@ -12,6 +12,7 @@ namespace scada.Services.implementation
     public class TagService : ITagService
     {
         private List<Tag> _tags;
+        private ITagHistoryService _tagHistoryService = new TagHistoryService();
 
         public TagService() 
         {
@@ -55,6 +56,7 @@ namespace scada.Services.implementation
             {
                 if (tag.Id == id) { 
                     _tags.Remove(tag);
+                    _tagHistoryService.Delete(id);
                     XmlSerializationHelper.SaveToXml(_tags);
                     return true; 
                 }

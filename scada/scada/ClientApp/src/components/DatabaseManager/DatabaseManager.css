@@ -1,4 +1,4 @@
-﻿#add-tag {
+#add-tag {
     text-align: right;
     width: 100%;
     padding-right: 1em;
@@ -50,6 +50,8 @@
     border: 1px solid #ccc;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     z-index: 1000;
+    height: 84%;
+    overflow-y: auto;
 }
 
 #output-container {
@@ -189,5 +191,3 @@
         background-color: green;
         color: white;
     }
-
-

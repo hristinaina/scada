@@ -1,8 +1,9 @@
 ﻿
-const AITag = ({ onClose }) => {
+
+const DITag = ({ onClose }) => {
     return (
         <div className="dialog">
-            <p id="title">New Analog Input Tag</p>
+            <p id="title">New Digital Input Tag</p>
 
             <p
                 className="label">Name</p>
@@ -43,37 +44,6 @@ const AITag = ({ onClose }) => {
                 <option value="simulation">Simulation</option>
             </select>
 
-            <p
-                className="label">Unit</p>
-            <input
-                className="input"
-                type="text"
-                name="unit"
-                maxLength="10"
-                placeholder="Type unit here..."
-            ></input>
-
-            <p
-                className="label">Low limit</p>
-            <input
-                className="input"
-                type="number"
-                name="low-limit"
-                maxLength="10"
-                placeholder="Type low limit here..."
-            ></input>
-
-            <p
-                className="label">High limit</p>
-            <input
-                className="input"
-                type="number"
-                name="high-limit"
-                maxLength="10"
-                placeholder="Type high limit here..."
-            ></input>
-
-
             <div id="buttons">
                 <button className="btn" id="save">SAVE</button>
                 <button className="btn" onClick={onClose}>CLOSE</button>
@@ -82,4 +52,4 @@ const AITag = ({ onClose }) => {
     );
 };
 
-export default AITag;
+export default DITag;
