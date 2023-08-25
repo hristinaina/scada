@@ -108,7 +108,8 @@ export class DatabaseManager extends Component {
                                 <div key={item.id} className="output-tag">
                                     <div className="tag-description">
                                         <h6 style={{ float: 'left' }}>{item.tagName}</h6>
-                                        <p className="attribute" style={{ margin:"0px" }}>Description: {item.description}</p>
+                                        <p className="attribute" style={{ margin: "0px" }}>Description: {item.description}</p>
+                                        <p className="attribute" style={{ margin: "0px" }}>Address: {item.address}</p>
                                         <p className="attribute">Range: ({item.lowLimit},{item.highLimit})</p>
                                     </div>
                                     <p className="value">{item.value} {item.units}</p>
@@ -123,7 +124,8 @@ export class DatabaseManager extends Component {
                                 <div key={item.id} className="output-tag">
                                     <div className="tag-description">
                                         <h6 style={{ float: 'left' }}>{item.tagName}</h6>
-                                        <p className="attribute">Description: {item.description}</p>
+                                        <p className="attribute" style={{ margin: "0px" }}>Description: {item.description}</p>
+                                        <p className="attribute">Address: {item.address}</p>
                                     </div>
                                     <p className="value">{item.value === 0 ? 'Off' : 'On'}</p>
                                     <div className="edit-delete-icons">
@@ -152,6 +154,7 @@ export class DatabaseManager extends Component {
                                     <div className="tag-description">
                                         <h6 style={{ float: 'left' }}>{item.tagName}</h6>
                                         <p className="attribute" style={{ margin: "0px" }}>Description: {item.description}</p>
+                                        <p className="attribute" style={{ margin: "0px" }}>Address: {item.address}</p>
                                         <p className="attribute" style={{ margin: "0px" }}>Range: ({item.lowLimit},{item.highLimit})</p>
                                         <p className="attribute" style={{ margin: "0px" }}>Scan Time: {item.scanTime} ms</p>
                                         <p className="attribute">Units: {item.units}</p>
@@ -173,6 +176,7 @@ export class DatabaseManager extends Component {
                                     <div className="tag-description">
                                         <h6 style={{ float: 'left' }}>{item.tagName}</h6>
                                         <p className="attribute" style={{ margin: "0px" }}>Description: {item.description}</p>
+                                        <p className="attribute" style={{ margin: "0px" }}>Address: {item.address}</p>
                                         <p className="attribute">Scan Time: {item.scanTime} ms</p>
                                     </div>
                                     <p className="value">{item.driver === 0 ? 'SIMULATION' : 'RTU'}</p>

@@ -6,6 +6,7 @@
     <IsScanning>true</IsScanning>
     <ScanTime>1000</ScanTime>
     <Description>Ovo je tag</Description>
+    <Address>adresa33</Address>
     <Driver>SIM</Driver>
   </Tag>
   <Tag xsi:type="DITag">
@@ -14,6 +15,7 @@
     <IsScanning>false</IsScanning>
     <ScanTime>1000</ScanTime>
     <Description>Ovo je tag</Description>
+    <Address>adresa1</Address>
     <Driver>RTU</Driver>
   </Tag>
   <Tag xsi:type="AOTag">
@@ -23,13 +25,14 @@
     <LowLimit>0</LowLimit>
     <HighLimit>10</HighLimit>
     <Description>ao tag jeeeee</Description>
+    <Address>neka adresa</Address>
     <Value>5.5</Value>
   </Tag>
   <Tag xsi:type="DOTag">
     <Id>6</Id>
     <TagName>Neki tag</TagName>
     <Description>alalala</Description>
-    <Address>Some address</Address>
+    <Address>adresica</Address>
     <Value>1</Value>
   </Tag>
   <Tag xsi:type="AITag">
@@ -39,6 +42,7 @@
     <ScanTime>2000</ScanTime>
     <Driver>RTU</Driver>
     <Description>neki opis lalalal</Description>
+    <Address>adresa ai taga</Address>
     <Units>C</Units>
     <LowLimit>-10</LowLimit>
     <HighLimit>50</HighLimit>
