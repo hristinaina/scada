@@ -1,9 +1,8 @@
-﻿#add-tag {
+#add-tag {
     text-align: right;
     width: 100%;
     padding-right: 1em;
     font-size: large;
-
 }
 
 #add-tag:hover {
@@ -54,3 +53,141 @@
     height: 84%;
     overflow-y: auto;
 }
+
+#output-container {
+    background: #E5E4E2;
+    border-radius: 10px;
+    width: 45%;
+    padding: 5px;
+    float: left;
+}
+
+.header {
+    display: flex;
+    align-items: center; 
+    justify-content: space-between;
+    margin: 15px;
+}
+
+.output-tag {
+    border: 1px solid white;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center; 
+    justify-content: space-between; 
+    gap: 10px;
+}
+
+.tag-description {
+    display: flex;
+    flex-direction: column;
+    margin: 0px;
+}
+
+.attribute
+{
+    font-size: 12px;
+    float: left;
+}
+
+.value
+{
+    font-size:30px;
+}
+
+.edit-delete-icons {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end; 
+    gap: 5px; 
+}
+
+.icon {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    transition: box-shadow 0.3s;
+}
+
+.icon:hover {
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+}
+
+#input-container {
+    background: #E5E4E2;
+    border-radius: 10px;
+    width: 45%;
+    padding: 5px;
+    float: right;
+}
+
+#input-tag {
+    border: 1px solid white;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+}
+
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 120px;
+    height: 40px;
+    background-color: #ccc;
+    border-radius: 20px;
+    transition: background-color 0.3s;
+    cursor: pointer;
+}
+
+.toggle-slider {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 50%;
+    height: 100%;
+    background-color: black;
+    border-radius: 20px;
+    transition: transform 0.3s; 
+}
+
+.toggle-text {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    text-align: center;
+    width: 50%;
+    color: white;
+    font-weight: bold;
+    transition: color 0.3s;
+}
+
+    .toggle-text.digital {
+        left: 0;
+    }
+
+    .toggle-text.analog {
+        right: 0;
+    }
+
+.toggle-switch.on .toggle-slider {
+    transform: translateX(100%);
+}
+
+.toggle-button {
+    display: inline-block;
+    width: 50px;
+    height: 20px;
+    background-color: #ccc;
+    border-radius: 20px;
+    text-align: center;
+    line-height: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+    .toggle-button.on {
+        background-color: green;
+        color: white;
+    }

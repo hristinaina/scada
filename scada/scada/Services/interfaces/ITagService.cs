@@ -9,6 +9,14 @@ namespace scada.Services.interfaces
 
         public Tag? Get(int id);
 
+        public List<DOTag> GetDOTags();
+
+        public List<AOTag> GetAOTags();
+
+        public List<DITag> GetDITags();
+
+        public List<AITag> GetAITags();
+
         public bool Delete(int id);
 
         public Tag Insert(TagDTO tag);

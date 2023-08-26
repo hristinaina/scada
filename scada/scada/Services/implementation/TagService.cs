@@ -5,6 +5,7 @@ using scada.Exceptions;
 using Newtonsoft.Json;
 using scada.DTO;
 using scada.Drivers;
+using scada.Data.Config;
 
 namespace scada.Services.implementation
 {
@@ -27,6 +28,26 @@ namespace scada.Services.implementation
         {
             foreach (Tag tag in _tags) if (tag.Id == id)  return tag; 
             throw new NotFoundException("Tag not found!");
+        }
+
+        public List<DOTag> GetDOTags() 
+        {
+            return ConfigHelper.ParseTags<DOTag>(_tags); 
+        }
+
+        public List<AOTag> GetAOTags()
+        {
+            return ConfigHelper.ParseTags<AOTag>(_tags);
+        }
+
+        public List<DITag> GetDITags()
+        {
+            return ConfigHelper.ParseTags<DITag>(_tags);
+        }
+
+        public List<AITag> GetAITags()
+        {
+            return ConfigHelper.ParseTags<AITag>(_tags);
         }
 
         public bool Delete(int id)
