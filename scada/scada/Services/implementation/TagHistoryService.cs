@@ -29,6 +29,7 @@ namespace scada.Services
 
                 List<TagHistoryDTO> dto = new List<TagHistoryDTO>();
                 foreach (TagHistory th in tagHistory) dto.Add(new TagHistoryDTO(tag, th));
+                dto = dto.OrderBy(item => item.Value).ToList();
                 return dto;
             }
         }
@@ -52,6 +53,7 @@ namespace scada.Services
                         })
                     .Select(result => new TagHistoryDTO(result.AITag, result.LastTagHistory))
                     .ToList();
+                result = result.OrderBy(item => item.Date).ToList();
                 return result;
             }
         }
@@ -75,6 +77,7 @@ namespace scada.Services
                         })
                     .Select(result => new TagHistoryDTO(result.DITag, result.LastTagHistory))
                     .ToList();
+                result = result.OrderBy(item => item.Date).ToList();
                 return result;
             }
         }
@@ -94,7 +97,7 @@ namespace scada.Services
                     dto.Add(new TagHistoryDTO(new TagService().Get(th.TagId), th));
                 }
             }
-
+            dto = dto.OrderBy(item => item.Date).ToList();
             return dto;
         }
     }

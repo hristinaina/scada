@@ -33,6 +33,11 @@ namespace scada.Services
                 }
             }
 
+            if (filter.SortingType == "priority")
+                dto = dto.OrderBy(item => item.Priority).ToList();
+            else if (filter.SortingType == "time")
+                dto = dto.OrderBy(item => item.Date).ToList();
+
             return dto;
         }
 
@@ -52,6 +57,8 @@ namespace scada.Services
                     dto.Add(new AlarmHistoryDTO(new TagService().GetAlarmById(ah.AlarmId), ah, new TagService().GetTagByAlarmId(ah.AlarmId)));
                 }
             }
+
+            dto = dto.OrderBy(item => item.Date).ToList();
 
             return dto;
         }
