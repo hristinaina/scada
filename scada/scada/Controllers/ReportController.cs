@@ -81,7 +81,20 @@ namespace scada.Controllers
             try
             {
                 List<AlarmHistoryDTO> alarmsDTO = _alarmHistoryService.GetAlarmsByTime(filterDTO);
-                foreach(AlarmHistoryDTO a in alarmsDTO) Console.WriteLine(a);
+                return Ok(alarmsDTO);
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(new { error = ex.Message });
+            }
+        }
+
+        [HttpGet("alarmPriority/{priority}")]
+        public IActionResult GetAlarmsByPriority([FromRoute] int priority)
+        {
+            try
+            {
+                List<AlarmHistoryDTO> alarmsDTO = _alarmHistoryService.GetByPriority(priority);
                 return Ok(alarmsDTO);
             }
             catch (NotFoundException ex)

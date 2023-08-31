@@ -35,5 +35,25 @@ namespace scada.Services
 
             return dto;
         }
+
+        List<AlarmHistoryDTO> IAlarmHistoryService.GetByPriority(int priority)
+        {
+            List<AlarmHistoryDTO> dto = new List<AlarmHistoryDTO>();
+
+            using (var dbContext = new ApplicationDbContext())
+            {
+                var filteredAlarmHistories = from history in dbContext.AlarmHistory.ToList()
+                             join alarm in new TagService().GetAllAlarms() on history.AlarmId equals alarm.Id
+                             where alarm.Priority == priority
+                             select history;
+
+                foreach (AlarmHistory ah in filteredAlarmHistories)
+                {
+                    dto.Add(new AlarmHistoryDTO(new TagService().GetAlarmById(ah.AlarmId), ah, new TagService().GetTagByAlarmId(ah.AlarmId)));
+                }
+            }
+
+            return dto;
+        }
     }
 }

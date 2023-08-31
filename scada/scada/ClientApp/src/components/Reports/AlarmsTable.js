@@ -70,17 +70,25 @@ export function FilterAlarmTime({ onFilter }) {
 export function FilterAlarmPriority({ onFilter }) {
     const [priority, setPriority] = useState('');
 
-    const handleFilterClick = async () => {
+    const handleFilterClick = async (flag) => {
         try {
-            const response = await axios.post('/api/report/alarmPriority', { priority });
-            onFilter(response.data); // Pass the filtered data to the parent component
+            if (flag === "load") {
+                const response = await axios.get('http://localhost:5083/api/report/alarmPriority/1');
+                onFilter(response.data); 
+            }
+            else {
+                const response = await axios.get('http://localhost:5083/api/report/alarmPriority/' + priority);
+                onFilter(response.data); 
+            }
         } catch (error) {
             console.error('Error fetching filtered data:', error);
+            onFilter([]);
         }
     };
 
     useEffect(() => {
-        handleFilterClick();
+        setPriority(1);
+        handleFilterClick("load");
     }, []); 
 
     return (
