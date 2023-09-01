@@ -1,5 +1,40 @@
-﻿
+﻿import React, { useState } from 'react';
+
+
 const AITag = ({ onClose }) => {
+    const [selectedDriver, setSelectedDriver] = useState('RTU'); // Default value for the driver dropdown
+
+    const create = async () => {
+        const type = "AITag";
+        const name = document.getElementsByName("name")[0].value;
+        const description = document.getElementsByName("description")[0].value;
+        const address = document.getElementsByName("address")[0].value;
+        const scanTime = document.getElementsByName("scan-time")[0].value;
+        const unit = document.getElementsByName("unit")[0].value;
+        const lowLimit = document.getElementsByName("low-limit")[0].value;
+        const highLimit = document.getElementsByName("high-limit")[0].value;
+        const driver = selectedDriver;
+
+        const tag = {
+            Type: type,
+            Data: {
+                Name: name,
+                Description: description,
+                Address: address,
+                ScanTime: scanTime,
+                Unit: unit,
+                LowLimit: lowLimit,
+                HighLimit: highLimit,
+                Driver: driver
+            }
+        }
+
+        console.log("TAGGGG");
+        console.log(tag);
+
+        //onClose();
+    };
+
     return (
         <div className="dialog">
             <p id="title">New Analog Input Tag</p>
@@ -15,7 +50,7 @@ const AITag = ({ onClose }) => {
             ></input>
 
             <p className="label">Description</p>
-            <textarea className="input" placeholder="Type description of the tag here..."
+            <textarea name="description" className="input" placeholder="Type description of the tag here..."
             />
 
             <p className="label">Address</p>
@@ -38,9 +73,12 @@ const AITag = ({ onClose }) => {
             ></input>
 
             <p className="label">Driver</p>
-            <select className="input">
-                <option value="real-time">Real-time</option>
-                <option value="simulation">Simulation</option>
+            <select
+                className="input"
+                value={selectedDriver}
+                onChange={(e) => setSelectedDriver(e.target.value)}>
+                <option value="RTU">Real-time</option>
+                <option value="SIM">Simulation</option>
             </select>
 
             <p
@@ -75,7 +113,7 @@ const AITag = ({ onClose }) => {
 
 
             <div id="buttons">
-                <button className="btn" id="save">SAVE</button>
+                <button className="btn" id="save" onClick={create}>SAVE</button>
                 <button className="btn" onClick={onClose}>CLOSE</button>
             </div>
         </div>
