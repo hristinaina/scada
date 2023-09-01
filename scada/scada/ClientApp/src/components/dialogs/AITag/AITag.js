@@ -3,7 +3,15 @@ import axios from 'axios';
 
 
 const AITag = ({ onClose }) => {
-    const [selectedDriver, setSelectedDriver] = useState('RTU'); // Default value for the driver dropdown
+    const [selectedDriver, setSelectedDriver] = useState('RTU'); // default value for the driver dropdown
+
+    const isValid = (tag) => {
+        if (tag.Data.LowLimit > tag.Data.HighLimit) return false;
+        if ((tag.Data.Name.trim() || tag.Data.Description.trim() || tag.Data.Address.trim()
+            || tag.Data.Unit.trim()) === "") return false;
+        if (tag.Data.ScanTime == 0) return false;
+        return true;
+    }
 
     const create = async () => {
         const type = "AITag";
@@ -34,9 +42,13 @@ const AITag = ({ onClose }) => {
         console.log(tag);
 
         try {
-            const response = await axios.post('http://localhost:5083/api/tag', tag);
+            if (!isValid(tag)) {
+                console.log("Inputted data is not valid!");
+                return;
+            }
+            //const response = await axios.post('http://localhost:5083/api/tag', tag);
 
-            console.log("Create successful!!!", response.data);
+            //console.log("Tag created successfully!", response.data);
         }
         catch (error) {
             console.log("Create failed: ", error);
