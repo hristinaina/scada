@@ -1,7 +1,7 @@
 #add-tag {
     text-align: right;
     width: 100%;
-    padding-right: 1em;
+ 
     font-size: large;
 }
 
@@ -10,9 +10,10 @@
 }
 
 #dropdown {
-    position: relative;
-    display: flex;
-    justify-content: flex-end;
+    position: absolute;
+    top: 29%;
+    right: 7.6em;
+    z-index: 1000;
 }
 
 #dropdown-tags {
