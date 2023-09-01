@@ -68,16 +68,4 @@
     <Address>Some address</Address>
     <Value>0</Value>
   </Tag>
-  <Tag xsi:type="AITag">
-    <Id>8</Id>
-    <Description>sad sad</Description>
-    <Address>adss</Address>
-    <IsScanning>false</IsScanning>
-    <ScanTime>1500</ScanTime>
-    <Driver>SIM</Driver>
-    <Units />
-    <LowLimit>50</LowLimit>
-    <HighLimit>500</HighLimit>
-    <Alarms />
-  </Tag>
 </ArrayOfTag>
