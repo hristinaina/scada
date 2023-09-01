@@ -5,6 +5,7 @@ using scada.Exceptions;
 using Newtonsoft.Json;
 using scada.DTO;
 using scada.Drivers;
+using scada.Data.Config;
 
 namespace scada.Services.implementation
 {
@@ -14,17 +15,65 @@ namespace scada.Services.implementation
 
         public TagService() 
         {
-            _tags = Get();    
+            _tags = Load();    
+        }
+
+        private List<Tag> Load()
+        {
+            return XmlSerializationHelper.LoadFromXml<Tag>();
         }
 
         public List<Tag> Get()
         {
-            return XmlSerializationHelper.LoadFromXml<Tag>();
+            return _tags;
         }
 
         public Tag? Get(int id)
         {
             foreach (Tag tag in _tags) if (tag.Id == id)  return tag; 
+            throw new NotFoundException("Tag not found!");
+        }
+
+        public List<Alarm> GetAllAlarms()
+        {
+            List<Alarm> alarms = new List<Alarm>();
+
+            foreach (Tag tag in _tags) { 
+                if (tag is AITag)
+                {
+                    AITag aitag = (AITag) tag;
+                    alarms.AddRange(aitag.Alarms);
+                }
+            }
+
+            return alarms;
+        }
+
+        public Alarm GetAlarmById(int id)
+        {
+            foreach (Tag tag in _tags)
+            {
+                if (tag is AITag)
+                {
+                    AITag aitag = (AITag)tag;
+                    Alarm alarm = aitag.Alarms.FirstOrDefault(item => item.Id == id);
+                    if (alarm != null) return alarm;
+                }
+            }
+            throw new NotFoundException("Alarm not found!");
+        }
+
+        public AITag GetTagByAlarmId(int id)
+        {
+            foreach (Tag tag in _tags)
+            {
+                if (tag is AITag)
+                {
+                    AITag aitag = (AITag)tag;
+                    Alarm alarm = aitag.Alarms.FirstOrDefault(item => item.Id == id);
+                    if (alarm != null) return aitag;
+                }
+            }
             throw new NotFoundException("Tag not found!");
         }
 
@@ -89,6 +138,16 @@ namespace scada.Services.implementation
         public void ReceiveRTUValue(RTUData rtu)
         {
             RTUDriver.SetValue(rtu.Address, rtu.Value);
+        }
+
+        public List<DITag> GetDITags()
+        {
+            return ConfigHelper.ParseLoadedObjects<DITag>(_tags);
+        }
+
+        public List<AITag> GetAITags()
+        {
+            return ConfigHelper.ParseLoadedObjects<AITag>(_tags);
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace scada.Models
+﻿namespace scada.DTO
 {
     //only used as pojo class, not to be saved
     public class RTUData

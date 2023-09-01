@@ -1,5 +1,5 @@
 ﻿using scada.Drivers;
-using scada.Models;
+using scada.DTO;
 
 namespace scada.Services
 {
