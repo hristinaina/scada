@@ -6,9 +6,17 @@ const AITag = ({ onClose }) => {
     const [selectedDriver, setSelectedDriver] = useState('RTU'); // default value for the driver dropdown
 
     const isValid = (tag) => {
+        console.log("unit");
+        console.log(tag.Data.Units);
         if (tag.Data.LowLimit > tag.Data.HighLimit) return false;
-        if ((tag.Data.Name.trim() || tag.Data.Description.trim() || tag.Data.Address.trim()
-            || tag.Data.Unit.trim()) === "") return false;
+        if (
+            tag.Data.Name.trim() === "" ||
+            tag.Data.Description.trim() === "" ||
+            tag.Data.Address.trim() === "" ||
+            tag.Data.Units.trim() === ""
+        ) {
+            return false;
+        }
         if (tag.Data.ScanTime == 0) return false;
         return true;
     }
@@ -19,7 +27,7 @@ const AITag = ({ onClose }) => {
         const description = document.getElementsByName("description")[0].value;
         const address = document.getElementsByName("address")[0].value;
         const scanTime = document.getElementsByName("scan-time")[0].value;
-        const unit = document.getElementsByName("unit")[0].value;
+        const units = document.getElementsByName("unit")[0].value;
         const lowLimit = document.getElementsByName("low-limit")[0].value;
         const highLimit = document.getElementsByName("high-limit")[0].value;
         const driver = selectedDriver;
@@ -31,30 +39,27 @@ const AITag = ({ onClose }) => {
                 Description: description,
                 Address: address,
                 ScanTime: scanTime,
-                Unit: unit,
+                Units: units,
                 LowLimit: lowLimit,
                 HighLimit: highLimit,
                 Driver: driver
             }
         }
 
-        console.log("TAGGGG");
-        console.log(tag);
-
         try {
             if (!isValid(tag)) {
                 console.log("Inputted data is not valid!");
                 return;
             }
-            //const response = await axios.post('http://localhost:5083/api/tag', tag);
+            const response = await axios.post('http://localhost:5083/api/tag', tag);
 
-            //console.log("Tag created successfully!", response.data);
+            console.log("Tag created successfully!", response.data);
         }
         catch (error) {
             console.log("Create failed: ", error);
         }
 
-        //onClose();
+        onClose();
     };
 
     return (
