@@ -6,14 +6,19 @@ const AITag = ({ onClose }) => {
     const [selectedDriver, setSelectedDriver] = useState('RTU'); // default value for the driver dropdown
 
     const isValid = (tag) => {
-        console.log("unit");
-        console.log(tag.Data.Units);
-        if (tag.Data.LowLimit > tag.Data.HighLimit) return false;
+        const lowLimit = parseFloat(tag.Data.LowLimit);
+        const highLimit = parseFloat(tag.Data.HighLimit);
+
+        if (lowLimit > highLimit) {
+            return false;
+        }
         if (
             tag.Data.Name.trim() === "" ||
             tag.Data.Description.trim() === "" ||
             tag.Data.Address.trim() === "" ||
-            tag.Data.Units.trim() === ""
+            tag.Data.Units.trim() === "" ||
+            tag.Data.LowLimit.trim() === "" ||
+            tag.Data.HighLimit.trim() === ""
         ) {
             return false;
         }

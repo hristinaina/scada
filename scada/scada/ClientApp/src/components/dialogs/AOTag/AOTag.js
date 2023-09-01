@@ -1,6 +1,66 @@
-﻿
+﻿import axios from 'axios';
+
 
 const AOTag = ({ onClose }) => {
+    const isValid = (tag) => {
+        const lowLimit = parseFloat(tag.Data.LowLimit);
+        const highLimit = parseFloat(tag.Data.HighLimit);
+
+        if (lowLimit > highLimit) {
+            return false;
+        }
+        if (
+            tag.Data.Name.trim() === "" ||
+            tag.Data.Description.trim() === "" ||
+            tag.Data.Address.trim() === "" ||
+            tag.Data.Units.trim() === "" ||
+            tag.Data.HighLimit.trim() === "" ||
+            tag.Data.LowLimit.trim() === "" ||
+            tag.Data.Value.trim() === ""
+        ) {
+            return false;
+        }
+        return true;
+    }
+
+    const create = async () => {
+        const type = "AOTag";
+        const name = document.getElementsByName("name")[0].value;
+        const description = document.getElementsByName("description")[0].value;
+        const address = document.getElementsByName("address")[0].value;
+        const units = document.getElementsByName("unit")[0].value;
+        const lowLimit = document.getElementsByName("low-limit")[0].value;
+        const highLimit = document.getElementsByName("high-limit")[0].value;
+        const value = document.getElementsByName("value")[0].value;
+
+        const tag = {
+            Type: type,
+            Data: {
+                Name: name,
+                Description: description,
+                Address: address,
+                Units: units,
+                LowLimit: lowLimit,
+                HighLimit: highLimit,
+                Value: value
+            }
+        }
+
+        try {
+            if (!isValid(tag)) {
+                console.log("Inputted data is not valid!");
+                return;
+            }
+            const response = await axios.post('http://localhost:5083/api/tag', tag);
+
+            console.log("Tag created successfully!", response.data);
+        }
+        catch (error) {
+            console.log("Create failed: ", error);
+        }
+
+        onClose();
+    };
     return (
         <div className="dialog">
             <p id="title">New Analog Output Tag</p>
@@ -16,7 +76,10 @@ const AOTag = ({ onClose }) => {
             ></input>
 
             <p className="label">Description</p>
-            <textarea className="input" placeholder="Type description of the tag here..."
+            <textarea
+                name="description"
+                className="input"
+                placeholder="Type description here..."
             />
 
             <p className="label">Address</p>
@@ -63,14 +126,14 @@ const AOTag = ({ onClose }) => {
             <input
                 className="input"
                 type="number"
-                name="high-limit"
+                name="value"
                 maxLength="15"
                 placeholder="Type value here..."
             ></input>
 
 
             <div id="buttons">
-                <button className="btn" id="save">SAVE</button>
+                <button className="btn" id="save" onClick={create}>SAVE</button>
                 <button className="btn" onClick={onClose}>CLOSE</button>
             </div>
         </div>
