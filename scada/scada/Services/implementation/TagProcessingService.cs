@@ -9,10 +9,8 @@ using scada.Services.interfaces;
 namespace scada.Services
 {
 
-    public class TagProcessingService
+    public class TagProcessingService: ITagProcessingService
     {
-        public Dictionary<int, Thread> threads = new Dictionary<int, Thread>();
-
         private List<Tag> _tags;
         private List<AITag> _analog;
         private List<DITag> _digital;
@@ -56,6 +54,20 @@ namespace scada.Services
                     else
                         t = new Thread(ScanRTUAnalog);
                     
+                    t.Start(tag);
+                }
+            }
+
+            foreach (var tag in _digital)
+            {
+                if (tag.IsScanning)
+                {
+                    Thread t;
+                    if (tag.Driver == DriverEnum.SIM)
+                        t = new Thread(ScanSimulationDigital);
+                    else
+                        t = new Thread(ScanRTUDigital);
+
                     t.Start(tag);
                 }
             }
@@ -113,6 +125,66 @@ namespace scada.Services
                     }
                 }
                     
+                else
+                    break;
+
+                Thread.Sleep(tag.ScanTime);
+            }
+        }
+
+        private void ScanSimulationDigital(object param)
+        {
+            DITag tag = (DITag)param;
+            double currentValue = -1000000;
+
+            while (true)
+            {
+                if (tag.IsScanning)
+                {
+                    try
+                    {
+                        currentValue = SimulationDriver.GetValue(tag.Address);
+                    }
+                    catch (Exception ex) { continue; }
+
+                    lock (_lock)
+                    {
+                        SaveTagValue(tag.Id, currentValue);
+                        // dodaj u config
+                    }
+
+                    // rad sa alarmima
+                }
+                else
+                    break;
+
+                Thread.Sleep(tag.ScanTime);
+            }
+        }
+
+        private void ScanRTUDigital(object param)
+        {
+            DITag tag = (DITag)param;
+            double currentValue = -1000000;
+
+            while (true)
+            {
+                if (tag.IsScanning)
+                {
+                    try
+                    {
+                        currentValue = RTUDriver.GetValue(tag.Address);
+                        Console.WriteLine(tag.Id + " " + currentValue);
+                    }
+                    catch (Exception ex) { continue; }
+
+                    lock (_lock)
+                    {
+                        SaveTagValue(tag.Id, currentValue);
+                        // dodaj u config
+                    }
+                }
+
                 else
                     break;
 
