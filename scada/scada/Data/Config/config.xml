@@ -3,29 +3,29 @@
   <Tag xsi:type="DITag">
     <Id>2</Id>
     <TagName>DI_Tag</TagName>
-    <IsScanning>true</IsScanning>
-    <ScanTime>1000</ScanTime>
     <Description>Ovo je tag</Description>
     <Address>adresa33</Address>
+    <IsScanning>true</IsScanning>
+    <ScanTime>1000</ScanTime>
     <Driver>SIM</Driver>
   </Tag>
   <Tag xsi:type="DITag">
     <Id>7</Id>
     <TagName>DI_Tag</TagName>
-    <IsScanning>false</IsScanning>
-    <ScanTime>1000</ScanTime>
     <Description>Ovo je tag</Description>
     <Address>adresa1</Address>
+    <IsScanning>false</IsScanning>
+    <ScanTime>1000</ScanTime>
     <Driver>RTU</Driver>
   </Tag>
   <Tag xsi:type="AOTag">
     <Id>3</Id>
     <TagName>AO_Tag</TagName>
+    <Description>ao tag jeeeee</Description>
+    <Address>neka adresa</Address>
     <Units>V</Units>
     <LowLimit>0</LowLimit>
     <HighLimit>10</HighLimit>
-    <Description>ao tag jeeeee</Description>
-    <Address>neka adresa</Address>
     <Value>5.5</Value>
   </Tag>
   <Tag xsi:type="DOTag">
@@ -38,11 +38,11 @@
   <Tag xsi:type="AITag">
     <Id>4</Id>
     <TagName>AI_Tag</TagName>
+    <Description>neki opis lalalal</Description>
+    <Address>adresa ai taga</Address>
     <IsScanning>true</IsScanning>
     <ScanTime>2000</ScanTime>
     <Driver>RTU</Driver>
-    <Description>neki opis lalalal</Description>
-    <Address>adresa ai taga</Address>
     <Units>C</Units>
     <LowLimit>-10</LowLimit>
     <HighLimit>50</HighLimit>
@@ -67,5 +67,17 @@
     <Description>A new DOTag</Description>
     <Address>Some address</Address>
     <Value>0</Value>
+  </Tag>
+  <Tag xsi:type="AITag">
+    <Id>8</Id>
+    <Description>sad sad</Description>
+    <Address>adss</Address>
+    <IsScanning>false</IsScanning>
+    <ScanTime>1500</ScanTime>
+    <Driver>SIM</Driver>
+    <Units />
+    <LowLimit>50</LowLimit>
+    <HighLimit>500</HighLimit>
+    <Alarms />
   </Tag>
 </ArrayOfTag>

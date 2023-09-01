@@ -1,4 +1,5 @@
 ﻿import React, { useState } from 'react';
+import axios from 'axios';
 
 
 const AITag = ({ onClose }) => {
@@ -31,6 +32,15 @@ const AITag = ({ onClose }) => {
 
         console.log("TAGGGG");
         console.log(tag);
+
+        try {
+            const response = await axios.post('http://localhost:5083/api/tag', tag);
+
+            console.log("Create successful!!!", response.data);
+        }
+        catch (error) {
+            console.log("Create failed: ", error);
+        }
 
         //onClose();
     };
