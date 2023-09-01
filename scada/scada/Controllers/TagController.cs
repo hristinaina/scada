@@ -67,5 +67,12 @@ namespace scada.Controllers
                 return BadRequest(new { error = ex.Message });
             }
         }
+
+        [HttpPost("rtu")]
+        public IActionResult ReceiveRtu([FromBody] RTUData rtu)
+        {
+            _service.ReceiveRTUValue(rtu);
+            return Ok(new { Message = "Value changed." });
+        }
     }
 }
