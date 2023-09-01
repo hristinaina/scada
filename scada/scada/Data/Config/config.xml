@@ -2,6 +2,7 @@
 <ArrayOfTag xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <Tag xsi:type="DITag">
     <Id>2</Id>
+	<Address>c1</Address>
     <TagName>DI_Tag</TagName>
     <IsScanning>true</IsScanning>
     <ScanTime>1000</ScanTime>

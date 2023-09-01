@@ -2,18 +2,18 @@
 {
     public class RTUDriver : IDriver
     {
-        private static IDictionary<string, double> AddressValues = new Dictionary<string, double>();
+        private static IDictionary<string, double> addressValues = new Dictionary<string, double>();
         private static readonly object Locker = new object();
-        public static double GetValue(string address)
+        public double GetValue(string address)
         {
-            return AddressValues[address];
+            return addressValues[address];
         }
 
         public static void SetValue(string address, double value) 
         {
             lock (Locker)
             {
-                AddressValues[address] = value;
+                addressValues[address] = value;
                 /*Console.WriteLine("START");
                 foreach (var kvp in AddressValues)
                 {

@@ -4,7 +4,7 @@ namespace scada.Drivers
 {
     public class SimulationDriver : IDriver
     {
-        public static double GetValue(string address)
+        public double GetValue(string address)
         {
             string[] sine = { "s1", "s2", "s3" };
             string[] cosine = { "c1", "c2", "c3" };

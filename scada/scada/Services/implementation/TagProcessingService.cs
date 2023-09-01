@@ -46,37 +46,29 @@ namespace scada.Services
         {
             foreach (var tag in _analog) 
             { 
-                if (tag.IsScanning)
-                {
                     Thread t;
-                    if(tag.Driver == DriverEnum.SIM)
-                        t = new Thread(ScanSimulationAnalog);
-                    else
-                        t = new Thread(ScanRTUAnalog);
-                    
+                    t = new Thread(ScanAnalog);
                     t.Start(tag);
-                }
             }
 
             foreach (var tag in _digital)
             {
-                if (tag.IsScanning)
-                {
                     Thread t;
-                    if (tag.Driver == DriverEnum.SIM)
-                        t = new Thread(ScanSimulationDigital);
-                    else
-                        t = new Thread(ScanRTUDigital);
-
+                    t = new Thread(ScanDigital);
                     t.Start(tag);
-                }
             }
         }
 
-        private void ScanSimulationAnalog(object param)
+        private void ScanAnalog(object param)
         {
             AITag tag = (AITag)param;
-            double currentValue = -1000000;
+            double currentValue = 0;
+
+            IDriver driver;
+            if (tag.Driver == DriverEnum.SIM)
+                driver = new SimulationDriver();
+            else
+                driver = new RTUDriver();
 
             while (true) 
             {
@@ -84,8 +76,10 @@ namespace scada.Services
                 {
                     try
                     {
-                        currentValue = SimulationDriver.GetValue(tag.Address);
-                    }catch (Exception ex) { continue; }
+                        currentValue = driver.GetValue(tag.Address);
+                        Console.WriteLine("SCANING " + tag.Id + " " + currentValue);
+                    }
+                    catch (Exception ex) { continue; }
 
                     lock (_lock)
                     {
@@ -95,47 +89,21 @@ namespace scada.Services
 
                     // rad sa alarmima
                 }
-                else
-                    break;
 
                 Thread.Sleep(tag.ScanTime);
             }
         }
 
-        private void ScanRTUAnalog(object param)
-        {
-            AITag tag = (AITag)param;
-            double currentValue = -1000000;
-
-            while (true)
-            {
-                if (tag.IsScanning) 
-                {
-                    try
-                    {
-                        currentValue = RTUDriver.GetValue(tag.Address);
-                        Console.WriteLine(tag.Id + " " + currentValue);
-                    }
-                    catch (Exception ex) { continue; }
-
-                    lock (_lock)
-                    {
-                        SaveTagValue(tag.Id, currentValue); 
-                        // dodaj u config
-                    }
-                }
-                    
-                else
-                    break;
-
-                Thread.Sleep(tag.ScanTime);
-            }
-        }
-
-        private void ScanSimulationDigital(object param)
+        private void ScanDigital(object param)
         {
             DITag tag = (DITag)param;
-            double currentValue = -1000000;
+            double currentValue = 0;
+
+            IDriver driver;
+            if (tag.Driver == DriverEnum.SIM)
+                driver = new SimulationDriver();
+            else
+                driver = new RTUDriver();
 
             while (true)
             {
@@ -143,38 +111,8 @@ namespace scada.Services
                 {
                     try
                     {
-                        currentValue = SimulationDriver.GetValue(tag.Address);
-                    }
-                    catch (Exception ex) { continue; }
-
-                    lock (_lock)
-                    {
-                        SaveTagValue(tag.Id, currentValue);
-                        // dodaj u config
-                    }
-
-                    // rad sa alarmima
-                }
-                else
-                    break;
-
-                Thread.Sleep(tag.ScanTime);
-            }
-        }
-
-        private void ScanRTUDigital(object param)
-        {
-            DITag tag = (DITag)param;
-            double currentValue = -1000000;
-
-            while (true)
-            {
-                if (tag.IsScanning)
-                {
-                    try
-                    {
-                        currentValue = RTUDriver.GetValue(tag.Address);
-                        Console.WriteLine(tag.Id + " " + currentValue);
+                        currentValue = driver.GetValue(tag.Address);
+                        Console.WriteLine("SCANING " + tag.Id + " " + currentValue);
                     }
                     catch (Exception ex) { continue; }
 
@@ -184,9 +122,6 @@ namespace scada.Services
                         // dodaj u config
                     }
                 }
-
-                else
-                    break;
 
                 Thread.Sleep(tag.ScanTime);
             }
