@@ -22,6 +22,32 @@
     <ScanTime>2000</ScanTime>
     <Driver>RTU</Driver>
     <Units>C</Units>
+    <Address>a1</Address>
+    <LowLimit>-10</LowLimit>
+    <HighLimit>50</HighLimit>
+    <Alarms>
+      <Alarm>
+        <Id>1</Id>
+        <Type>HIGH</Type>
+        <Priority>1</Priority>
+        <Border>40</Border>
+      </Alarm>
+      <Alarm>
+        <Id>2</Id>
+        <Type>LOW</Type>
+        <Priority>2</Priority>
+        <Border>-5</Border>
+      </Alarm>
+    </Alarms>
+  </Tag>
+  <Tag xsi:type="AITag">
+    <Id>5</Id>
+    <TagName>AI_Tag</TagName>
+    <IsScanning>true</IsScanning>
+    <ScanTime>2000</ScanTime>
+    <Driver>RTU</Driver>
+    <Units>C</Units>
+    <Address>a2</Address>
     <LowLimit>-10</LowLimit>
     <HighLimit>50</HighLimit>
     <Alarms>
