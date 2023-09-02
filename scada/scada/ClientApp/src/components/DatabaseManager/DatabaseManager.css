@@ -188,7 +188,61 @@
     transition: background-color 0.3s, color 0.3s;
 }
 
-    .toggle-button.on {
-        background-color: green;
-        color: white;
-    }
+.toggle-button.on {
+    background-color: green;
+    color: white;
+}
+
+.dialog-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.5); 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.dialog {
+    background: white;
+    width: 300px;
+    height: fit-content;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
+
+.dialog-title {
+    font-size: 24px;
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+.dialog-message {
+    font-size: 16px;
+    margin-bottom: 20px;
+}
+
+.dialog-buttons {
+    display: flex;
+    justify-content: space-between;
+}
+
+.button {
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.delete-button {
+    background: #ff3333;
+}
+
+.close-button {
+    background: #333; 
+}

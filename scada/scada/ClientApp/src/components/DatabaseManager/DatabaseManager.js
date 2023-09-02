@@ -22,6 +22,7 @@ export class DatabaseManager extends Component {
             DIData: [],
             isDO: false,
             isDI: false,
+            showDeleteDialog: false
         };
     }
 
@@ -60,6 +61,23 @@ export class DatabaseManager extends Component {
         });
     };
 
+    openDeleteDialog = () => {
+        this.setState({
+            showDeleteDialog: true,
+        });
+    }
+
+    closeDeleteDialog = () => {
+        this.setState({
+            showDeleteDialog: false,
+        });
+    }
+
+    delete = (id) => {
+        console.log("You clicked: " + id);
+        this.openDeleteDialog();
+    }
+
     async componentDidMount() {
         const AOData = await TagService.getAOData(); 
         const DOData = await TagService.getDOData(); 
@@ -71,7 +89,7 @@ export class DatabaseManager extends Component {
 
 
     render() {
-        const { isDropdownOpen, selectedItem, isDO, isDI, AOData, DOData, AIData, DIData } = this.state;
+        const { isDropdownOpen, selectedItem, isDO, isDI, AOData, DOData, AIData, DIData, showDeleteDialog } = this.state;
 
         return (
             <div>
@@ -89,6 +107,19 @@ export class DatabaseManager extends Component {
                             <li onClick={() => this.openDialog("DO")} className="tag bottom-margin">DIGITAL OUTPUT</li>
                             <li onClick={() => this.openDialog("DI")} className="tag">DIGITAL INPUT</li>
                         </ul>
+                    </div>
+                )}
+
+                {showDeleteDialog && (
+                    <div className="dialog-container">
+                        <div className="dialog">
+                            <h2 className="dialog-title">Delete</h2>
+                            <p className="dialog-message">Are you sure you want to delete this dialog?</p>
+                            <div className="dialog-buttons">
+                                <button className="delete-button button">Delete</button>
+                                <button className="close-button button" onClick={this.closeDeleteDialog}>Close</button>
+                            </div>
+                        </div>
                     </div>
                 )}
 
@@ -119,7 +150,7 @@ export class DatabaseManager extends Component {
                                     </div>
                                     <p className="value">{item.value} {item.units}</p>
                                     <div className="edit-delete-icons">
-                                        <img src="/images/delete.png" alt="Delete" className="icon" />
+                                        <img src="/images/delete.png" alt="Delete" className="icon" onClick={() => this.delete(item.id)} />
                                         <img src="/images/pencil.png" alt="Edit" className="icon" />
                                     </div>
                                 </div>
@@ -134,7 +165,7 @@ export class DatabaseManager extends Component {
                                     </div>
                                     <p className="value">{item.value === 0 ? 'Off' : 'On'}</p>
                                     <div className="edit-delete-icons">
-                                        <img src="/images/delete.png" alt="Delete" className="icon" />
+                                        <img src="/images/delete.png" alt="Delete" className="icon" onClick={() => this.delete(item.id)} />
                                         <img src="/images/pencil.png" alt="Edit" className="icon" />
                                     </div>
                                 </div>
@@ -166,7 +197,7 @@ export class DatabaseManager extends Component {
                                     </div>
                                     <p className="value">{item.driver === 0 ? 'SIMULATION' : 'RTU'}</p>
                                     <div className="edit-delete-icons">
-                                        <img style={{ marginRight: '15px' }} src="/images/delete.png" alt="Delete" className="icon" />
+                                        <img style={{ marginRight: '15px' }} src="/images/delete.png" alt="Delete" className="icon" onClick={() => this.delete(item.id)} />
                                         <img style={{ marginRight: '15px', marginBottom: '2px', marginTop: '2px' }} src="/images/bell.png" alt="Alarm" className="icon" />
                                         <div
                                             className={`toggle-button ${item.isScanning ? 'on' : ''}`}
@@ -187,7 +218,7 @@ export class DatabaseManager extends Component {
                                     </div>
                                     <p className="value">{item.driver === 0 ? 'SIMULATION' : 'RTU'}</p>
                                     <div className="edit-delete-icons">
-                                        <img style={{ marginRight: '15px' }} src="/images/delete.png" alt="Delete" className="icon" />
+                                        <img style={{ marginRight: '15px' }} src="/images/delete.png" alt="Delete" className="icon" onClick={() => this.delete(item.id)} />
                                         <div
                                             className={`toggle-button ${item.isScanning ? 'on' : ''}`}
                                             onClick={() => this.toggleValue(item.id)}>
