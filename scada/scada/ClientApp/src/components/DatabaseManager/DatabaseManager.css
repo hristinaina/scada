@@ -195,17 +195,15 @@
 
 .dialog-container {
     position: fixed;
-    top: 0;
-    left: 0;
+    top: 38%;
+    left: 40%;
     width: 100%;
-    background: rgba(0, 0, 0, 0.5); 
-    display: flex;
     justify-content: center;
     align-items: center;
     z-index: 1000;
 }
 
-.dialog {
+.delete-dialog {
     background: white;
     width: 300px;
     height: fit-content;

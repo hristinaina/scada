@@ -61,6 +61,7 @@ export class DatabaseManager extends Component {
         this.setState({
             selectedItem: null,
         });
+        this.componentDidMount();
     };
 
     openDeleteDialog = (id) => {
@@ -86,6 +87,7 @@ export class DatabaseManager extends Component {
             console.log("Error ocurred: ", error);
         }
         this.closeDeleteDialog();
+        this.componentDidMount();
     }
 
     async componentDidMount() {
@@ -122,7 +124,7 @@ export class DatabaseManager extends Component {
 
                 {showDeleteDialog && (
                     <div className="dialog-container">
-                        <div className="dialog">
+                        <div className="delete-dialog">
                             <h2 className="dialog-title">Delete</h2>
                             <p className="dialog-message">Are you sure you want to delete this tag?</p>
                             <div className="dialog-buttons">
