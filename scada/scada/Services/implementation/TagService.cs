@@ -66,10 +66,13 @@ namespace scada.Services.implementation
 
         public Tag Insert(TagDTO tagDTO)
         {
+            List<String> addresses = getAllAddresses();
             Tag tag = convert(tagDTO);
 
             if (tag != null)
             {
+                if (addresses.Contains(tag.Address))
+                    throw new BadRequestException("Address already in use!");
                 tag.Id = generateId();
                 _tags.Add(tag);
                 XmlSerializationHelper.SaveToXml(_tags);
@@ -96,6 +99,15 @@ namespace scada.Services.implementation
             int id = 1;
             foreach (Tag tag in _tags) if (tag.Id > id) id = tag.Id;
             return ++id;
+        }
+
+        private List<String> getAllAddresses()
+        {
+            List<String> addresses = new List<String>();
+            foreach(Tag tag in _tags) addresses.Add(tag.Address);
+            addresses.AddRange(new[] { "a1", "a2", "a3", "a4", "a5",
+                                       "d1", "d2", "d3", "d4", "d5"});
+            return addresses;
         }
 
         /*
