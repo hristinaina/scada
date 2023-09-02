@@ -10,5 +10,6 @@ namespace scada.Services
         List<TagHistoryDTO> GetLastValueOfAITags();
         List<TagHistoryDTO> GetLastValueOfDITags();
         List<TagHistoryDTO> GetTagsByTime(FilterDTO filterDTO);
+        public void Insert(TagHistory tagHistory);
     }
 }

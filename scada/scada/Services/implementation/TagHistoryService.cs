@@ -4,19 +4,27 @@ using scada.DTO;
 using scada.Exceptions;
 using scada.Models;
 using scada.Services.implementation;
+using scada.Repositories;
 
 namespace scada.Services
 {
     public class TagHistoryService : ITagHistoryService
     {
+        private TagHistoryRepository _repository;
+
+        public TagHistoryService(TagHistoryRepository tagHistoryRepository)
+        {
+            this._repository = tagHistoryRepository;
+        }
 
         public List<TagHistory> Get()
         {
-            using (var dbContext = new ApplicationDbContext())
-            {
-                List<TagHistory> tagHistory = dbContext.TagHistory.ToList();
-                return tagHistory;
-            }
+            return _repository.Get();
+        }
+
+        public void Insert(TagHistory tagHistory)
+        {
+            _repository.Insert(tagHistory);
         }
 
         public List<TagHistoryDTO> GetByTagId(int id)

@@ -1,3 +1,4 @@
+using scada.Repositories;
 using scada.Services;
 using scada.Services.implementation;
 using scada.Services.interfaces;
@@ -18,10 +19,15 @@ builder.Services.AddCors(options =>
     });
 });
 
+// services
 builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<IAlarmHistoryService, AlarmHistoryService>();
 builder.Services.AddTransient<ITagHistoryService, TagHistoryService>();
 builder.Services.AddTransient<ITagService, TagService>();
+builder.Services.AddTransient<TagProcessingService>();
+
+// repositories
+builder.Services.AddTransient<TagHistoryRepository>();
 
 var app = builder.Build();
 
@@ -44,5 +50,7 @@ app.MapControllerRoute(
 
 app.MapFallbackToFile("index.html");
 
-app.Run();
+using var scope = app.Services.CreateScope();
+scope.ServiceProvider.GetRequiredService<TagProcessingService>().Run();
 
+app.Run();

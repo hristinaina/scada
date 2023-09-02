@@ -125,10 +125,10 @@ namespace scada.Services.implementation
         }
 
         /*
-         should be called when tag value changes:
-            1. for input tags = in trending app after scanning 
-            2. for output tags = when value is changed (manually)
-        */
+        should be called when tag value changes:
+           1. for input tags = in trending app after scanning 
+           2. for output tags = when value is changed (manually)
+       */
         public void SaveTagValue(int tag, double value)
         {
             TagHistory tagHistory = new TagHistory(tag, value);
