@@ -8,6 +8,7 @@ import { NavMenu } from "../Nav/NavMenu";
 import './DatabaseManager.css';
 import TagService from "../../services/TagService";
 import axios from 'axios';
+import Alarms from "../dialogs/Alarm/Alarms";
 
 
 export class DatabaseManager extends Component {
@@ -24,7 +25,8 @@ export class DatabaseManager extends Component {
             isDO: false,
             isDI: false,
             showDeleteDialog: false,
-            chosenTag: -1
+            chosenTag: -1,
+            showAlarmsDialog: false,
         };
     }
 
@@ -77,6 +79,18 @@ export class DatabaseManager extends Component {
         });
     }
 
+    openAlarmsDialog = () => {
+        this.setState({
+            showAlarmsDialog: true,
+        });
+    }
+
+    closeAlarmsDialog = () => {
+        this.setState({
+            showAlarmsDialog: false,
+        });
+    }
+
     delete = async () => {
         console.log("You clicked: " + this.state.chosenTag);
         try {
@@ -101,15 +115,15 @@ export class DatabaseManager extends Component {
 
 
     render() {
-        const { isDropdownOpen, selectedItem, isDO, isDI, AOData, DOData, AIData, DIData, showDeleteDialog } = this.state;
+        const { isDropdownOpen, selectedItem, isDO, isDI, AOData, DOData, AIData, DIData,
+                showDeleteDialog, showAlarmsDialog } = this.state;
 
         return (
             <div>
                 <NavMenu showNavbar={true} />
                 <h1 id="tableLabel">Database Manager</h1>
-                {/*<img alt="." src="../..images/plus.png"/>*/}
-
-                <p id="add-tag" onClick={this.toggleDropdown}>Add tag</p>
+                <p id="add-tag" onClick={this.toggleDropdown}>
+                    <img alt="." src="/images/plus.png" id="plus" /> Add tag</p>
 
                 {isDropdownOpen && (
                     <div id="dropdown">
@@ -134,6 +148,9 @@ export class DatabaseManager extends Component {
                         </div>
                     </div>
                 )}
+
+                {/*TODO : add here alarms dialog tag*/}
+                {showAlarmsDialog && <Alarms onClose={this.closeAlarmsDialog} />}
 
                 {/*Dialogs */}
                 {selectedItem === "AI" && <AITag onClose={this.closeDialog} />}
@@ -210,7 +227,7 @@ export class DatabaseManager extends Component {
                                     <p className="value">{item.driver === 0 ? 'SIMULATION' : 'RTU'}</p>
                                     <div className="edit-delete-icons">
                                         <img style={{ marginRight: '15px' }} src="/images/delete.png" alt="Delete" className="icon" onClick={() => this.openDeleteDialog(item.id)} />
-                                        <img style={{ marginRight: '15px', marginBottom: '2px', marginTop: '2px' }} src="/images/bell.png" alt="Alarm" className="icon" />
+                                        <img style={{ marginRight: '15px', marginBottom: '2px', marginTop: '2px' }} src="/images/bell.png" alt="Alarm" className="icon" onClick={this.openAlarmsDialog} />
                                         <div
                                             className={`toggle-button ${item.isScanning ? 'on' : ''}`}
                                             onClick={() => this.toggleValue(item.id)}>
