@@ -33,7 +33,7 @@ export class Trending extends Component {
 
       this.connection.on("ReceiveMessage", (tag) => {
           const currentTags = [...this.state.tags];
-          const existingTagIndex = currentTags.findIndex(t => t.id === tag.id);
+          const existingTagIndex = currentTags.findIndex(t => t.tagName === tag.tagName);
 
           if (existingTagIndex === -1) {
               currentTags.push(tag);
@@ -42,9 +42,6 @@ export class Trending extends Component {
           }
 
           this.setState({ tags: currentTags });   
-          
-          console.log("Received message:", tag);
-          console.log(this.tags);
       });
 
       this.interval = setInterval(this.renderForecastsTable, 1000);
@@ -76,6 +73,7 @@ export class Trending extends Component {
             <tbody>
               {tags.map(tag =>
                 <tr key={tag.tagName}>
+                  <td>{tag.tagName}</td>
                   <td>{tag.type}</td>
                   <td>{tag.description}</td>
                   <td>{tag.scanTime}</td>

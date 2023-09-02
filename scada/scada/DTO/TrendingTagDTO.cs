@@ -17,8 +17,8 @@ namespace scada.DTO
             Type = "digital";
             Description = tag.Description;
             ScanTime = tag.ScanTime;
-            Range = null;
-            Value = value;
+            Range = "";
+            Value = Math.Round(value, 2);
         }
 
         public TrendingTagDTO(AITag tag, double value)
@@ -28,7 +28,7 @@ namespace scada.DTO
             Description = tag.Description;
             ScanTime = tag.ScanTime;
             Range = "(" + tag.HighLimit + ", " + tag.LowLimit + ")";
-            Value = value;
+            Value = Math.Round(value, 2);
         }
     }
 }
