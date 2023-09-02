@@ -1,4 +1,4 @@
-﻿import { Component } from "react";
+﻿import React, { Component } from "react";
 import '../../fonts.css';
 import AITag from "../dialogs/AITag/AITag";
 import AOTag from "../dialogs/AOTag/AOTag";
@@ -7,6 +7,7 @@ import DOTag from "../dialogs/DOTag/DOTag";
 import { NavMenu } from "../Nav/NavMenu";
 import './DatabaseManager.css';
 import TagService from "../../services/TagService";
+import axios from 'axios';
 
 
 export class DatabaseManager extends Component {
@@ -22,7 +23,8 @@ export class DatabaseManager extends Component {
             DIData: [],
             isDO: false,
             isDI: false,
-            showDeleteDialog: false
+            showDeleteDialog: false,
+            chosenTag: -1
         };
     }
 
@@ -61,9 +63,10 @@ export class DatabaseManager extends Component {
         });
     };
 
-    openDeleteDialog = () => {
+    openDeleteDialog = (id) => {
         this.setState({
             showDeleteDialog: true,
+            chosenTag: id,
         });
     }
 
@@ -73,9 +76,16 @@ export class DatabaseManager extends Component {
         });
     }
 
-    delete = (id) => {
-        console.log("You clicked: " + id);
-        this.openDeleteDialog();
+    delete = async () => {
+        console.log("You clicked: " + this.state.chosenTag);
+        try {
+            await axios.delete('http://localhost:5083/api/tag/' + this.state.chosenTag);
+            console.log("Successfully deleted!");
+        }
+        catch (error) {
+            console.log("Error ocurred: ", error);
+        }
+        this.closeDeleteDialog();
     }
 
     async componentDidMount() {
@@ -114,9 +124,9 @@ export class DatabaseManager extends Component {
                     <div className="dialog-container">
                         <div className="dialog">
                             <h2 className="dialog-title">Delete</h2>
-                            <p className="dialog-message">Are you sure you want to delete this dialog?</p>
+                            <p className="dialog-message">Are you sure you want to delete this tag?</p>
                             <div className="dialog-buttons">
-                                <button className="delete-button button">Delete</button>
+                                <button className="delete-button button" onClick={this.delete}>Delete</button>
                                 <button className="close-button button" onClick={this.closeDeleteDialog}>Close</button>
                             </div>
                         </div>
@@ -150,7 +160,7 @@ export class DatabaseManager extends Component {
                                     </div>
                                     <p className="value">{item.value} {item.units}</p>
                                     <div className="edit-delete-icons">
-                                        <img src="/images/delete.png" alt="Delete" className="icon" onClick={() => this.delete(item.id)} />
+                                        <img src="/images/delete.png" alt="Delete" className="icon" onClick={() => this.openDeleteDialog(item.id)} />
                                         <img src="/images/pencil.png" alt="Edit" className="icon" />
                                     </div>
                                 </div>
@@ -165,7 +175,7 @@ export class DatabaseManager extends Component {
                                     </div>
                                     <p className="value">{item.value === 0 ? 'Off' : 'On'}</p>
                                     <div className="edit-delete-icons">
-                                        <img src="/images/delete.png" alt="Delete" className="icon" onClick={() => this.delete(item.id)} />
+                                        <img src="/images/delete.png" alt="Delete" className="icon" onClick={() => this.openDeleteDialog(item.id)} />
                                         <img src="/images/pencil.png" alt="Edit" className="icon" />
                                     </div>
                                 </div>
@@ -197,7 +207,7 @@ export class DatabaseManager extends Component {
                                     </div>
                                     <p className="value">{item.driver === 0 ? 'SIMULATION' : 'RTU'}</p>
                                     <div className="edit-delete-icons">
-                                        <img style={{ marginRight: '15px' }} src="/images/delete.png" alt="Delete" className="icon" onClick={() => this.delete(item.id)} />
+                                        <img style={{ marginRight: '15px' }} src="/images/delete.png" alt="Delete" className="icon" onClick={() => this.openDeleteDialog(item.id)} />
                                         <img style={{ marginRight: '15px', marginBottom: '2px', marginTop: '2px' }} src="/images/bell.png" alt="Alarm" className="icon" />
                                         <div
                                             className={`toggle-button ${item.isScanning ? 'on' : ''}`}
@@ -218,7 +228,7 @@ export class DatabaseManager extends Component {
                                     </div>
                                     <p className="value">{item.driver === 0 ? 'SIMULATION' : 'RTU'}</p>
                                     <div className="edit-delete-icons">
-                                        <img style={{ marginRight: '15px' }} src="/images/delete.png" alt="Delete" className="icon" onClick={() => this.delete(item.id)} />
+                                        <img style={{ marginRight: '15px' }} src="/images/delete.png" alt="Delete" className="icon" onClick={() => this.openDeleteDialog(item.id)} />
                                         <div
                                             className={`toggle-button ${item.isScanning ? 'on' : ''}`}
                                             onClick={() => this.toggleValue(item.id)}>
