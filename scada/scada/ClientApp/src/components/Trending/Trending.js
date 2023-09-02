@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { NavMenu } from '../Nav/NavMenu';
 import './Trending.css';
 import '../../fonts.css';
+import { HubConnectionBuilder } from "@microsoft/signalr";
 
 
 export class Trending extends Component {
@@ -9,12 +10,34 @@ export class Trending extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { forecasts: [], loading: true };
+      this.state = { forecasts: [], loading: true };
+      this.connection = new HubConnectionBuilder()
+          .withUrl("http://localhost:5083/Hub/tag") // Postavite istu putanju kao u vašem serveru
+          .build();
   }
 
   componentDidMount() {
-    this.populateWeatherData();
-  }
+
+      this.connection
+          .start()
+          .then(() => {
+              console.log("Connected to WebSocket server");
+          })
+          .catch((error) => {
+              console.error(error);
+          });
+      //this.populateWeatherData();
+
+      this.connection.on("ReceiveMessage", (message) => {
+          console.log("Received message:", message);
+          
+      });
+    }
+
+    componentWillUnmount() {
+        this.connection.stop();
+    }
+
 
   static renderForecastsTable(forecasts) {
     return (
