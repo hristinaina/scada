@@ -13,7 +13,7 @@ const AITag = ({ onClose }) => {
             return false;
         }
         if (
-            tag.Data.Name.trim() === "" ||
+            tag.Data.TagName.trim() === "" ||
             tag.Data.Description.trim() === "" ||
             tag.Data.Address.trim() === "" ||
             tag.Data.Units.trim() === "" ||
@@ -40,7 +40,7 @@ const AITag = ({ onClose }) => {
         const tag = {
             Type: type,
             Data: {
-                Name: name,
+                TagName: name,
                 Description: description,
                 Address: address,
                 ScanTime: scanTime,
