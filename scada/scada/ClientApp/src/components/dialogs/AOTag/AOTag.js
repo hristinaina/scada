@@ -5,10 +5,11 @@ const AOTag = ({ onClose }) => {
     const isValid = (tag) => {
         const lowLimit = parseFloat(tag.Data.LowLimit);
         const highLimit = parseFloat(tag.Data.HighLimit);
+        const value = parseFloat(tag.Data.Value);
 
-        if (lowLimit > highLimit) {
-            return false;
-        }
+        if (lowLimit > highLimit) return false;
+        if (value < lowLimit) return false;
+        if (value > highLimit) return false;
         if (
             tag.Data.TagName.trim() === "" ||
             tag.Data.Description.trim() === "" ||
@@ -20,6 +21,7 @@ const AOTag = ({ onClose }) => {
         ) {
             return false;
         }
+        
         return true;
     }
 
