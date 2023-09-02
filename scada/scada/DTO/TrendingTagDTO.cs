@@ -9,7 +9,7 @@ namespace scada.DTO
         public string Description { get; set; }
         public int ScanTime { get; set; }
         public string Range { get; set; }
-        public double Value { get; set; }
+        public string Value { get; set; }
 
         public TrendingTagDTO(DITag tag, double value) 
         {
@@ -18,7 +18,7 @@ namespace scada.DTO
             Description = tag.Description;
             ScanTime = tag.ScanTime;
             Range = "";
-            Value = Math.Round(value, 2);
+            Value = (value > 0) ? "on" : "off";
         }
 
         public TrendingTagDTO(AITag tag, double value)
@@ -28,7 +28,7 @@ namespace scada.DTO
             Description = tag.Description;
             ScanTime = tag.ScanTime;
             Range = "(" + tag.HighLimit + ", " + tag.LowLimit + ")";
-            Value = Math.Round(value, 2);
+            Value = Math.Round(value, 2).ToString() + " " + tag.Units;
         }
     }
 }
