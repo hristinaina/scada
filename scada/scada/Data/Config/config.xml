@@ -68,4 +68,22 @@
     <Address>Some address</Address>
     <Value>0</Value>
   </Tag>
+  <Tag xsi:type="DITag">
+    <Id>8</Id>
+    <TagName>sadas</TagName>
+    <Description>    sadsad</Description>
+    <Address>asddas</Address>
+    <IsScanning>false</IsScanning>
+    <ScanTime>2000</ScanTime>
+    <Driver>SIM</Driver>
+  </Tag>
+  <Tag xsi:type="DITag">
+    <Id>9</Id>
+    <TagName>sss</TagName>
+    <Description>fsf</Description>
+    <Address>fsc</Address>
+    <IsScanning>false</IsScanning>
+    <ScanTime>150</ScanTime>
+    <Driver>RTU</Driver>
+  </Tag>
 </ArrayOfTag>
