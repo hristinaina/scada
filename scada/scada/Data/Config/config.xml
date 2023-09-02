@@ -3,6 +3,7 @@
   <Tag xsi:type="DITag">
     <Id>1</Id>
 	  <Address>c1</Address>
+    <Description>lalalal</Description>
     <TagName>DI_Tag</TagName>
     <IsScanning>true</IsScanning>
     <ScanTime>1000</ScanTime>
@@ -15,6 +16,7 @@
     <LowLimit>0</LowLimit>
     <HighLimit>10</HighLimit>
     <Value>5.5</Value>
+    <Description>nestoo</Description>
   </Tag>
   <Tag xsi:type="AITag">
     <Id>3</Id>
@@ -24,6 +26,7 @@
     <Driver>RTU</Driver>
     <Units>C</Units>
     <Address>a1</Address>
+    <Description>neki tag</Description>
     <LowLimit>-10</LowLimit>
     <HighLimit>50</HighLimit>
     <Alarms>
@@ -49,6 +52,7 @@
     <Driver>RTU</Driver>
     <Units>C</Units>
     <Address>a2</Address>
+    <Description>novi taaaag</Description>
     <LowLimit>-10</LowLimit>
     <HighLimit>50</HighLimit>
     <Alarms>
@@ -73,6 +77,8 @@
     <ScanTime>2000</ScanTime>
     <Driver>RTU</Driver>
     <Units>C</Units>
+    <Address>a3</Address>
+    <Description>jos jedan ai tag</Description>
     <LowLimit>-10</LowLimit>
     <HighLimit>50</HighLimit>
     <Alarms>

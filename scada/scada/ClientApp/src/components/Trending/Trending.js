@@ -9,10 +9,14 @@ export class Trending extends Component {
   static displayName = Trending.name;
 
   constructor(props) {
-    super(props);
-      this.state = { forecasts: [], loading: true };
+      super(props);
+
+      this.state = {
+         tags: []
+      };
+
       this.connection = new HubConnectionBuilder()
-          .withUrl("http://localhost:5083/Hub/tag") // Postavite istu putanju kao u vašem serveru
+          .withUrl("http://localhost:5083/Hub/tag") 
           .build();
   }
 
@@ -26,53 +30,67 @@ export class Trending extends Component {
           .catch((error) => {
               console.error(error);
           });
-      //this.populateWeatherData();
 
-      this.connection.on("ReceiveMessage", (message) => {
-          console.log("Received message:", message);
+      this.connection.on("ReceiveMessage", (tag) => {
+          const currentTags = [...this.state.tags];
+          const existingTagIndex = currentTags.findIndex(t => t.id === tag.id);
+
+          if (existingTagIndex === -1) {
+              currentTags.push(tag);
+          } else {
+              currentTags[existingTagIndex].value = tag.value;
+          }
+
+          this.setState({ tags: currentTags });   
           
+          console.log("Received message:", tag);
+          console.log(this.tags);
       });
+
+      this.interval = setInterval(this.renderForecastsTable, 1000);
     }
 
     componentWillUnmount() {
+        clearInterval(this.interval);
         this.connection.stop();
     }
 
 
-  static renderForecastsTable(forecasts) {
-    return (
-      <table className="table table-striped" aria-labelledby="tableLabel">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Type</th>
-            <th>Description</th>
-            <th>Scan Time</th>
-            <th>Scan</th>
-            <th>Low Limit</th>
-            <th>High Limit</th>
-            <th>Value</th>
-            <th>ALARM</th>
-          </tr>
-        </thead>
-        <tbody>
-          {forecasts.map(forecast =>
-            <tr key={forecast.date}>
-              <td>{forecast.date}</td>
-              <td>{forecast.temperatureC}</td>
-              <td>{forecast.temperatureF}</td>
-              <td>{forecast.summary}</td>
-            </tr>
-          )}
-        </tbody>
-      </table>
-    );
-  }
+    static renderForecastsTable(tags) {
+        if (!tags || tags.length === 0) {
+            return <p>No data available.</p>;
+        }
+        return (
+          <table className="table table-striped" aria-labelledby="tableLabel">
+            <thead>
+              <tr>
+                <th>Tag name</th>
+                <th>Type</th>
+                <th>Description</th>
+                <th>Scan Time (ms)</th>
+                <th>Range</th>
+                <th>Value</th>
+                <th>ALARM</th>
+              </tr>
+            </thead>
+            <tbody>
+              {tags.map(tag =>
+                <tr key={tag.tagName}>
+                  <td>{tag.type}</td>
+                  <td>{tag.description}</td>
+                  <td>{tag.scanTime}</td>
+                  <td>{tag.range}</td>
+                  <td>{tag.value}</td>
+                  <td></td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        );
+    }
 
   render() {
-    let contents = this.state.loading
-      ? <p><em>Loading...</em></p>
-      : Trending.renderForecastsTable(this.state.forecasts);
+    let contents = Trending.renderForecastsTable(this.state.tags);
 
     return (
         <div>
@@ -81,11 +99,5 @@ export class Trending extends Component {
         {contents}
       </div>
     );
-  }
-
-  async populateWeatherData() {
-    const response = await fetch('weatherforecast');
-    const data = await response.json();
-    this.setState({ forecasts: data, loading: false });
   }
 }
