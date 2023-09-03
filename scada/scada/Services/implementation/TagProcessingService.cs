@@ -23,8 +23,8 @@ namespace scada.Services
 
         public TagProcessingService(TagHistoryRepository tagHistoryRepository, IHubContext<WebSocket> tagHub) {
             _tags = XmlSerializationHelper.LoadFromXml<Tag>();
-            _analog = ConfigHelper.ParseLoadedObjects<AITag>(_tags);
-            _digital = ConfigHelper.ParseLoadedObjects<DITag>(_tags);
+            _analog = ConfigHelper.ParseTags<AITag>(_tags);
+            _digital = ConfigHelper.ParseTags<DITag>(_tags);
             _tagHistoryRepository = tagHistoryRepository;
             _tagHub = tagHub;
         }

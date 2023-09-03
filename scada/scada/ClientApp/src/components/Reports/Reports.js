@@ -73,7 +73,7 @@ function Dropdown({ onSelect }) {
 
     return (
         <div className="center">
-            <select id="dropdown" value={selectedOption} onChange={handleSelect}>
+            <select id="dropdown-reports" value={selectedOption} onChange={handleSelect}>
                 {options.map((option, index) => (
                     <option key={index} value={option}>
                         {option}

@@ -13,6 +13,11 @@ namespace scada.Services
     {
         private TagHistoryRepository _repository;
 
+        public TagHistoryService()
+        {
+
+        }
+
         public TagHistoryService(TagHistoryRepository tagHistoryRepository)
         {
             this._repository = tagHistoryRepository;
@@ -108,6 +113,8 @@ namespace scada.Services
             }
             dto = dto.OrderBy(item => item.Date).ToList();
             return dto;
+        }
+
         public bool Delete(int id)
         {
             using (var dbContext = new ApplicationDbContext())

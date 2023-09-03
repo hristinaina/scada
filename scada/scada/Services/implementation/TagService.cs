@@ -76,6 +76,8 @@ namespace scada.Services.implementation
                 }
             }
             throw new NotFoundException("Tag not found!");
+        }
+
         public List<DOTag> GetDOTags() 
         {
             return ConfigHelper.ParseTags<DOTag>(_tags); 
@@ -172,16 +174,6 @@ namespace scada.Services.implementation
         public void ReceiveRTUValue(RTUData rtu)
         {
             RTUDriver.SetValue(rtu.Address, rtu.Value);
-        }
-
-        public List<DITag> GetDITags()
-        {
-            return ConfigHelper.ParseLoadedObjects<DITag>(_tags);
-        }
-
-        public List<AITag> GetAITags()
-        {
-            return ConfigHelper.ParseLoadedObjects<AITag>(_tags);
         }
     }
 }
