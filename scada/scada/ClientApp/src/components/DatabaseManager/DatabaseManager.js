@@ -9,6 +9,7 @@ import './DatabaseManager.css';
 import TagService from "../../services/TagService";
 import axios from 'axios';
 import Alarms from "../dialogs/Alarm/Alarms";
+import CreateAlarmDialog from "../dialogs/CreateAlarm/CreateAlarmDialog";
 
 
 export class DatabaseManager extends Component {
@@ -27,6 +28,7 @@ export class DatabaseManager extends Component {
             showDeleteDialog: false,
             chosenTag: -1,
             showAlarmsDialog: false,
+            showCreateAlarmDialog: false,
         };
     }
 
@@ -91,6 +93,18 @@ export class DatabaseManager extends Component {
         });
     }
 
+    openCreateAlarmDialog = () => {
+        this.setState({
+            showCreateAlarmDialog: true,
+        });
+    }
+
+    closeCreateAlarmDialog = () => {
+        this.setState({
+            showCreateAlarmDialog: false,
+        });
+    }
+
     delete = async () => {
         console.log("You clicked: " + this.state.chosenTag);
         try {
@@ -116,7 +130,7 @@ export class DatabaseManager extends Component {
 
     render() {
         const { isDropdownOpen, selectedItem, isDO, isDI, AOData, DOData, AIData, DIData,
-                showDeleteDialog, showAlarmsDialog } = this.state;
+                showDeleteDialog, showAlarmsDialog, showCreateAlarmDialog } = this.state;
 
         return (
             <div>
@@ -150,7 +164,9 @@ export class DatabaseManager extends Component {
                 )}
 
                 {/*TODO : add here alarms dialog tag*/}
-                {showAlarmsDialog && <Alarms onClose={this.closeAlarmsDialog} />}
+                {showAlarmsDialog && <Alarms onClose={this.closeAlarmsDialog} openCreateAlarmDialog={this.openCreateAlarmDialog} />}
+
+                {showCreateAlarmDialog && <CreateAlarmDialog onClose={this.closeCreateAlarmDialog} />}
 
                 {/*Dialogs */}
                 {selectedItem === "AI" && <AITag onClose={this.closeDialog} />}
