@@ -6,7 +6,6 @@ using Newtonsoft.Json;
 using scada.DTO;
 using scada.Drivers;
 using scada.Data.Config;
-using Azure;
 
 namespace scada.Services.implementation
 {
@@ -179,15 +178,21 @@ namespace scada.Services.implementation
 
         public Alarm InsertAlarm(AlarmDTO alarmDTO)
         {
-            // TODO : add check if low/high limit alarm already exists
             Alarm alarm = new Alarm(alarmDTO);
             alarm.Id = generateAlarmId(alarmDTO.TagId);
             AITag aiTag = GetAITags().FirstOrDefault(item => item.Id == alarmDTO.TagId);
+            if (isAlarmAdded(aiTag, alarm.Type)) throw new BadRequestException("Alarm already added.");
             aiTag.Alarms.Add(alarm);
             Delete(aiTag.Id);
             _tags.Add(aiTag);
             XmlSerializationHelper.SaveToXml(_tags);
             return alarm;
+        }
+
+        private bool isAlarmAdded(AITag aiTag, AlarmType type)
+        {
+            foreach (Alarm alarm in aiTag.Alarms) if (alarm.Type == type) return true;
+            return false;
         }
 
         private int generateAlarmId(int tagId)

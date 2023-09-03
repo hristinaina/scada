@@ -1,11 +1,8 @@
-﻿using Azure;
-using scada.Database;
+﻿using scada.Database;
 using scada.DTO;
-using scada.Exceptions;
 using scada.Models;
 using scada.Services.implementation;
 using scada.Repositories;
-using System.Reflection.Metadata.Ecma335;
 
 namespace scada.Services
 {

@@ -103,5 +103,20 @@ namespace scada.Controllers
             _service.ReceiveRTUValue(rtu);
             return Ok(new { Message = "Value changed." });
         }
+
+        [HttpPost("alarm")]
+        public IActionResult InsertAlarm([FromBody] AlarmDTO alarmDTO)
+        {
+            try
+            {
+                _service.InsertAlarm(alarmDTO);
+                return Ok(new { Message = "Alarm added successfully." });
+            }
+            catch (BadRequestException ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
+
+        }
     }
 }
