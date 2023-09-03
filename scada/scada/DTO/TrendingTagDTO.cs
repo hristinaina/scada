@@ -1,3 +1,4 @@
+using Google.Protobuf.WellKnownTypes;
 using scada.Models;
 
 namespace scada.DTO
@@ -28,7 +29,12 @@ namespace scada.DTO
             Description = tag.Description;
             ScanTime = tag.ScanTime;
             Range = "(" + tag.HighLimit + ", " + tag.LowLimit + ")";
-            Value = Math.Round(value, 2).ToString() + " " + tag.Units;
+            Value =  Math.Round(this.calculateAnalogValue(tag, value), 2).ToString() + " " + tag.Units;
+        }
+
+        private double calculateAnalogValue(AITag tag, double value)
+        {
+            return value > tag.HighLimit ? tag.HighLimit : (value < tag.LowLimit ? tag.LowLimit : value);
         }
     }
 }
