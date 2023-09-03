@@ -5,6 +5,7 @@ using scada.Exceptions;
 using scada.Models;
 using scada.Services.implementation;
 using scada.Repositories;
+using System.Reflection.Metadata.Ecma335;
 
 namespace scada.Services
 {
@@ -107,6 +108,20 @@ namespace scada.Services
             }
             dto = dto.OrderBy(item => item.Date).ToList();
             return dto;
+        public bool Delete(int id)
+        {
+            using (var dbContext = new ApplicationDbContext())
+            {
+                List<TagHistory> tagsToDelete = dbContext.TagHistory.Where(u => u.TagId == id).ToList();
+
+                if (tagsToDelete != null)
+                {
+                    dbContext.TagHistory.RemoveRange(tagsToDelete);
+                    dbContext.SaveChanges();
+                    return true;
+                }
+                return false;
+            }
         }
     }
 }
