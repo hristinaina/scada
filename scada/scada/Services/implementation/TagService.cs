@@ -197,11 +197,29 @@ namespace scada.Services.implementation
 
         private int generateAlarmId(int tagId)
         {
-            AITag tag = GetAITags().FirstOrDefault(item => item.Id == tagId);
+            List<Alarm> alarms = GetAllAlarms();
             int id = 0;
-            foreach(Alarm alarm in tag.Alarms) if (alarm.Id > id) id = alarm.Id;
+            foreach (Alarm alarm in alarms) if (alarm.Id > id) id = alarm.Id;
             return ++id;
+        }
 
+        public bool DeleteAlarm(int alarmId)
+        {
+            AITag aiTag = GetTagByAlarmId(alarmId);
+            if (aiTag == null) throw new NotFoundException("Tag with specified alarm not found!");
+            
+            foreach (Alarm alarm in aiTag.Alarms) 
+            { 
+                if (alarm.Id == alarmId) 
+                { 
+                    aiTag.Alarms.Remove(alarm);
+                    Delete(aiTag.Id);
+                    _tags.Add(aiTag);
+                    XmlSerializationHelper.SaveToXml(_tags); 
+                    return true;
+                } 
+            }
+            throw new NotFoundException("Alarm not found!");
         }
     }
 }

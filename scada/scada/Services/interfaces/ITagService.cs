@@ -32,5 +32,7 @@ namespace scada.Services.interfaces
         public Alarm GetAlarmById(int id);
         
         public AITag GetTagByAlarmId(int id);
+
+        public bool DeleteAlarm(int alarmId);
     }
 }

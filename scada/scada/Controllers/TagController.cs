@@ -118,5 +118,23 @@ namespace scada.Controllers
             }
 
         }
+
+        [HttpDelete("alarm/{id}")]
+        public IActionResult DeleteAlarm([FromRoute] int id)
+        {
+            try
+            {
+                _service.DeleteAlarm(id);
+                return Ok(new { Message = "Alarm deleted successfully!" });
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(new { error = ex.Message });
+            }
+            catch (BadRequestException ex)
+            {
+                return NotFound(new { error = ex.Message });
+            }
+        }
     }
 }
