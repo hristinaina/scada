@@ -18,10 +18,6 @@ export class Trending extends Component {
 
       this.tagConnection = TrendingService.createConnection("http://localhost:5083/Hub/tag");
       this.alarmConnection = TrendingService.createConnection("http://localhost:5083/Hub/alarm");
-
-      //this.connectionAlarm = new HubConnectionBuilder()
-      //    .withUrl("http://localhost:5083/Hub/alarm")
-      //    .build();
   }
 
   componentDidMount() {
@@ -47,7 +43,8 @@ export class Trending extends Component {
 
     componentWillUnmount() {
         clearInterval(this.interval);
-        this.connection.stop();
+        this.tagConnection.stop();
+        this.alarmConnection.stop();
     }
 
 
