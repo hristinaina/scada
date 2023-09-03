@@ -4,7 +4,7 @@ using scada.Models;
 using scada.Services;
 using scada.Services.implementation;
 using scada.Services.interfaces;
-using scada.WebSockets;
+using scada.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -60,6 +60,6 @@ app.MapFallbackToFile("index.html");
 using var scope = app.Services.CreateScope();
 scope.ServiceProvider.GetRequiredService<TagProcessingService>().Run();
 
-app.MapHub<WebSocket>("/Hub/tag");
+app.MapHub<TagHub>("/Hub/tag");
 
 app.Run();

@@ -6,7 +6,7 @@ using scada.Models;
 using scada.Repositories;
 using scada.Services.interfaces;
 using Microsoft.AspNetCore.SignalR;
-using scada.WebSockets;
+using scada.Hubs;
 using Google.Protobuf.WellKnownTypes;
 
 namespace scada.Services
@@ -17,11 +17,11 @@ namespace scada.Services
         private List<Tag> _tags;
         private List<AITag> _analog;
         private List<DITag> _digital;
-        private readonly IHubContext<WebSocket> _tagHub;
+        private readonly IHubContext<TagHub> _tagHub;
 
         private TagHistoryRepository _tagHistoryRepository;
 
-        public TagProcessingService(TagHistoryRepository tagHistoryRepository, IHubContext<WebSocket> tagHub) {
+        public TagProcessingService(TagHistoryRepository tagHistoryRepository, IHubContext<TagHub> tagHub) {
             _tags = XmlSerializationHelper.LoadFromXml<Tag>();
             _analog = ConfigHelper.ParseTags<AITag>(_tags);
             _digital = ConfigHelper.ParseTags<DITag>(_tags);
@@ -83,6 +83,7 @@ namespace scada.Services
                     {
                         currentValue = driver.GetValue(tag.Address);
                         Console.WriteLine("SCANING " + tag.Id + " " + currentValue);
+                        //Console.WriteLine("Alarm " + tag.Alarms.Count());
                     }
                     catch (Exception ex) { continue; }
 
@@ -94,8 +95,19 @@ namespace scada.Services
 
                     this.SendCurrentValue(new TrendingTagDTO(tag, currentValue));
 
-                    // rad sa alarmima
 
+                    foreach (Alarm alarm in tag.Alarms)
+                    {
+                        if (alarm.Type == AlarmType.HIGH && currentValue >= alarm.Limit)
+                        {
+                            // dodaj u bazu
+                            // prosledi na front
+                        }
+                        else if (alarm.Type == AlarmType.LOW && currentValue <= alarm.Limit)
+                        { 
+                            // prosledi na front
+                        }
+                    }
                 }
 
                 Thread.Sleep(tag.ScanTime);

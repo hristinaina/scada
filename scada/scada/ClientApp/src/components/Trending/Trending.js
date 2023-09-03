@@ -44,7 +44,7 @@ export class Trending extends Component {
           this.setState({ tags: currentTags });   
       });
 
-      this.interval = setInterval(this.renderForecastsTable, 1000);
+      this.interval = setInterval(this.renderTagsTable, 1000);
     }
 
     componentWillUnmount() {
@@ -53,9 +53,9 @@ export class Trending extends Component {
     }
 
 
-    static renderForecastsTable(tags) {
+    static renderTagsTable(tags) {
         if (!tags || tags.length === 0) {
-            return <p>No data available.</p>;
+            return <p>No data available</p>;
         }
         return (
           <table className="table table-striped" aria-labelledby="tableLabel">
@@ -88,7 +88,7 @@ export class Trending extends Component {
     }
 
   render() {
-    let contents = Trending.renderForecastsTable(this.state.tags);
+    let contents = Trending.renderTagsTable(this.state.tags);
 
     return (
         <div>
