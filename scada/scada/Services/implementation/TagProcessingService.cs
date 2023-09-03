@@ -5,6 +5,9 @@ using scada.Drivers;
 using scada.Models;
 using scada.Repositories;
 using scada.Services.interfaces;
+using Microsoft.AspNetCore.SignalR;
+using scada.WebSockets;
+using Google.Protobuf.WellKnownTypes;
 
 namespace scada.Services
 {
@@ -14,14 +17,16 @@ namespace scada.Services
         private List<Tag> _tags;
         private List<AITag> _analog;
         private List<DITag> _digital;
+        private readonly IHubContext<WebSocket> _tagHub;
 
         private TagHistoryRepository _tagHistoryRepository;
 
-        public TagProcessingService(TagHistoryRepository tagHistoryRepository) {
+        public TagProcessingService(TagHistoryRepository tagHistoryRepository, IHubContext<WebSocket> tagHub) {
             _tags = XmlSerializationHelper.LoadFromXml<Tag>();
             _analog = ConfigHelper.ParseLoadedObjects<AITag>(_tags);
             _digital = ConfigHelper.ParseLoadedObjects<DITag>(_tags);
             _tagHistoryRepository = tagHistoryRepository;
+            _tagHub = tagHub;
         }
 
         private readonly object _lock = new object();
@@ -87,7 +92,10 @@ namespace scada.Services
                         // dodaj u config
                     }
 
+                    this.SendCurrentValue(new TrendingTagDTO(tag, currentValue));
+
                     // rad sa alarmima
+
                 }
 
                 Thread.Sleep(tag.ScanTime);
@@ -121,10 +129,17 @@ namespace scada.Services
                         SaveTagValue(tag.Id, currentValue);
                         // dodaj u config
                     }
+
+                    this.SendCurrentValue(new TrendingTagDTO(tag, currentValue));
                 }
 
                 Thread.Sleep(tag.ScanTime);
             }
+        }
+
+        private async Task SendCurrentValue(TrendingTagDTO tag)
+        {           
+            await _tagHub.Clients.All.SendAsync("ReceiveMessage", tag);
         }
     }
 }
