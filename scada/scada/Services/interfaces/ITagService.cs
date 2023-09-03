@@ -24,5 +24,8 @@ namespace scada.Services.interfaces
         public void SaveTagValue(int tag, double value);
         
         public void ReceiveRTUValue(RTUData rtu);
+
+        public Alarm InsertAlarm(AlarmDTO alarmDTO);
+
     }
 }

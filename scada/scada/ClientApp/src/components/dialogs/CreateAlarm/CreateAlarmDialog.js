@@ -27,9 +27,9 @@ const CreateAlarmDialog = ({ tagId, onClose }) => {
                     className="label">Priority</p>
                 <select
                     className="input">
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
+                    <option value="1">1 - low</option>
+                    <option value="2">2 - medium</option>
+                    <option value="3">3 - high</option>
                 </select>
             </div>
             <div className="dialogs-button top-margin" id="bottom">

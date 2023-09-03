@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using scada.DTO;
 using scada.Drivers;
 using scada.Data.Config;
+using Azure;
 
 namespace scada.Services.implementation
 {
@@ -96,7 +97,7 @@ namespace scada.Services.implementation
 
         private int generateId()
         {
-            int id = 1;
+            int id = 0;
             foreach (Tag tag in _tags) if (tag.Id > id) id = tag.Id;
             return ++id;
         }
@@ -124,6 +125,28 @@ namespace scada.Services.implementation
         public void ReceiveRTUValue(RTUData rtu)
         {
             RTUDriver.SetValue(rtu.Address, rtu.Value);
+        }
+
+        public Alarm InsertAlarm(AlarmDTO alarmDTO)
+        {
+            // TODO : add check if low/high limit alarm already exists
+            Alarm alarm = new Alarm(alarmDTO);
+            alarm.Id = generateAlarmId(alarmDTO.TagId);
+            AITag aiTag = GetAITags().FirstOrDefault(item => item.Id == alarmDTO.TagId);
+            aiTag.Alarms.Add(alarm);
+            Delete(aiTag.Id);
+            _tags.Add(aiTag);
+            XmlSerializationHelper.SaveToXml(_tags);
+            return alarm;
+        }
+
+        private int generateAlarmId(int tagId)
+        {
+            AITag tag = GetAITags().FirstOrDefault(item => item.Id == tagId);
+            int id = 0;
+            foreach(Alarm alarm in tag.Alarms) if (alarm.Id > id) id = alarm.Id;
+            return ++id;
+
         }
     }
 }
