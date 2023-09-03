@@ -100,11 +100,13 @@ namespace scada.Services
                     {
                         if (alarm.Type == AlarmType.HIGH && currentValue >= alarm.Limit)
                         {
+                            this.SendAlarm();
                             // dodaj u bazu
                             // prosledi na front
                         }
                         else if (alarm.Type == AlarmType.LOW && currentValue <= alarm.Limit)
-                        { 
+                        {
+                            this.SendAlarm();
                             // prosledi na front
                         }
                     }
@@ -152,6 +154,11 @@ namespace scada.Services
         private async Task SendCurrentValue(TrendingTagDTO tag)
         {           
             await _tagHub.Clients.All.SendAsync("ReceiveMessage", tag);
+        }
+
+        private async Task SendAlarm()
+        {
+            await _tagHub.Clients.All.SendAsync("ReceiveMessage", "ALARM");
         }
     }
 }

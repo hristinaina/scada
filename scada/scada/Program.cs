@@ -61,5 +61,6 @@ using var scope = app.Services.CreateScope();
 scope.ServiceProvider.GetRequiredService<TagProcessingService>().Run();
 
 app.MapHub<TagHub>("/Hub/tag");
+app.MapHub<AlarmHub>("/Hub/alarm");
 
 app.Run();

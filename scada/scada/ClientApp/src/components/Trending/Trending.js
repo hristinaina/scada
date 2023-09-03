@@ -18,6 +18,10 @@ export class Trending extends Component {
       this.connection = new HubConnectionBuilder()
           .withUrl("http://localhost:5083/Hub/tag") 
           .build();
+
+      this.connectionAlarm = new HubConnectionBuilder()
+          .withUrl("http://localhost:5083/Hub/alarm")
+          .build();
   }
 
   componentDidMount() {
@@ -42,6 +46,19 @@ export class Trending extends Component {
           }
 
           this.setState({ tags: currentTags });   
+      });
+
+      this.connection
+          .start()
+          .then(() => {
+              console.log("Connected to WebSocket server for alarm");
+          })
+          .catch((error) => {
+              console.error(error);
+          });
+
+      this.connection.on("ReceiveMessage", (alarm) => {
+          console.log(alarm)
       });
 
       this.interval = setInterval(this.renderTagsTable, 1000);
