@@ -7,7 +7,7 @@ namespace scada.Hubs
     {
         public async Task SendAlarm(Alarm alarm)
         {
-            await Clients.All.SendAsync("ReceiveMessage", alarm);
+            await Clients.All.SendAsync("nekaPoruka", alarm);
         }
     }
 }

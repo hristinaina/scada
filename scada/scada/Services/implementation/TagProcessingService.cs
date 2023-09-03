@@ -18,15 +18,18 @@ namespace scada.Services
         private List<AITag> _analog;
         private List<DITag> _digital;
         private readonly IHubContext<TagHub> _tagHub;
+        private readonly IHubContext<AlarmHub> _alarmHub;
 
         private TagHistoryRepository _tagHistoryRepository;
 
-        public TagProcessingService(TagHistoryRepository tagHistoryRepository, IHubContext<TagHub> tagHub) {
+        public TagProcessingService(TagHistoryRepository tagHistoryRepository, IHubContext<TagHub> tagHub, IHubContext<AlarmHub> alarmHub)
+        {
             _tags = XmlSerializationHelper.LoadFromXml<Tag>();
             _analog = ConfigHelper.ParseTags<AITag>(_tags);
             _digital = ConfigHelper.ParseTags<DITag>(_tags);
             _tagHistoryRepository = tagHistoryRepository;
             _tagHub = tagHub;
+            _alarmHub = alarmHub;
         }
 
         private readonly object _lock = new object();
@@ -158,7 +161,7 @@ namespace scada.Services
 
         private async Task SendAlarm()
         {
-            await _tagHub.Clients.All.SendAsync("ReceiveMessage", "ALARM");
+            await _alarmHub.Clients.All.SendAsync("nekaPoruka", "ALARM");
         }
     }
 }

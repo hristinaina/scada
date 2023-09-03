@@ -3,6 +3,7 @@ import { NavMenu } from '../Nav/NavMenu';
 import './Trending.css';
 import '../../fonts.css';
 import { HubConnectionBuilder } from "@microsoft/signalr";
+import TrendingService from '../../services/TrendingService';
 
 
 export class Trending extends Component {
@@ -15,27 +16,17 @@ export class Trending extends Component {
          tags: []
       };
 
-      this.connection = new HubConnectionBuilder()
-          .withUrl("http://localhost:5083/Hub/tag") 
-          .build();
+      this.tagConnection = TrendingService.createConnection("http://localhost:5083/Hub/tag");
+      this.alarmConnection = TrendingService.createConnection("http://localhost:5083/Hub/alarm");
 
-      this.connectionAlarm = new HubConnectionBuilder()
-          .withUrl("http://localhost:5083/Hub/alarm")
-          .build();
+      //this.connectionAlarm = new HubConnectionBuilder()
+      //    .withUrl("http://localhost:5083/Hub/alarm")
+      //    .build();
   }
 
   componentDidMount() {
 
-      this.connection
-          .start()
-          .then(() => {
-              console.log("Connected to WebSocket server");
-          })
-          .catch((error) => {
-              console.error(error);
-          });
-
-      this.connection.on("ReceiveMessage", (tag) => {
+      this.tagConnection?.on("ReceiveMessage", (tag) => {
           const currentTags = [...this.state.tags];
           const existingTagIndex = currentTags.findIndex(t => t.tagName === tag.tagName);
 
@@ -44,20 +35,10 @@ export class Trending extends Component {
           } else {
               currentTags[existingTagIndex].value = tag.value;
           }
-
           this.setState({ tags: currentTags });   
       });
 
-      this.connection
-          .start()
-          .then(() => {
-              console.log("Connected to WebSocket server for alarm");
-          })
-          .catch((error) => {
-              console.error(error);
-          });
-
-      this.connection.on("ReceiveMessage", (alarm) => {
+      this.alarmConnection?.on("nekaPoruka", (alarm) => {
           console.log(alarm)
       });
 
