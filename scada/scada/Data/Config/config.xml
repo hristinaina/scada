@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfTag xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Tag xsi:type="DITag">
+    <Id>1</Id>
+	  <Address>c1</Address>
+    <Description>lalalal</Description>
+    <TagName>DI_Tag</TagName>
+    <Description>Ovo je tag</Description>
+    <Address>adresa33</Address>
+    <IsScanning>true</IsScanning>
+    <ScanTime>1000</ScanTime>
+    <Driver>SIM</Driver>
+  </Tag>
+  <Tag xsi:type="DITag">
+    <Id>7</Id>
+    <TagName>DI_Tag</TagName>
+    <Description>Ovo je tag</Description>
+    <Address>adresa1</Address>
+    <IsScanning>false</IsScanning>
+    <ScanTime>1000</ScanTime>
+    <Driver>RTU</Driver>
+  </Tag>
+  <Tag xsi:type="AOTag">
+    <Id>2</Id>
+    <TagName>AO_Tag</TagName>
+    <Description>ao tag jeeeee</Description>
+    <Address>neka adresa</Address>
+    <Units>V</Units>
+    <LowLimit>0</LowLimit>
+    <HighLimit>10</HighLimit>
+    <Value>5.5</Value>
+    <Description>nestoo</Description>
+  </Tag>
+  <Tag xsi:type="DOTag">
+    <Id>6</Id>
+    <TagName>Neki tag</TagName>
+    <Description>alalala</Description>
+    <Address>adresica</Address>
+    <Value>1</Value>
+  </Tag>
+  <Tag xsi:type="AITag">
+    <Id>3</Id>
+    <TagName>AI_Tag</TagName>
+    <Description>neki opis lalalal</Description>
+    <Address>adresa ai taga</Address>
+    <IsScanning>true</IsScanning>
+    <ScanTime>2000</ScanTime>
+    <Driver>RTU</Driver>
+    <Units>C</Units>
+    <Address>a1</Address>
+    <Description>neki tag</Description>
+    <LowLimit>-10</LowLimit>
+    <HighLimit>50</HighLimit>
+    <Alarms>
+      <Alarm>
+        <Id>1</Id>
+        <Type>HIGH</Type>
+        <Priority>1</Priority>
+        <Limit>0</Limit>
+      </Alarm>
+      <Alarm>
+        <Id>2</Id>
+        <Type>LOW</Type>
+        <Priority>2</Priority>
+        <Limit>0</Limit>
+      </Alarm>
+    </Alarms>
+  </Tag>
+  <Tag xsi:type="AITag">
+    <Id>5</Id>
+    <TagName>AI_Tag</TagName>
+    <IsScanning>true</IsScanning>
+    <ScanTime>2000</ScanTime>
+    <Driver>RTU</Driver>
+    <Units>C</Units>
+    <Address>a2</Address>
+    <Description>novi taaaag</Description>
+    <LowLimit>-10</LowLimit>
+    <HighLimit>50</HighLimit>
+    <Alarms>
+      <Alarm>
+        <Id>1</Id>
+        <Type>HIGH</Type>
+        <Priority>1</Priority>
+        <Border>40</Border>
+      </Alarm>
+      <Alarm>
+        <Id>2</Id>
+        <Type>LOW</Type>
+        <Priority>2</Priority>
+        <Border>-5</Border>
+      </Alarm>
+    </Alarms>
+  </Tag>
+  <Tag xsi:type="AITag">
+    <Id>4</Id>
+    <TagName>AI_Tag2</TagName>
+    <IsScanning>true</IsScanning>
+    <ScanTime>2000</ScanTime>
+    <Driver>RTU</Driver>
+    <Units>C</Units>
+    <Address>a3</Address>
+    <Description>jos jedan ai tag</Description>
+    <LowLimit>-10</LowLimit>
+    <HighLimit>50</HighLimit>
+    <Alarms>
+      <Alarm>
+        <Id>3</Id>
+        <Type>HIGH</Type>
+        <Priority>1</Priority>
+        <Border>40</Border>
+      </Alarm>
+      <Alarm>
+        <Id>4</Id>
+        <Type>LOW</Type>
+        <Priority>2</Priority>
+        <Border>-5</Border>
+      </Alarm>
+    </Alarms>
+  </Tag>
+</ArrayOfTag>
