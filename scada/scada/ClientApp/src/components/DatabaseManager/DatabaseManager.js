@@ -106,7 +106,6 @@ export class DatabaseManager extends Component {
     }
 
     delete = async () => {
-        console.log("You clicked: " + this.state.chosenTag);
         try {
             await axios.delete('http://localhost:5083/api/tag/' + this.state.chosenTag);
             console.log("Successfully deleted!");
