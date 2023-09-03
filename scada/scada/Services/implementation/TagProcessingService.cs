@@ -103,13 +103,13 @@ namespace scada.Services
                     {
                         if (alarm.Type == AlarmType.HIGH && currentValue >= alarm.Limit)
                         {
-                            this.SendAlarm();
+                            this.SendAlarm(new TrendingAlarmDTO(tag.TagName, alarm));
                             // dodaj u bazu
                             // prosledi na front
                         }
                         else if (alarm.Type == AlarmType.LOW && currentValue <= alarm.Limit)
                         {
-                            this.SendAlarm();
+                            this.SendAlarm(new TrendingAlarmDTO(tag.TagName, alarm));
                             // prosledi na front
                         }
                     }
@@ -159,9 +159,9 @@ namespace scada.Services
             await _tagHub.Clients.All.SendAsync("ReceiveMessage", tag);
         }
 
-        private async Task SendAlarm()
+        private async Task SendAlarm(TrendingAlarmDTO alarm)
         {
-            await _alarmHub.Clients.All.SendAsync("nekaPoruka", "ALARM");
+            await _alarmHub.Clients.All.SendAsync("nekaPoruka", alarm);
         }
     }
 }

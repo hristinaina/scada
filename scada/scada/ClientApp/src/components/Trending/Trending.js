@@ -30,11 +30,17 @@ export class Trending extends Component {
               currentTags.push(tag);
           } else {
               currentTags[existingTagIndex].value = tag.value;
+              currentTags[existingTagIndex].alarm = "";
           }
           this.setState({ tags: currentTags });   
       });
 
       this.alarmConnection?.on("nekaPoruka", (alarm) => {
+          let alarmTag = this.state.tags.find(tag => tag.tagName === alarm.tagName);
+
+          if (alarmTag) 
+              alarmTag.alarm = alarm.description;
+          
           console.log(alarm)
       });
 
@@ -74,7 +80,7 @@ export class Trending extends Component {
                   <td>{tag.scanTime}</td>
                   <td>{tag.range}</td>
                   <td>{tag.value}</td>
-                  <td></td>
+                  <td>{tag.alarm}</td>
                 </tr>
               )}
             </tbody>
