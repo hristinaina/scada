@@ -81,15 +81,17 @@ export class DatabaseManager extends Component {
         });
     }
 
-    openAlarmsDialog = () => {
+    openAlarmsDialog = (id) => {
         this.setState({
             showAlarmsDialog: true,
+            chosenTag: id,
         });
     }
 
     closeAlarmsDialog = () => {
         this.setState({
             showAlarmsDialog: false,
+            chosenTag: null,
         });
     }
 
@@ -129,7 +131,7 @@ export class DatabaseManager extends Component {
 
     render() {
         const { isDropdownOpen, selectedItem, isDO, isDI, AOData, DOData, AIData, DIData,
-                showDeleteDialog, showAlarmsDialog, showCreateAlarmDialog } = this.state;
+                showDeleteDialog, showAlarmsDialog, showCreateAlarmDialog, chosenTag } = this.state;
 
         return (
             <div>
@@ -165,7 +167,7 @@ export class DatabaseManager extends Component {
                 {/*TODO : add here alarms dialog tag*/}
                 {showAlarmsDialog && <Alarms onClose={this.closeAlarmsDialog} openCreateAlarmDialog={this.openCreateAlarmDialog} />}
 
-                {showCreateAlarmDialog && <CreateAlarmDialog onClose={this.closeCreateAlarmDialog} />}
+                {showCreateAlarmDialog && <CreateAlarmDialog onClose={this.closeCreateAlarmDialog} tagId={chosenTag} />}
 
                 {/*Dialogs */}
                 {selectedItem === "AI" && <AITag onClose={this.closeDialog} />}
@@ -242,7 +244,7 @@ export class DatabaseManager extends Component {
                                     <p className="value">{item.driver === 0 ? 'SIMULATION' : 'RTU'}</p>
                                     <div className="edit-delete-icons">
                                         <img style={{ marginRight: '15px' }} src="/images/delete.png" alt="Delete" className="icon" onClick={() => this.openDeleteDialog(item.id)} />
-                                        <img style={{ marginRight: '15px', marginBottom: '2px', marginTop: '2px' }} src="/images/bell.png" alt="Alarm" className="icon" onClick={this.openAlarmsDialog} />
+                                        <img style={{ marginRight: '15px', marginBottom: '2px', marginTop: '2px' }} src="/images/bell.png" alt="Alarm" className="icon" onClick={() => this.openAlarmsDialog(item.id)} />
                                         <div
                                             className={`toggle-button ${item.isScanning ? 'on' : ''}`}
                                             onClick={() => this.toggleValue(item.id)}>
