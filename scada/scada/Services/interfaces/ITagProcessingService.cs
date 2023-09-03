@@ -1,5 +1,5 @@
 ﻿using scada.Drivers;
-using scada.Models;
+using scada.DTO;
 
 namespace scada.Services
 {
@@ -7,5 +7,7 @@ namespace scada.Services
     {
         public void SaveTagValue(int tag, double value);
         public void ReceiveRTUValue(RTUData rtu);
+        public void Run();
+
     }
 }

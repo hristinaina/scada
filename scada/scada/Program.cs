@@ -1,8 +1,10 @@
+using scada.Repositories;
 using scada.Data.Config;
 using scada.Models;
 using scada.Services;
 using scada.Services.implementation;
 using scada.Services.interfaces;
+using scada.WebSockets;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,16 +16,25 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowMyFrontend", builder =>
     {
-        builder.WithOrigins("*")
+        builder.WithOrigins("http://localhost:44438")
             .AllowAnyHeader()
-            .AllowAnyMethod();
+            .AllowAnyMethod()
+            .AllowCredentials();
     });
 });
 
+// services
 builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<IAlarmHistoryService, AlarmHistoryService>();
 builder.Services.AddTransient<ITagHistoryService, TagHistoryService>();
 builder.Services.AddTransient<ITagService, TagService>();
+builder.Services.AddTransient<TagProcessingService>();
+
+// repositories
+builder.Services.AddTransient<TagHistoryRepository>();
+
+// sockets
+builder.Services.AddSignalR();
 
 var app = builder.Build();
 
@@ -46,5 +57,9 @@ app.MapControllerRoute(
 
 app.MapFallbackToFile("index.html");
 
-app.Run();
+using var scope = app.Services.CreateScope();
+scope.ServiceProvider.GetRequiredService<TagProcessingService>().Run();
 
+app.MapHub<WebSocket>("/Hub/tag");
+
+app.Run();

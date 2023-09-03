@@ -17,17 +17,65 @@ namespace scada.Services.implementation
 
         public TagService() 
         {
-            _tags = Get();    
+            _tags = Load();    
+        }
+
+        private List<Tag> Load()
+        {
+            return XmlSerializationHelper.LoadFromXml<Tag>();
         }
 
         public List<Tag> Get()
         {
-            return XmlSerializationHelper.LoadFromXml<Tag>();
+            return _tags;
         }
 
         public Tag? Get(int id)
         {
             foreach (Tag tag in _tags) if (tag.Id == id)  return tag; 
+            throw new NotFoundException("Tag not found!");
+        }
+
+        public List<Alarm> GetAllAlarms()
+        {
+            List<Alarm> alarms = new List<Alarm>();
+
+            foreach (Tag tag in _tags) { 
+                if (tag is AITag)
+                {
+                    AITag aitag = (AITag) tag;
+                    alarms.AddRange(aitag.Alarms);
+                }
+            }
+
+            return alarms;
+        }
+
+        public Alarm GetAlarmById(int id)
+        {
+            foreach (Tag tag in _tags)
+            {
+                if (tag is AITag)
+                {
+                    AITag aitag = (AITag)tag;
+                    Alarm alarm = aitag.Alarms.FirstOrDefault(item => item.Id == id);
+                    if (alarm != null) return alarm;
+                }
+            }
+            throw new NotFoundException("Alarm not found!");
+        }
+
+        public AITag GetTagByAlarmId(int id)
+        {
+            foreach (Tag tag in _tags)
+            {
+                if (tag is AITag)
+                {
+                    AITag aitag = (AITag)tag;
+                    Alarm alarm = aitag.Alarms.FirstOrDefault(item => item.Id == id);
+                    if (alarm != null) return aitag;
+                }
+            }
             throw new NotFoundException("Tag not found!");
         }
 
@@ -72,8 +120,11 @@ namespace scada.Services.implementation
 
             if (tag != null)
             {
-                if (addresses.Contains(tag.Address))
-                    throw new BadRequestException("Address already in use!");
+                if (tagDTO.Type == "AOTag" || tagDTO.Type == "DOTag")
+                {
+                    if (addresses.Contains(tag.Address))
+                        throw new BadRequestException("Address already in use!");
+                }
                 tag.Id = generateId();
                 _tags.Add(tag);
                 XmlSerializationHelper.SaveToXml(_tags);
@@ -105,17 +156,16 @@ namespace scada.Services.implementation
         private List<String> getAllAddresses()
         {
             List<String> addresses = new List<String>();
-            foreach(Tag tag in _tags) addresses.Add(tag.Address);
             addresses.AddRange(new[] { "a1", "a2", "a3", "a4", "a5",
                                        "d1", "d2", "d3", "d4", "d5"});
             return addresses;
         }
 
         /*
-         should be called when tag value changes:
-            1. for input tags = in trending app after scanning 
-            2. for output tags = when value is changed (manually)
-        */
+        should be called when tag value changes:
+           1. for input tags = in trending app after scanning 
+           2. for output tags = when value is changed (manually)
+       */
         public void SaveTagValue(int tag, double value)
         {
             TagHistory tagHistory = new TagHistory(tag, value);

@@ -14,5 +14,10 @@
             Value = value;
             Timestamp = DateTime.Now;
         }
+
+        public override string ToString()
+        {
+            return $"Id: {Id}, Value: {Value}, TagId: {TagId}, TimeStamp: {Timestamp}";
+        }
     }
 }
