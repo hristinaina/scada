@@ -12,6 +12,7 @@ using scada.Exceptions;
 using Newtonsoft.Json;
 using scada.Services.implementation;
 using Azure;
+using System.Threading;
 
 namespace scada.Services
 {
@@ -23,6 +24,7 @@ namespace scada.Services
         private ITagHistoryService _tagHistoryService;
         private TagHistoryRepository _tagHistoryRepository;
         private ITagService _tagService;
+        private static IDictionary<int, Thread> threads = new Dictionary<int, Thread>();
 
         public TagProcessingService(TagHistoryRepository tagHistoryRepository, ITagService tagService, ITagHistoryService tagHistoryService, IHubContext<WebSocket> tagHub) {
             _tagHistoryRepository = tagHistoryRepository;
@@ -46,16 +48,18 @@ namespace scada.Services
         {
             foreach (var tag in ConfigHelper.ParseTags<AITag>(_tagService.Get()))
             { 
-                    Thread t;
-                    t = new Thread(ScanAnalog);
-                    t.Start(tag);
+                Thread t;
+                t = new Thread(ScanAnalog);
+                threads[tag.Id] = t;
+                t.Start(tag);
             }
 
             foreach (var tag in ConfigHelper.ParseTags<DITag>(_tagService.Get()))
             {
-                    Thread t;
-                    t = new Thread(ScanDigital);
-                    t.Start(tag);
+                Thread t;
+                t = new Thread(ScanDigital);
+                threads[tag.Id] = t;
+                t.Start(tag);
             }
         }
 
@@ -70,14 +74,14 @@ namespace scada.Services
             else
                 driver = new RTUDriver();
 
-            while (true) 
+            while (threads.ContainsKey(tag.Id)) 
             {
                 if (tag.IsScanning)
                 {
                     try
                     {
                         currentValue = driver.GetValue(tag.Address);
-                        Console.WriteLine("SCANING " + tag.Id + " " + currentValue);
+                        Console.WriteLine("SCANING " + tag.TagName + " | " + currentValue);
                     }
                     catch (Exception ex) { continue; }
 
@@ -105,14 +109,14 @@ namespace scada.Services
             else
                 driver = new RTUDriver();
 
-            while (true)
+            while (threads.ContainsKey(tag.Id))
             {
                 if (tag.IsScanning)
                 {
                     try
                     {
                         currentValue = driver.GetValue(tag.Address);
-                        Console.WriteLine("SCANING " + tag.Id + " " + currentValue);
+                        Console.WriteLine("SCANING " + tag.TagName + " | " + currentValue);
                     }
                     catch (Exception ex) { continue; }
 
@@ -134,8 +138,14 @@ namespace scada.Services
                 {
                     _tagHistoryService.Delete(id);
                     _tagService.RemoveTag(tag);
-                    //todo ukloniti iz niti
-                    return true;
+
+                    //delete a thread
+                    if (tag is AITag || tag is DITag)
+                    {
+                        Thread t = threads[tag.Id];
+                        threads.Remove(tag.Id);
+                        return true;
+                    }
                 }
             }
             throw new NotFoundException("Tag not found!");
@@ -164,13 +174,33 @@ namespace scada.Services
                         RTUDriver.SetValue(tag.Address, aotag.Value);
                     }
                 }
+                else
                 tag.Id = generateId();
                 _tagService.InsertTag(tag);
-                //todo dodaj u listu niti
+                createThread(tag, tagDTO.Type);
                 return tag;
             }
 
             throw new BadRequestException("Invalid tag data"); ;
+        }
+
+        private void createThread(Tag tag, string type)
+        {
+            Thread t;
+            if (type == "AITag")
+            {
+                t = new Thread(ScanAnalog);
+                threads.Add(tag.Id, t);
+                t.Start(tag);
+            }
+
+            else if (type == "DITag")
+            {
+                t = new Thread(ScanDigital);
+                threads.Add(tag.Id, t);
+                t.Start(tag);
+            }
+            //if the type is not input then do nothing
         }
 
         private async Task SendCurrentValue(TrendingTagDTO tag)

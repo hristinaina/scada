@@ -7,7 +7,9 @@
 
         public double GetValue(string address)
         {
-            return addressValues[address];
+            if (addressValues.ContainsKey(address))
+                return addressValues[address];
+            else return 0.0;
         }
 
         public static void SetValue(string address, double value) 
