@@ -12,7 +12,8 @@ namespace scada.Services.implementation
     public class TagService : ITagService
     {
         private List<Tag> _tags;
-        private ITagHistoryService _tagHistoryService = new TagHistoryService();
+
+        private readonly object _lock = new object();
 
         public TagService() 
         {
@@ -26,7 +27,10 @@ namespace scada.Services.implementation
 
         public List<Tag> Get()
         {
-            return _tags;
+            lock (_lock)
+            {
+                return _tags;
+            }
         }
 
         public Tag? Get(int id)
@@ -98,71 +102,27 @@ namespace scada.Services.implementation
             return ConfigHelper.ParseTags<AITag>(_tags);
         }
 
-        public bool Delete(int id)
-        {
-            foreach (Tag tag in _tags)
-            {
-                if (tag.Id == id) { 
-                    _tags.Remove(tag);
-                    _tagHistoryService.Delete(id);
-                    XmlSerializationHelper.SaveToXml(_tags);
-                    return true; 
-                }
-            }
-            throw new NotFoundException("Tag not found!");
-        }
-
-        public Tag Insert(TagDTO tagDTO)
-        {
-            List<String> addresses = getAllAddresses();
-            Tag tag = convert(tagDTO);
-
-            if (tag != null)
-            {
-                if (tagDTO.Type == "AOTag" || tagDTO.Type == "DOTag")
-                {
-                    if (addresses.Contains(tag.Address))
-                        throw new BadRequestException("Address already in use!");
-                }
-                tag.Id = generateId();
-                _tags.Add(tag);
-                XmlSerializationHelper.SaveToXml(_tags);
-                return tag;
-            }
-
-            throw new BadRequestException("Invalid tag data"); ;
-        }
-
-        private Tag convert(TagDTO tagDTO)
-        {
-            return tagDTO.Type switch
-            {
-                "DOTag" => JsonConvert.DeserializeObject<DOTag>(tagDTO.Data.ToString()),
-                "DITag" => JsonConvert.DeserializeObject<DITag>(tagDTO.Data.ToString()),
-                "AOTag" => JsonConvert.DeserializeObject<AOTag>(tagDTO.Data.ToString()),
-                "AITag" => JsonConvert.DeserializeObject<AITag>(tagDTO.Data.ToString()),
-                _ => null // handle unknown types
-            };
-        }
-
-        private int generateId()
-        {
-            int id = 1;
-            foreach (Tag tag in _tags) if (tag.Id > id) id = tag.Id;
-            return ++id;
-        }
-
-        private List<String> getAllAddresses()
-        {
-            List<String> addresses = new List<String>();
-            addresses.AddRange(new[] { "a1", "a2", "a3", "a4", "a5",
-                                       "d1", "d2", "d3", "d4", "d5"});
-            return addresses;
-        }
-
         public void ReceiveRTUValue(RTUData rtu)
         {
             RTUDriver.SetValue(rtu.Address, rtu.Value);
+        }
+
+
+        public void RemoveTag(Tag tag)
+        {
+            lock (_lock)
+            {
+                _tags.Remove(tag);
+            }
+            XmlSerializationHelper.SaveToXml(_tags);
+        }
+
+        public void InsertTag(Tag tag){
+            lock (_lock)
+            {
+                _tags.Add(tag);
+            }
+            XmlSerializationHelper.SaveToXml(_tags);  
         }
     }
 }

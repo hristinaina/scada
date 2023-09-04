@@ -17,15 +17,17 @@ namespace scada.Services.interfaces
 
         public List<AOTag> GetAOTags();
 
-        public bool Delete(int id);
-
-        public Tag Insert(TagDTO tag);
-
         public void ReceiveRTUValue(RTUData rtu);
 
         public List<Alarm> GetAllAlarms();
 
         public Alarm GetAlarmById(int id);
+
         public AITag GetTagByAlarmId(int id);
+
+        public void RemoveTag(Tag tag);
+
+        void InsertTag(Tag tag);
+
     }
 }

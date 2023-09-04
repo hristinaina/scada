@@ -8,28 +8,28 @@ using scada.Services.interfaces;
 using Microsoft.AspNetCore.SignalR;
 using scada.WebSockets;
 using Google.Protobuf.WellKnownTypes;
+using scada.Exceptions;
+using Newtonsoft.Json;
+using scada.Services.implementation;
+using Azure;
 
 namespace scada.Services
 {
 
     public class TagProcessingService : ITagProcessingService
     {
-        private List<Tag> _tags;
-        private List<AITag> _analog;
-        private List<DITag> _digital;
         private readonly IHubContext<WebSocket> _tagHub;
 
+        private ITagHistoryService _tagHistoryService;
         private TagHistoryRepository _tagHistoryRepository;
+        private ITagService _tagService;
 
-        public TagProcessingService(TagHistoryRepository tagHistoryRepository, IHubContext<WebSocket> tagHub) {
-            _tags = XmlSerializationHelper.LoadFromXml<Tag>();
-            _analog = ConfigHelper.ParseTags<AITag>(_tags);
-            _digital = ConfigHelper.ParseTags<DITag>(_tags);
+        public TagProcessingService(TagHistoryRepository tagHistoryRepository, ITagService tagService, ITagHistoryService tagHistoryService, IHubContext<WebSocket> tagHub) {
             _tagHistoryRepository = tagHistoryRepository;
+            _tagService = tagService;
+            _tagHistoryService = tagHistoryService;
             _tagHub = tagHub;
         }
-
-        private readonly object _lock = new object();
 
         /*
          should be called when tag value changes:
@@ -44,14 +44,14 @@ namespace scada.Services
 
         public void Run()
         {
-            foreach (var tag in _analog) 
+            foreach (var tag in ConfigHelper.ParseTags<AITag>(_tagService.Get()))
             { 
                     Thread t;
                     t = new Thread(ScanAnalog);
                     t.Start(tag);
             }
 
-            foreach (var tag in _digital)
+            foreach (var tag in ConfigHelper.ParseTags<DITag>(_tagService.Get()))
             {
                     Thread t;
                     t = new Thread(ScanDigital);
@@ -81,11 +81,8 @@ namespace scada.Services
                     }
                     catch (Exception ex) { continue; }
 
-                    lock (_lock)
-                    {
-                        SaveTagValue(tag.Id, currentValue); 
-                        // dodaj u config
-                    }
+                    SaveTagValue(tag.Id, currentValue); 
+                    // dodaj u config
 
                     this.SendCurrentValue(new TrendingTagDTO(tag, currentValue));
 
@@ -119,11 +116,8 @@ namespace scada.Services
                     }
                     catch (Exception ex) { continue; }
 
-                    lock (_lock)
-                    {
-                        SaveTagValue(tag.Id, currentValue);
-                        // dodaj u config
-                    }
+                    SaveTagValue(tag.Id, currentValue);
+                    // dodaj u config
 
                     this.SendCurrentValue(new TrendingTagDTO(tag, currentValue));
                 }
@@ -132,9 +126,75 @@ namespace scada.Services
             }
         }
 
+        public bool Delete(int id)
+        {
+            foreach (Tag tag in _tagService.Get())
+            {
+                if (tag.Id == id)
+                {
+                    _tagHistoryService.Delete(id);
+                    _tagService.RemoveTag(tag);
+                    //todo ukloniti iz niti
+                    return true;
+                }
+            }
+            throw new NotFoundException("Tag not found!");
+        }
+
+        public Tag Insert(TagDTO tagDTO)
+        {
+            List<String> addresses = RTUDriver.GetAddresses();
+            Tag tag = convert(tagDTO);
+
+            if (tag != null)
+            {
+                if (tagDTO.Type == "AOTag" || tagDTO.Type == "DOTag")
+                {
+                    if (addresses.Contains(tag.Address))
+                        throw new BadRequestException("Address already in use!");
+
+                    if (tagDTO.Type == "DOTag")
+                    {
+                        DOTag dotag = (DOTag)tag;
+                        RTUDriver.SetValue(tag.Address, dotag.Value);
+                    }
+                    else if (tagDTO.Type == "AOTag")
+                    {
+                        AOTag aotag = (AOTag)tag;
+                        RTUDriver.SetValue(tag.Address, aotag.Value);
+                    }
+                }
+                tag.Id = generateId();
+                _tagService.InsertTag(tag);
+                //todo dodaj u listu niti
+                return tag;
+            }
+
+            throw new BadRequestException("Invalid tag data"); ;
+        }
+
         private async Task SendCurrentValue(TrendingTagDTO tag)
         {           
             await _tagHub.Clients.All.SendAsync("ReceiveMessage", tag);
+        }
+
+        private Tag convert(TagDTO tagDTO)
+        {
+            return tagDTO.Type switch
+            {
+                "DOTag" => JsonConvert.DeserializeObject<DOTag>(tagDTO.Data.ToString()),
+                "DITag" => JsonConvert.DeserializeObject<DITag>(tagDTO.Data.ToString()),
+                "AOTag" => JsonConvert.DeserializeObject<AOTag>(tagDTO.Data.ToString()),
+                "AITag" => JsonConvert.DeserializeObject<AITag>(tagDTO.Data.ToString()),
+                _ => null // handle unknown types
+            };
+        }
+
+        private int generateId()
+        {
+            int id = 1;
+            foreach (Tag tag in _tagService.Get()) if (tag.Id > id) id = tag.Id;
+            return ++id;
         }
     }
 }

@@ -27,13 +27,16 @@ namespace scada.Data
 
         public static void SaveToXml<T>(List<T> objects)
         {
-            // clearing xml file before writing anything to it
-            File.WriteAllText(_filePath, string.Empty);
-
-            XmlSerializer serializer = new XmlSerializer(typeof(List<T>));
-            using (TextWriter writer = new StreamWriter(_filePath))
+            lock (fileLock)
             {
-                serializer.Serialize(writer, objects);
+                // clearing xml file before writing anything to it
+                File.WriteAllText(_filePath, string.Empty);
+
+                XmlSerializer serializer = new XmlSerializer(typeof(List<T>));
+                using (TextWriter writer = new StreamWriter(_filePath))
+                {
+                    serializer.Serialize(writer, objects);
+                }
             }
         }
     }

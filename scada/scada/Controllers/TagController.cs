@@ -13,11 +13,13 @@ namespace scada.Controllers
     {
 
         private readonly ITagService _service;
+        private readonly ITagProcessingService _tagProcessingService ;
 
 
-        public TagController(ITagService tagService)
+        public TagController(ITagService tagService, TagProcessingService tagProcessingService)
         {
             _service = tagService;
+            _tagProcessingService = tagProcessingService;
         }
 
         [HttpGet()]
@@ -74,7 +76,7 @@ namespace scada.Controllers
         public IActionResult Delete([FromRoute] int id)
         {
             try { 
-                _service.Delete(id);
+                _tagProcessingService.Delete(id);
                 return Ok("Successfully deleted!"); 
             }
             catch (NotFoundException ex)
@@ -88,7 +90,7 @@ namespace scada.Controllers
         {
             try
             {
-                Tag tag = _service.Insert(tagInput);
+                Tag tag = _tagProcessingService.Insert(tagInput);
                 return Ok(tag);
             }
             catch (BadRequestException ex)

@@ -1,5 +1,6 @@
 ﻿using scada.Drivers;
 using scada.DTO;
+using scada.Models;
 
 namespace scada.Services
 {
@@ -7,6 +8,8 @@ namespace scada.Services
     {
         public void SaveTagValue(int tag, double value);
         public void Run();
+        public bool Delete(int id);
+        public Tag Insert(TagDTO tag);
 
     }
 }
