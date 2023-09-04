@@ -182,6 +182,7 @@ namespace scada.Services.implementation
             alarm.Id = generateAlarmId(alarmDTO.TagId);
             AITag aiTag = GetAITags().FirstOrDefault(item => item.Id == alarmDTO.TagId);
             if (isAlarmAdded(aiTag, alarm.Type)) throw new BadRequestException("Alarm already added.");
+            if (!checkAlarmLimit(aiTag, alarm)) throw new BadRequestException("Invalid data!");
             aiTag.Alarms.Add(alarm);
             Delete(aiTag.Id);
             _tags.Add(aiTag);
@@ -193,6 +194,22 @@ namespace scada.Services.implementation
         {
             foreach (Alarm alarm in aiTag.Alarms) if (alarm.Type == type) return true;
             return false;
+        }
+
+        private bool checkAlarmLimit(AITag aiTag, Alarm alarm)
+        {
+            bool isLow = alarm.Type == AlarmType.LOW;
+
+            foreach (Alarm a in aiTag.Alarms)
+            {
+                if ((isLow && a.Type == AlarmType.HIGH && a.Limit < alarm.Limit) ||
+                    (!isLow && a.Type == AlarmType.LOW && a.Limit > alarm.Limit))
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         private int generateAlarmId(int tagId)

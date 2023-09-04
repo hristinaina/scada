@@ -47,20 +47,25 @@ const Alarms = ({ onClose, openCreateAlarmDialog, tagId }) => {
         <div>
             <div className="alarms-dialog">
                 <p id="title">Alarms</p>
-                <div id="alarms-list">
-                    {alarms.map((item) => (
-                        <div key={item.id}>
-                            <p className="alarm-title">ALARM</p>
-                            <img src="/images/delete.png" alt="Delete" className="icon" onClick={() => openDeleteDialog(item.id)} />
-                            <p className="alarms-label">TYPE</p>
-                            <p className="alarms-value">{item.type === 1 ? "low" : "high"}</p>
-                            <p className="alarms-label">PRIORITY</p>
-                            <p className="alarms-value">{item.priority}</p>
-                            <p className="alarms-label">LIMIT</p>
-                            <p className="alarms-value">{item.limit}</p>
-                        </div>
-                    ))}
-                </div>
+                {alarms.length === 0 ? (
+                    <p id="no-added-alarms">No added alarms</p>
+                ) : (
+                    <div id="alarms-list">
+
+                        {alarms.map((item) => (
+                            <div key={item.id}>
+                                <p className="alarm-title">ALARM</p>
+                                <img src="/images/delete.png" alt="Delete" className="icon" onClick={() => openDeleteDialog(item.id)} />
+                                <p className="alarms-label">TYPE</p>
+                                <p className="alarms-value">{item.type === 1 ? "low" : "high"}</p>
+                                <p className="alarms-label">PRIORITY</p>
+                                <p className="alarms-value">{item.priority}</p>
+                                <p className="alarms-label">LIMIT</p>
+                                <p className="alarms-value">{item.limit}</p>
+                            </div>
+                        ))}
+                    </div>
+                )}
                 <div className="dialogs-button" id="bottom">
                     <button className="btn" onClick={openCreateAlarmDialog}>ADD</button>
                     <button className="btn right-btn" onClick={onClose}>CLOSE</button>

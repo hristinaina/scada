@@ -43,3 +43,12 @@
     display: inline-block;
     width: 48%;
 }
+
+#no-added-alarms {
+    display: flex;
+    justify-content: center; 
+    align-items: center;
+    height: 70%;
+    width: 300px;
+    text-align: center;
+}
