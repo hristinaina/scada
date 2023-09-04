@@ -58,6 +58,9 @@ export class Trending extends Component {
         if (!tags || tags.length === 0) {
             return <p>No data available</p>;
         }
+
+        tags.sort((a, b) => b.alarm.priority - a.alarm.priority);
+
         return (
           <table className="table" aria-labelledby="tableLabel">
             <thead>
