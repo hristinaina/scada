@@ -5,6 +5,7 @@ using scada.Services;
 using scada.Services.implementation;
 using scada.Services.interfaces;
 using scada.Hubs;
+using scada.Logging;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +23,8 @@ builder.Services.AddCors(options =>
             .AllowCredentials();
     });
 });
+
+builder.Services.AddTransient<AlarmLogging>();
 
 // services
 builder.Services.AddTransient<IUserService, UserService>();

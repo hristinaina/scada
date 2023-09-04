@@ -1,4 +1,6 @@
-﻿namespace scada.Models
+﻿using Google.Protobuf.WellKnownTypes;
+
+namespace scada.Models
 {
     public class Alarm
     {
@@ -8,8 +10,12 @@
         public int Priority { get; set; }
         public double Limit { get; set; }
 
-    }
+        public override string ToString()
+        {
+            return $"{Id}|{Type.ToString()}|{Limit}|{Priority}";
+        }
 
+    }
 
     public enum AlarmType
     {

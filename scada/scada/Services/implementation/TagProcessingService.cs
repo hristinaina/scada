@@ -8,10 +8,10 @@ using scada.Services.interfaces;
 using Microsoft.AspNetCore.SignalR;
 using scada.Hubs;
 using Google.Protobuf.WellKnownTypes;
+using scada.Logging;
 
 namespace scada.Services
 {
-
     public class TagProcessingService : ITagProcessingService
     {
         private List<Tag> _tags;
@@ -22,7 +22,9 @@ namespace scada.Services
         private TagHistoryRepository _tagHistoryRepository;
         private AlarmHistoryRepository _alarmHistoryRepository;
 
-        public TagProcessingService(TagHistoryRepository tagHistoryRepository, AlarmHistoryRepository alarmHistoryRepository, IHubContext<TagHub> tagHub)
+        private AlarmLogging _alarmLogging;
+
+        public TagProcessingService(TagHistoryRepository tagHistoryRepository, AlarmHistoryRepository alarmHistoryRepository, IHubContext<TagHub> tagHub, AlarmLogging alarmLogging)
         {
             _tags = XmlSerializationHelper.LoadFromXml<Tag>();
             _analog = ConfigHelper.ParseTags<AITag>(_tags);
@@ -30,6 +32,7 @@ namespace scada.Services
             _tagHistoryRepository = tagHistoryRepository;
             _alarmHistoryRepository = alarmHistoryRepository;
             _tagHub = tagHub;
+            _alarmLogging = alarmLogging;
         }
 
         private readonly object _lock = new object();
@@ -105,7 +108,8 @@ namespace scada.Services
                             
                             lock (_lock)
                             {
-                                this.saveAlarm(tag.Id, alarm.Id); // TODO dodaj u bazu
+                                this.saveAlarm(tag.Id, alarm.Id);
+                                this._alarmLogging.Logging(alarm, tag.TagName);
                             }
 
                         }
