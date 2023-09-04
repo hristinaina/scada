@@ -221,5 +221,12 @@ namespace scada.Services.implementation
             }
             throw new NotFoundException("Alarm not found!");
         }
+
+        public List<Alarm> GetAlarmsByTagId(int id)
+        {
+            AITag aiTag = GetAITags().FirstOrDefault(item => item.Id == id);
+            if (aiTag == null) throw new NotFoundException("Tag not found!");
+            return aiTag.Alarms;
+        }
     }
 }

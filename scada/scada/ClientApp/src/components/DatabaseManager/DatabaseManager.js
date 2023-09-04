@@ -165,7 +165,7 @@ export class DatabaseManager extends Component {
                 )}
 
                 {/*TODO : add here alarms dialog tag*/}
-                {showAlarmsDialog && <Alarms onClose={this.closeAlarmsDialog} openCreateAlarmDialog={this.openCreateAlarmDialog} />}
+                {showAlarmsDialog && <Alarms onClose={this.closeAlarmsDialog} openCreateAlarmDialog={this.openCreateAlarmDialog} tagId={chosenTag} />}
 
                 {showCreateAlarmDialog && <CreateAlarmDialog onClose={this.closeCreateAlarmDialog} tagId={chosenTag} />}
 

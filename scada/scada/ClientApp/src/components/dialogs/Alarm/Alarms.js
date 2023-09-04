@@ -1,9 +1,16 @@
 ﻿import CreateAlarmDialog from '../CreateAlarm/CreateAlarmDialog';
 import './Alarms.css';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+//import TagService from "../../services/TagService";
 
 
-const Alarms = ({ onClose, openCreateAlarmDialog }) => {
+const Alarms = ({ onClose, openCreateAlarmDialog, tagId }) => {
+    const [alarms, setAlarms] = useState([]);
+
+/*    useEffect( async() => {
+        // Fetch data here and update AOData
+        await TagService.getAlarms().then((data) => setAlarms());
+    }, []);*/
 
     return (
         <div className="alarms-dialog">

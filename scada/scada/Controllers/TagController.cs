@@ -136,5 +136,19 @@ namespace scada.Controllers
                 return NotFound(new { error = ex.Message });
             }
         }
+
+        [HttpGet("alarm/{id}")]
+        public IActionResult GetAlarms(int id)
+        {
+            try
+            {
+                List<Alarm> alarms =_service.GetAlarmsByTagId(id);
+                return Ok(alarms);
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(new { error = ex.Message });
+            }
+        }
     }
 }
