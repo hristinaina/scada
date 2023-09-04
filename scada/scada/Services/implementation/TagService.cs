@@ -27,10 +27,7 @@ namespace scada.Services.implementation
 
         public List<Tag> Get()
         {
-            lock (_lock)
-            {
-                return _tags;
-            }
+            return _tags;
         }
 
         public Tag? Get(int id)
@@ -110,18 +107,13 @@ namespace scada.Services.implementation
 
         public void RemoveTag(Tag tag)
         {
-            lock (_lock)
-            {
-                _tags.Remove(tag);
-            }
+            _tags.Remove(tag);
             XmlSerializationHelper.SaveToXml(_tags);
         }
 
-        public void InsertTag(Tag tag){
-            lock (_lock)
-            {
-                _tags.Add(tag);
-            }
+        public void InsertTag(Tag tag)
+        {
+            _tags.Add(tag);
             XmlSerializationHelper.SaveToXml(_tags);  
         }
     }
