@@ -4,7 +4,6 @@ import MuiAlert from '@mui/material/Alert';
 import './Login.css';
 import '../../fonts.css';
 import axios from 'axios';
-import { Counter } from '../Counter';
 import { NavMenu } from '../Nav/NavMenu';
 import { Navigate } from 'react-router-dom';
 import userService from '../../services/UserService';
@@ -81,10 +80,7 @@ export class Login extends Component {
         if (this.state.loggedIn) {
             return <Navigate to="/trending" replace/>;
         }
-        else if (this.state.showSignUp) {
-            // TODO : change this after sign up component implementation
-            return <Counter/>
-        }
+
         return (
 
             <div id="container">
