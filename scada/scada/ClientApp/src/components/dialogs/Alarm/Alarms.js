@@ -8,18 +8,18 @@ const Alarms = ({ onClose, openCreateAlarmDialog, tagId }) => {
     const [showDeleteDialog, setShowDeleteDialog] = useState(false);
     const [id, setId] = useState(-1);
 
-    useEffect(() => {
-        async function fetchData() {
-            try {
-                const response = await axios.get('http://localhost:5083/api/tag/alarm/' + tagId);
-                setAlarms(response.data);
-            } catch (error) {
-                console.error('Error fetching data:', error);
-            }
+    const fetchData = async () => {
+        try {
+            const response = await axios.get('http://localhost:5083/api/tag/alarm/' + tagId);
+            setAlarms(response.data);
+        } catch (error) {
+            console.error('Error fetching data:', error);
         }
+    };
 
+    useEffect(() => {
         fetchData();
-    }, [alarms]);
+    }, [tagId]); // fetch data whenever tagId changes
 
     const openDeleteDialog = (id) => {
         setShowDeleteDialog(true);
@@ -35,6 +35,7 @@ const Alarms = ({ onClose, openCreateAlarmDialog, tagId }) => {
         try {
             await axios.delete('http://localhost:5083/api/tag/alarm/' + id);
             console.log("Successfully deleted!");
+            fetchData();
         }
         catch (error) {
             console.log("Error ocurred: ", error);

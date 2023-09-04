@@ -104,6 +104,7 @@ export class DatabaseManager extends Component {
     closeCreateAlarmDialog = () => {
         this.setState({
             showCreateAlarmDialog: false,
+            showAlarmsDialog: false,
         });
     }
 
