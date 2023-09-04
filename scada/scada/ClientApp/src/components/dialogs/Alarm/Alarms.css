@@ -24,3 +24,20 @@
     display: flex;
     justify-content: space-between;
 }
+
+.alarm-title{
+    text-align: center;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.alarms-label {
+    display: inline-block;
+    font-weight: bold;
+    width: 50%;
+}
+
+.alarms-value {
+    display: inline-block;
+    width: 48%;
+}

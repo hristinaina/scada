@@ -24,7 +24,17 @@ const Alarms = ({ onClose, openCreateAlarmDialog, tagId }) => {
             <p id="title">Alarms</p>
             {/* TODO : add here list of added alarms*/}
             <div id="alarms-list">
-                <p>Here is the list of alarms</p>
+                {alarms.map((item) => (
+                    <div>
+                        <p className="alarm-title">ALARM</p>
+                        <p className="alarms-label">TYPE</p>
+                        <p className="alarms-value">{item.type === 1 ? "low" : "high"}</p>
+                        <p className="alarms-label">PRIORITY</p>
+                        <p className="alarms-value">{item.priority}</p>
+                        <p className="alarms-label">LIMIT</p>
+                        <p className="alarms-value">{item.limit}</p>
+                    </div>
+                ))}
             </div>
             <div className="dialogs-button" id="bottom">
                 <button className="btn" onClick={openCreateAlarmDialog}>ADD</button>
