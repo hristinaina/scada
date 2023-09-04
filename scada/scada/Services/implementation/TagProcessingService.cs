@@ -42,11 +42,6 @@ namespace scada.Services
             _tagHistoryRepository.Insert(tagHistory);
         }
 
-        public void ReceiveRTUValue(RTUData rtu)
-        {
-            RTUDriver.SetValue(rtu.Address, rtu.Value);
-        }
-
         public void Run()
         {
             foreach (var tag in _analog) 
