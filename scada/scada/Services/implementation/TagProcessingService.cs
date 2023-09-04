@@ -20,25 +20,33 @@ namespace scada.Services
         private readonly IHubContext<TagHub> _tagHub;
 
         private TagHistoryRepository _tagHistoryRepository;
+        private AlarmHistoryRepository _alarmHistoryRepository;
 
-        public TagProcessingService(TagHistoryRepository tagHistoryRepository, IHubContext<TagHub> tagHub)
+        public TagProcessingService(TagHistoryRepository tagHistoryRepository, AlarmHistoryRepository alarmHistoryRepository, IHubContext<TagHub> tagHub)
         {
             _tags = XmlSerializationHelper.LoadFromXml<Tag>();
             _analog = ConfigHelper.ParseTags<AITag>(_tags);
             _digital = ConfigHelper.ParseTags<DITag>(_tags);
             _tagHistoryRepository = tagHistoryRepository;
+            _alarmHistoryRepository = alarmHistoryRepository;
             _tagHub = tagHub;
         }
 
         private readonly object _lock = new object();
 
-        public void SaveTagValue(int tag, double value)
+        private void saveTagValue(int tag, double value)
         {
             TagHistory tagHistory = new TagHistory(tag, value);
             _tagHistoryRepository.Insert(tagHistory);
         }
 
-        public void ReceiveRTUValue(RTUData rtu)
+        private void saveAlarm(int tagId, int alarmId)
+        {
+            AlarmHistory alarmHistory = new AlarmHistory(tagId, alarmId);
+            _alarmHistoryRepository.Insert(alarmHistory);
+        }
+
+        private void receiveRTUValue(RTUData rtu)
         {
             RTUDriver.SetValue(rtu.Address, rtu.Value);
         }
@@ -84,7 +92,7 @@ namespace scada.Services
 
                     lock (_lock)
                     {
-                        SaveTagValue(tag.Id, currentValue); 
+                        this.saveTagValue(tag.Id, currentValue); 
                     }
 
                     TrendingAlarmDTO alarmDTO = new TrendingAlarmDTO();
@@ -94,7 +102,12 @@ namespace scada.Services
                         {
                             alarmDTO.Description = alarm.Type + " then " + alarm.Limit;
                             alarmDTO.Priority = alarm.Priority;
-                            // TODO dodaj u bazu
+                            
+                            lock (_lock)
+                            {
+                                this.saveAlarm(tag.Id, alarm.Id); // TODO dodaj u bazu
+                            }
+
                         }
                     }
 
@@ -129,7 +142,7 @@ namespace scada.Services
 
                     lock (_lock)
                     {
-                        SaveTagValue(tag.Id, currentValue); 
+                        this.saveTagValue(tag.Id, currentValue); 
                     }
 
                     this.sendCurrentValue(new TrendingTagDTO(tag, currentValue));

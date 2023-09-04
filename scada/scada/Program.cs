@@ -32,6 +32,7 @@ builder.Services.AddTransient<TagProcessingService>();
 
 // repositories
 builder.Services.AddTransient<TagHistoryRepository>();
+builder.Services.AddTransient<AlarmHistoryRepository>();
 
 // sockets
 builder.Services.AddSignalR();

@@ -2,19 +2,23 @@
 using scada.Database;
 using scada.DTO;
 using scada.Models;
+using scada.Repositories;
 using scada.Services.implementation;
 
 namespace scada.Services
 {
     public class AlarmHistoryService : IAlarmHistoryService
     {
+        private AlarmHistoryRepository _repository;
+
+        public AlarmHistoryService(AlarmHistoryRepository alarmHistoryRepository)
+        {
+            this._repository = alarmHistoryRepository;
+        }
+
         public List<AlarmHistory> Get()
         {
-            using (var dbContext = new ApplicationDbContext())
-            {
-                var alarmHistory = dbContext.AlarmHistory.ToList();
-                return alarmHistory;
-            }
+            return _repository.Get();
         }
 
         List<AlarmHistoryDTO> IAlarmHistoryService.GetAlarmsByTime(FilterDTO filter)
