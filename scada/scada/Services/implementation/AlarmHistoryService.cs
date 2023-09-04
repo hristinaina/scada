@@ -62,5 +62,21 @@ namespace scada.Services
 
             return dto;
         }
+
+        public bool Delete(int id)
+        {
+            using (var dbContext = new ApplicationDbContext())
+            {
+                List <AlarmHistory> alarmsToDelete = dbContext.AlarmHistory.Where(u => u.AlarmId == id).ToList();
+
+                if (alarmsToDelete != null)
+                {
+                    dbContext.AlarmHistory.RemoveRange(alarmsToDelete);
+                    dbContext.SaveChanges();
+                    return true;
+                }
+                return false;
+            }
+        }
     }
 }

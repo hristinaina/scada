@@ -13,6 +13,7 @@ namespace scada.Services.implementation
     {
         private List<Tag> _tags;
         private ITagHistoryService _tagHistoryService = new TagHistoryService();
+        private IAlarmHistoryService _alarmHistoryService = new AlarmHistoryService();
 
         public TagService() 
         {
@@ -232,6 +233,7 @@ namespace scada.Services.implementation
                     aiTag.Alarms.Remove(alarm);
                     Delete(aiTag.Id);
                     _tags.Add(aiTag);
+                    _alarmHistoryService.Delete(alarmId);
                     XmlSerializationHelper.SaveToXml(_tags); 
                     return true;
                 } 
