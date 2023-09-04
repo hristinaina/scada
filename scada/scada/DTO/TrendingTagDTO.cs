@@ -22,7 +22,7 @@ namespace scada.DTO
             Description = tag.Description;
             ScanTime = tag.ScanTime;
             Range = "";
-            Value = (value > 0) ? "on" : "off";
+            Value = (value == 1) ? "on" : "off";
             Alarm = new TrendingAlarmDTO();
         }
 
@@ -33,13 +33,8 @@ namespace scada.DTO
             Description = tag.Description;
             ScanTime = tag.ScanTime;
             Range = "(" + tag.HighLimit + ", " + tag.LowLimit + ")";
-            Value =  Math.Round(this.calculateAnalogValue(tag, value), 2).ToString() + " " + tag.Units;
+            Value =  Math.Round(value, 2).ToString() + " " + tag.Units;
             Alarm = alarm;
-        }
-
-        private double calculateAnalogValue(AITag tag, double value)
-        {
-            return value > tag.HighLimit ? tag.HighLimit : (value < tag.LowLimit ? tag.LowLimit : value);
         }
     }
 }

@@ -32,11 +32,6 @@ namespace scada.Services
 
         private readonly object _lock = new object();
 
-        /*
-         should be called when tag value changes:
-            1. for input tags = in trending app after scanning 
-            2. for output tags = when value is changed (manually)
-        */
         public void SaveTagValue(int tag, double value)
         {
             TagHistory tagHistory = new TagHistory(tag, value);
@@ -82,15 +77,14 @@ namespace scada.Services
                 {
                     try
                     {
-                        currentValue = driver.GetValue(tag.Address);
+                        currentValue = this.calculateAnalogValue(tag, driver.GetValue(tag.Address));
                         Console.WriteLine("SCANING " + tag.Id + " " + currentValue);
                     }
                     catch (Exception ex) { continue; }
 
                     lock (_lock)
                     {
-                        SaveTagValue(tag.Id, currentValue);
-                        // dodaj u config
+                        SaveTagValue(tag.Id, currentValue); 
                     }
 
                     TrendingAlarmDTO alarmDTO = new TrendingAlarmDTO();
@@ -100,11 +94,11 @@ namespace scada.Services
                         {
                             alarmDTO.Description = alarm.Type + " then " + alarm.Limit;
                             alarmDTO.Priority = alarm.Priority;
-                            // dodaj u bazu
+                            // TODO dodaj u bazu
                         }
                     }
 
-                    this.SendCurrentValue(new TrendingTagDTO(tag, currentValue, alarmDTO));
+                    this.sendCurrentValue(new TrendingTagDTO(tag, currentValue, alarmDTO));
                 }
 
                 Thread.Sleep(tag.ScanTime);
@@ -128,27 +122,36 @@ namespace scada.Services
                 {
                     try
                     {
-                        currentValue = driver.GetValue(tag.Address);
+                        currentValue = this.calculateDigitalValue(driver.GetValue(tag.Address));
                         Console.WriteLine("SCANING " + tag.Id + " " + currentValue);
                     }
                     catch (Exception ex) { continue; }
 
                     lock (_lock)
                     {
-                        SaveTagValue(tag.Id, currentValue);
-                        // dodaj u config
+                        SaveTagValue(tag.Id, currentValue); 
                     }
 
-                    this.SendCurrentValue(new TrendingTagDTO(tag, currentValue));
+                    this.sendCurrentValue(new TrendingTagDTO(tag, currentValue));
                 }
 
                 Thread.Sleep(tag.ScanTime);
             }
         }
 
-        private async Task SendCurrentValue(TrendingTagDTO tag)
+        private async Task sendCurrentValue(TrendingTagDTO tag)
         {           
             await _tagHub.Clients.All.SendAsync("ReceiveMessage", tag);
+        }
+
+        private double calculateAnalogValue(AITag tag, double value)
+        {
+            return value > tag.HighLimit ? tag.HighLimit : (value < tag.LowLimit ? tag.LowLimit : value);
+        }
+
+        private double calculateDigitalValue(double value)
+        {
+            return value > 0 ? 1 : 0;
         }
     }
 }
