@@ -2,9 +2,7 @@ import React, { Component } from 'react';
 import { NavMenu } from '../Nav/NavMenu';
 import './Trending.css';
 import '../../fonts.css';
-import { HubConnectionBuilder } from "@microsoft/signalr";
 import TrendingService from '../../services/TrendingService';
-
 
 export class Trending extends Component {
   static displayName = Trending.name;
@@ -17,7 +15,6 @@ export class Trending extends Component {
       };
 
       this.tagConnection = TrendingService.createConnection("http://localhost:5083/Hub/tag");
-      this.alarmConnection = TrendingService.createConnection("http://localhost:5083/Hub/alarm");
   }
 
   componentDidMount() {
@@ -30,18 +27,9 @@ export class Trending extends Component {
               currentTags.push(tag);
           } else {
               currentTags[existingTagIndex].value = tag.value;
-              currentTags[existingTagIndex].alarm = "";
+              currentTags[existingTagIndex].alarm = tag.alarm;
           }
           this.setState({ tags: currentTags });   
-      });
-
-      this.alarmConnection?.on("nekaPoruka", (alarm) => {
-          let alarmTag = this.state.tags.find(tag => tag.tagName === alarm.tagName);
-
-          if (alarmTag) 
-              alarmTag.alarm = alarm.description;
-          
-          console.log(alarm)
       });
 
       this.interval = setInterval(this.renderTagsTable, 1000);
@@ -50,7 +38,6 @@ export class Trending extends Component {
     componentWillUnmount() {
         clearInterval(this.interval);
         this.tagConnection.stop();
-        this.alarmConnection.stop();
     }
 
 
@@ -73,15 +60,15 @@ export class Trending extends Component {
             </thead>
             <tbody>
               {tags.map(tag =>
-                <tr key={tag.tagName}>
-                  <td>{tag.tagName}</td>
-                  <td>{tag.type}</td>
-                  <td>{tag.description}</td>
-                  <td>{tag.scanTime}</td>
-                  <td>{tag.range}</td>
-                  <td>{tag.value}</td>
-                  <td>{tag.alarm}</td>
-                </tr>
+                  <tr key={tag.tagName} className={tag.alarm !== "" ? "red-row" : ""}>
+                      <td>{tag.tagName}</td>
+                      <td>{tag.type}</td>
+                      <td>{tag.description}</td>
+                      <td>{tag.scanTime}</td>
+                      <td>{tag.range}</td>
+                      <td>{tag.value}</td>
+                      <td>{tag.alarm}</td>
+                  </tr>
               )}
             </tbody>
           </table>
