@@ -38,8 +38,8 @@
     <Units>C</Units>
     <Address>a1</Address>
     <Description>neki tag</Description>
-    <LowLimit>-10</LowLimit>
-    <HighLimit>50</HighLimit>
+    <LowLimit>-50</LowLimit>
+    <HighLimit>150</HighLimit>
     <Alarms>
       <Alarm>
         <Id>1</Id>
@@ -59,13 +59,13 @@
     <Id>5</Id>
     <TagName>AI_Tag</TagName>
     <IsScanning>true</IsScanning>
-    <ScanTime>2000</ScanTime>
+    <ScanTime>5000</ScanTime>
     <Driver>RTU</Driver>
     <Units>C</Units>
     <Address>a2</Address>
     <Description>novi taaaag</Description>
-    <LowLimit>-10</LowLimit>
-    <HighLimit>50</HighLimit>
+    <LowLimit>-20</LowLimit>
+    <HighLimit>120</HighLimit>
     <Alarms>
       <Alarm>
         <Id>1</Id>
@@ -90,20 +90,20 @@
     <Units>C</Units>
     <Address>a3</Address>
     <Description>jos jedan ai tag</Description>
-    <LowLimit>-10</LowLimit>
-    <HighLimit>50</HighLimit>
+    <LowLimit>0</LowLimit>
+    <HighLimit>100</HighLimit>
     <Alarms>
       <Alarm>
         <Id>3</Id>
         <Type>HIGH</Type>
         <Priority>1</Priority>
-        <Limit>40</Limit>
+        <Limit>90</Limit>
       </Alarm>
       <Alarm>
         <Id>4</Id>
         <Type>LOW</Type>
         <Priority>2</Priority>
-        <Limit>-5</Limit>
+        <Limit>5</Limit>
       </Alarm>
     </Alarms>
   </Tag>

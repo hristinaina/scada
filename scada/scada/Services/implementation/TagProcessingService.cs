@@ -18,18 +18,16 @@ namespace scada.Services
         private List<AITag> _analog;
         private List<DITag> _digital;
         private readonly IHubContext<TagHub> _tagHub;
-        private readonly IHubContext<AlarmHub> _alarmHub;
 
         private TagHistoryRepository _tagHistoryRepository;
 
-        public TagProcessingService(TagHistoryRepository tagHistoryRepository, IHubContext<TagHub> tagHub, IHubContext<AlarmHub> alarmHub)
+        public TagProcessingService(TagHistoryRepository tagHistoryRepository, IHubContext<TagHub> tagHub)
         {
             _tags = XmlSerializationHelper.LoadFromXml<Tag>();
             _analog = ConfigHelper.ParseTags<AITag>(_tags);
             _digital = ConfigHelper.ParseTags<DITag>(_tags);
             _tagHistoryRepository = tagHistoryRepository;
             _tagHub = tagHub;
-            _alarmHub = alarmHub;
         }
 
         private readonly object _lock = new object();
@@ -86,33 +84,26 @@ namespace scada.Services
                     {
                         currentValue = driver.GetValue(tag.Address);
                         Console.WriteLine("SCANING " + tag.Id + " " + currentValue);
-                        //Console.WriteLine("Alarm " + tag.Alarms.Count());
                     }
                     catch (Exception ex) { continue; }
 
                     lock (_lock)
                     {
-                        SaveTagValue(tag.Id, currentValue); 
+                        SaveTagValue(tag.Id, currentValue);
                         // dodaj u config
                     }
 
-                    this.SendCurrentValue(new TrendingTagDTO(tag, currentValue));
-
-
+                    string a = "";
                     foreach (Alarm alarm in tag.Alarms)
                     {
-                        if (alarm.Type == AlarmType.HIGH && currentValue >= alarm.Limit)
+                        if (alarm.Type == AlarmType.HIGH && currentValue >= alarm.Limit || alarm.Type == AlarmType.LOW && currentValue <= alarm.Limit)
                         {
-                            this.SendAlarm(new TrendingAlarmDTO(tag.TagName, alarm));
+                            a = alarm.Type + " then " + alarm.Limit;
                             // dodaj u bazu
-                            // prosledi na front
-                        }
-                        else if (alarm.Type == AlarmType.LOW && currentValue <= alarm.Limit)
-                        {
-                            this.SendAlarm(new TrendingAlarmDTO(tag.TagName, alarm));
-                            // prosledi na front
                         }
                     }
+
+                    this.SendCurrentValue(new TrendingTagDTO(tag, currentValue, a));
                 }
 
                 Thread.Sleep(tag.ScanTime);
@@ -157,11 +148,6 @@ namespace scada.Services
         private async Task SendCurrentValue(TrendingTagDTO tag)
         {           
             await _tagHub.Clients.All.SendAsync("ReceiveMessage", tag);
-        }
-
-        private async Task SendAlarm(TrendingAlarmDTO alarm)
-        {
-            await _alarmHub.Clients.All.SendAsync("nekaPoruka", alarm);
         }
     }
 }
