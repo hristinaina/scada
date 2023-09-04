@@ -174,7 +174,6 @@ namespace scada.Services
                         RTUDriver.SetValue(tag.Address, aotag.Value);
                     }
                 }
-                else
                 tag.Id = generateId();
                 _tagService.InsertTag(tag);
                 createThread(tag, tagDTO.Type);
