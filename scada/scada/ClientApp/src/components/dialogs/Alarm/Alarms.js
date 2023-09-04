@@ -5,6 +5,8 @@ import axios from 'axios';
 
 const Alarms = ({ onClose, openCreateAlarmDialog, tagId }) => {
     const [alarms, setAlarms] = useState([]);
+    const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+    const [id, setId] = useState(-1);
 
     useEffect(() => {
         async function fetchData() {
@@ -19,28 +21,68 @@ const Alarms = ({ onClose, openCreateAlarmDialog, tagId }) => {
         fetchData();
     }, [alarms]);
 
+    const openDeleteDialog = (id) => {
+        setShowDeleteDialog(true);
+        setId(id);
+    }
+
+    const closeDeleteDialog = () => {
+        setShowDeleteDialog(false);
+        setId(-1);
+    }
+
+    const deleteAlarm = async () => {
+        try {
+            await axios.delete('http://localhost:5083/api/tag/alarm/' + id);
+            console.log("Successfully deleted!");
+        }
+        catch (error) {
+            console.log("Error ocurred: ", error);
+        }
+
+        closeDeleteDialog();
+    };
+
     return (
-        <div className="alarms-dialog">
-            <p id="title">Alarms</p>
-            {/* TODO : add here list of added alarms*/}
-            <div id="alarms-list">
-                {alarms.map((item) => (
-                    <div>
-                        <p className="alarm-title">ALARM</p>
-                        <p className="alarms-label">TYPE</p>
-                        <p className="alarms-value">{item.type === 1 ? "low" : "high"}</p>
-                        <p className="alarms-label">PRIORITY</p>
-                        <p className="alarms-value">{item.priority}</p>
-                        <p className="alarms-label">LIMIT</p>
-                        <p className="alarms-value">{item.limit}</p>
+        <div>
+            <div className="alarms-dialog">
+                <p id="title">Alarms</p>
+                <div id="alarms-list">
+                    {alarms.map((item) => (
+                        <div key={item.id}>
+                            <p className="alarm-title">ALARM</p>
+                            <img src="/images/delete.png" alt="Delete" className="icon" onClick={() => openDeleteDialog(item.id)} />
+                            <p className="alarms-label">TYPE</p>
+                            <p className="alarms-value">{item.type === 1 ? "low" : "high"}</p>
+                            <p className="alarms-label">PRIORITY</p>
+                            <p className="alarms-value">{item.priority}</p>
+                            <p className="alarms-label">LIMIT</p>
+                            <p className="alarms-value">{item.limit}</p>
+                        </div>
+                    ))}
+                </div>
+                <div className="dialogs-button" id="bottom">
+                    <button className="btn" onClick={openCreateAlarmDialog}>ADD</button>
+                    <button className="btn right-btn" onClick={onClose}>CLOSE</button>
+                </div>
+            
+            </div>
+
+            {showDeleteDialog && (
+                <div className="dialog-container">
+                    <div className="delete-dialog">
+                        <h2 className="dialog-title">Delete</h2>
+                        <p className="dialog-message">Are you sure you want to delete this alarm?</p>
+                        <div className="dialog-buttons">
+                            <button className="delete-button button" onClick={deleteAlarm}>Delete</button>
+                            <button className="close-button button" onClick={closeDeleteDialog}>Close</button>
+                        </div>
                     </div>
-                ))}
-            </div>
-            <div className="dialogs-button" id="bottom">
-                <button className="btn" onClick={openCreateAlarmDialog}>ADD</button>
-                <button className="btn right-btn" onClick={onClose}>CLOSE</button>
-            </div>
+                </div>
+            )}
         </div>
+
+
     );
 };
 
