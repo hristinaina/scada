@@ -70,7 +70,7 @@
       <Alarm>
         <Id>1</Id>
         <Type>HIGH</Type>
-        <Priority>1</Priority>
+        <Priority>3</Priority>
         <Limit>40</Limit>
       </Alarm>
       <Alarm>

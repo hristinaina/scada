@@ -13,7 +13,7 @@ namespace scada.DTO
         public string Range { get; set; }
         public string Value { get; set; }
 
-        public string Alarm { get; set; }
+        public TrendingAlarmDTO Alarm { get; set; }
 
         public TrendingTagDTO(DITag tag, double value) 
         {
@@ -23,10 +23,10 @@ namespace scada.DTO
             ScanTime = tag.ScanTime;
             Range = "";
             Value = (value > 0) ? "on" : "off";
-            Alarm = "";
+            Alarm = new TrendingAlarmDTO();
         }
 
-        public TrendingTagDTO(AITag tag, double value, string alarm)
+        public TrendingTagDTO(AITag tag, double value, TrendingAlarmDTO alarm)
         {
             TagName = tag.TagName;
             Type = "analog";

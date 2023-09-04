@@ -3,6 +3,17 @@ h1 {
     margin-bottom: 50px;
 }
 
-.red-row {
-    background-color: red;
+.low-priority-row {
+    background-color: #ff8f8f;
+    color: white;
+}
+
+.medium-priority-row {
+    background-color: #ff4747;
+    color: white;
+}
+
+.high-priority-row {
+    background-color: #ff0000;
+    color: white;
 }

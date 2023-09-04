@@ -93,17 +93,18 @@ namespace scada.Services
                         // dodaj u config
                     }
 
-                    string a = "";
+                    TrendingAlarmDTO alarmDTO = new TrendingAlarmDTO();
                     foreach (Alarm alarm in tag.Alarms)
                     {
                         if (alarm.Type == AlarmType.HIGH && currentValue >= alarm.Limit || alarm.Type == AlarmType.LOW && currentValue <= alarm.Limit)
                         {
-                            a = alarm.Type + " then " + alarm.Limit;
+                            alarmDTO.Description = alarm.Type + " then " + alarm.Limit;
+                            alarmDTO.Priority = alarm.Priority;
                             // dodaj u bazu
                         }
                     }
 
-                    this.SendCurrentValue(new TrendingTagDTO(tag, currentValue, a));
+                    this.SendCurrentValue(new TrendingTagDTO(tag, currentValue, alarmDTO));
                 }
 
                 Thread.Sleep(tag.ScanTime);
