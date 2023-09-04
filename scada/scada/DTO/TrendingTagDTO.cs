@@ -7,6 +7,8 @@ namespace scada.DTO
     {
         public string TagName { get; set; }
         public string Type { get; set; }
+        public string Address { get; set; }
+        public string Driver { get; set; }
         public string Description { get; set; }
         public int ScanTime { get; set; }
         public string Range { get; set; }
@@ -16,9 +18,11 @@ namespace scada.DTO
         {
             TagName = tag.TagName;
             Type = "digital";
+            Driver = tag.Driver.ToString();
             Description = tag.Description;
             ScanTime = tag.ScanTime;
             Range = "";
+            Address = tag.Address;
             Value = (value > 0) ? "on" : "off";
         }
 
@@ -26,9 +30,11 @@ namespace scada.DTO
         {
             TagName = tag.TagName;
             Type = "analog";
+            Driver = tag.Driver.ToString();
             Description = tag.Description;
             ScanTime = tag.ScanTime;
-            Range = "(" + tag.HighLimit + ", " + tag.LowLimit + ")";
+            Address = tag.Address;
+            Range = "(" + tag.LowLimit + ", " + tag.HighLimit + ")";
             Value =  Math.Round(this.calculateAnalogValue(tag, value), 2).ToString() + " " + tag.Units;
         }
 

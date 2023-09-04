@@ -63,6 +63,8 @@ export class Trending extends Component {
               <tr>
                 <th>Tag name</th>
                 <th>Type</th>
+                <th>Address</th>
+                <th>Driver</th>
                 <th>Description</th>
                 <th>Scan Time (ms)</th>
                 <th>Range</th>
@@ -75,6 +77,8 @@ export class Trending extends Component {
                 <tr key={tag.tagName}>
                   <td>{tag.tagName}</td>
                   <td>{tag.type}</td>
+                  <td>{tag.address}</td>
+                  <td>{tag.driver}</td>
                   <td>{tag.description}</td>
                   <td>{tag.scanTime}</td>
                   <td>{tag.range}</td>
