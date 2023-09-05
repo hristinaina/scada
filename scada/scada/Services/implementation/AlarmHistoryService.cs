@@ -11,6 +11,10 @@ namespace scada.Services
     {
         private AlarmHistoryRepository _repository;
 
+        public AlarmHistoryService() 
+        { 
+        }
+
         public AlarmHistoryService(AlarmHistoryRepository alarmHistoryRepository)
         {
             this._repository = alarmHistoryRepository;
