@@ -40,8 +40,32 @@ export class DatabaseManager extends Component {
         }));
     };
 
-    toggleValue = (itemId) => {
-        // TODO Implementirati logiku za promenu isScanning atributa sa dati itemId
+    toggleValue = async(item) => {
+        const newItem = { ...item };
+        newItem.isScanning = !newItem.isScanning;
+
+        this.setState(prevState => ({
+            DIData: prevState.DIData.map(dataItem => {
+                if (dataItem.id === newItem.id) {
+                    return newItem;
+                }
+                return dataItem;
+            }),
+            AIData: prevState.AIData.map(dataItem => {
+                if (dataItem.id === newItem.id) {
+                    return newItem;
+                }
+                return dataItem;
+            })
+        }));
+
+        try {
+            await axios.put('http://localhost:5083/api/tag/scan' + item.id);
+            console.log("Successfully changed scan on/off!");
+        }
+        catch (error) {
+            console.log("Error ocurred: ", error);
+        }
     }
 
     toggleDropdown = () => {
@@ -213,7 +237,7 @@ export class DatabaseManager extends Component {
                                         <img style={{ marginRight: '15px', marginBottom: '2px', marginTop: '2px' }} src="/images/bell.png" alt="Alarm" className="icon" />
                                         <div
                                             className={`toggle-button ${item.isScanning ? 'on' : ''}`}
-                                            onClick={() => this.toggleValue(item.id)}>
+                                            onClick={() => this.toggleValue(item)}>
                                             {item.isScanning ? 'on' : 'off'}
                                         </div>
                                     </div>
@@ -233,7 +257,7 @@ export class DatabaseManager extends Component {
                                         <img style={{ marginRight: '15px' }} src="/images/delete.png" alt="Delete" className="icon" onClick={() => this.openDeleteDialog(item.id)} />
                                         <div
                                             className={`toggle-button ${item.isScanning ? 'on' : ''}`}
-                                            onClick={() => this.toggleValue(item.id)}>
+                                            onClick={() => this.toggleValue(item)}>
                                             {item.isScanning ? 'on' : 'off'}
                                         </div>
                                     </div>

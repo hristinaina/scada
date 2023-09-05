@@ -6,12 +6,13 @@ using Newtonsoft.Json;
 using scada.DTO;
 using scada.Drivers;
 using scada.Data.Config;
+using Azure;
 
 namespace scada.Services.implementation
 {
     public class TagService : ITagService
     {
-        private List<Tag> _tags;
+        private static List<Tag> _tags;
 
         private readonly object _lock = new object();
 
@@ -115,6 +116,27 @@ namespace scada.Services.implementation
         {
             _tags.Add(tag);
             XmlSerializationHelper.SaveToXml(_tags);  
+        }
+
+        public void ChangeScan(int id)
+        {
+            Tag tag = Get(id);
+            if (tag is AITag) 
+            {
+                AITag aitag = (AITag)tag;
+                aitag.IsScanning = !aitag.IsScanning;
+                _tags.Remove(aitag);
+                _tags.Add(aitag);
+                XmlSerializationHelper.SaveToXml(_tags);
+            }
+            else if (tag is DITag)
+            {
+                DITag ditag = (DITag)tag;
+                ditag.IsScanning = !ditag.IsScanning;
+                _tags.Remove(ditag);
+                _tags.Add(ditag);
+                XmlSerializationHelper.SaveToXml(_tags);
+            }
         }
     }
 }

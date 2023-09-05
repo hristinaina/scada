@@ -76,7 +76,7 @@ namespace scada.Services
 
             while (threads.ContainsKey(tag.Id)) 
             {
-                if (tag.IsScanning)
+                if ( ((AITag)_tagService.Get(tag.Id)).IsScanning)
                 {
                     try
                     {
@@ -111,7 +111,7 @@ namespace scada.Services
 
             while (threads.ContainsKey(tag.Id))
             {
-                if (tag.IsScanning)
+                if (((DITag)_tagService.Get(tag.Id)).IsScanning)
                 {
                     try
                     {

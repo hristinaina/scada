@@ -72,6 +72,20 @@ namespace scada.Controllers
             }
         }
 
+        [HttpPut("scan{id}")]
+        public IActionResult ChangeScan([FromRoute] int id)
+        {
+            try
+            {
+                _service.ChangeScan(id);
+                return Ok("Successfully changed scan!");
+            }
+            catch (BadRequestException ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
+        }
+
         [HttpDelete("{id}")]
         public IActionResult Delete([FromRoute] int id)
         {

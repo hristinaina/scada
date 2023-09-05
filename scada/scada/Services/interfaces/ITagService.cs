@@ -28,6 +28,6 @@ namespace scada.Services.interfaces
         public void RemoveTag(Tag tag);
 
         void InsertTag(Tag tag);
-
+        void ChangeScan(int id);
     }
 }
