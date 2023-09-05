@@ -1,11 +1,24 @@
-﻿namespace scada.Models
+﻿using Google.Protobuf.WellKnownTypes;
+
+namespace scada.Models
 {
-    // should be saved to DB
     public class AlarmHistory
     {
         public int Id { get; set; }
         public DateTime Timestamp { get; set; }
-        public int TagId { get; set; }  // maybe this attribute is not needed 
+        public int TagId { get; set; }
         public int AlarmId { get; set; }
+
+        public AlarmHistory(int tagId, int alarmId)
+        {
+            Timestamp = DateTime.Now;
+            TagId = tagId;
+            AlarmId = alarmId;
+        }
+
+        public override string ToString()
+        {
+            return $"Id: {Id}, AlarmId: {AlarmId}, TagId: {TagId}, TimeStamp: {Timestamp}";
+        }
     }
 }

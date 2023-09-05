@@ -4,7 +4,8 @@ using scada.Models;
 using scada.Services;
 using scada.Services.implementation;
 using scada.Services.interfaces;
-using scada.WebSockets;
+using scada.Hubs;
+using scada.Logging;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,6 +24,8 @@ builder.Services.AddCors(options =>
     });
 });
 
+builder.Services.AddTransient<AlarmLogging>();
+
 // services
 builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<IAlarmHistoryService, AlarmHistoryService>();
@@ -32,6 +35,7 @@ builder.Services.AddTransient<TagProcessingService>();
 
 // repositories
 builder.Services.AddTransient<TagHistoryRepository>();
+builder.Services.AddTransient<AlarmHistoryRepository>();
 
 // sockets
 builder.Services.AddSignalR();
@@ -60,6 +64,6 @@ app.MapFallbackToFile("index.html");
 using var scope = app.Services.CreateScope();
 scope.ServiceProvider.GetRequiredService<TagProcessingService>().Run();
 
-app.MapHub<WebSocket>("/Hub/tag");
+app.MapHub<TagHub>("/Hub/tag");
 
 app.Run();

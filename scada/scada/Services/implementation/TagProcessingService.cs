@@ -5,42 +5,50 @@ using scada.Drivers;
 using scada.Models;
 using scada.Repositories;
 using Microsoft.AspNetCore.SignalR;
-using scada.WebSockets;
+using scada.Hubs;
+using Google.Protobuf.WellKnownTypes;
+using scada.Logging;
 
 namespace scada.Services
 {
-
     public class TagProcessingService : ITagProcessingService
     {
         private List<Tag> _tags;
         private List<AITag> _analog;
         private List<DITag> _digital;
-        private readonly IHubContext<WebSocket> _tagHub;
+        private readonly IHubContext<TagHub> _tagHub;
 
         private TagHistoryRepository _tagHistoryRepository;
+        private AlarmHistoryRepository _alarmHistoryRepository;
 
-        public TagProcessingService(TagHistoryRepository tagHistoryRepository, IHubContext<WebSocket> tagHub) {
+        private AlarmLogging _alarmLogging;
+
+        public TagProcessingService(TagHistoryRepository tagHistoryRepository, AlarmHistoryRepository alarmHistoryRepository, IHubContext<TagHub> tagHub, AlarmLogging alarmLogging)
+        {
             _tags = XmlSerializationHelper.LoadFromXml<Tag>();
             _analog = ConfigHelper.ParseTags<AITag>(_tags);
             _digital = ConfigHelper.ParseTags<DITag>(_tags);
             _tagHistoryRepository = tagHistoryRepository;
+            _alarmHistoryRepository = alarmHistoryRepository;
             _tagHub = tagHub;
+            _alarmLogging = alarmLogging;
         }
 
         private readonly object _lock = new object();
 
-        /*
-         should be called when tag value changes:
-            1. for input tags = in trending app after scanning 
-            2. for output tags = when value is changed (manually)
-        */
-        public void SaveTagValue(int tag, double value)
+        private void saveTagValue(int tag, double value)
         {
             TagHistory tagHistory = new TagHistory(tag, value);
             _tagHistoryRepository.Insert(tagHistory);
         }
 
-        public void ReceiveRTUValue(RTUData rtu)
+        private void saveAlarm(int tagId, int alarmId)
+        {
+            AlarmHistory alarmHistory = new AlarmHistory(tagId, alarmId);
+            _alarmHistoryRepository.Insert(alarmHistory);
+        }
+
+        private void receiveRTUValue(RTUData rtu)
         {
             RTUDriver.SetValue(rtu.Address, rtu.Value);
         }
@@ -79,21 +87,34 @@ namespace scada.Services
                 {
                     try
                     {
-                        currentValue = driver.GetValue(tag.Address);
+                        currentValue = this.calculateAnalogValue(tag, driver.GetValue(tag.Address));
                         Console.WriteLine("SCANING " + tag.Id + " " + currentValue);
                     }
                     catch (Exception ex) { continue; }
 
                     lock (_lock)
                     {
-                        SaveTagValue(tag.Id, currentValue); 
-                        // dodaj u config
+                        this.saveTagValue(tag.Id, currentValue); 
                     }
 
-                    this.SendCurrentValue(new TrendingTagDTO(tag, currentValue));
+                    TrendingAlarmDTO alarmDTO = new TrendingAlarmDTO();
+                    foreach (Alarm alarm in tag.Alarms)
+                    {
+                        if (alarm.Type == AlarmType.HIGH && currentValue >= alarm.Limit || alarm.Type == AlarmType.LOW && currentValue <= alarm.Limit)
+                        {
+                            alarmDTO.Description = alarm.Type + " then " + alarm.Limit;
+                            alarmDTO.Priority = alarm.Priority;
+                            
+                            lock (_lock)
+                            {
+                                this.saveAlarm(tag.Id, alarm.Id);
+                                this._alarmLogging.Logging(alarm, tag.TagName);
+                            }
 
-                    // rad sa alarmima
+                        }
+                    }
 
+                    this.sendCurrentValue(new TrendingTagDTO(tag, currentValue, alarmDTO));
                 }
 
                 Thread.Sleep(tag.ScanTime);
@@ -117,27 +138,36 @@ namespace scada.Services
                 {
                     try
                     {
-                        currentValue = driver.GetValue(tag.Address);
+                        currentValue = this.calculateDigitalValue(driver.GetValue(tag.Address));
                         Console.WriteLine("SCANING " + tag.Id + " " + currentValue);
                     }
                     catch (Exception ex) { continue; }
 
                     lock (_lock)
                     {
-                        SaveTagValue(tag.Id, currentValue);
-                        // dodaj u config
+                        this.saveTagValue(tag.Id, currentValue); 
                     }
 
-                    this.SendCurrentValue(new TrendingTagDTO(tag, currentValue));
+                    this.sendCurrentValue(new TrendingTagDTO(tag, currentValue));
                 }
 
                 Thread.Sleep(tag.ScanTime);
             }
         }
 
-        private async Task SendCurrentValue(TrendingTagDTO tag)
+        private async Task sendCurrentValue(TrendingTagDTO tag)
         {           
             await _tagHub.Clients.All.SendAsync("ReceiveMessage", tag);
+        }
+
+        private double calculateAnalogValue(AITag tag, double value)
+        {
+            return value > tag.HighLimit ? tag.HighLimit : (value < tag.LowLimit ? tag.LowLimit : value);
+        }
+
+        private double calculateDigitalValue(double value)
+        {
+            return value > 0 ? 1 : 0;
         }
     }
 }

@@ -1,5 +1,6 @@
 using Google.Protobuf.WellKnownTypes;
 using scada.Models;
+using System.Runtime.CompilerServices;
 
 namespace scada.DTO
 {
@@ -12,6 +13,8 @@ namespace scada.DTO
         public string Range { get; set; }
         public string Value { get; set; }
 
+        public TrendingAlarmDTO Alarm { get; set; }
+
         public TrendingTagDTO(DITag tag, double value) 
         {
             TagName = tag.TagName;
@@ -19,22 +22,19 @@ namespace scada.DTO
             Description = tag.Description;
             ScanTime = tag.ScanTime;
             Range = "";
-            Value = (value > 0) ? "on" : "off";
+            Value = (value == 1) ? "on" : "off";
+            Alarm = new TrendingAlarmDTO();
         }
 
-        public TrendingTagDTO(AITag tag, double value)
+        public TrendingTagDTO(AITag tag, double value, TrendingAlarmDTO alarm)
         {
             TagName = tag.TagName;
             Type = "analog";
             Description = tag.Description;
             ScanTime = tag.ScanTime;
             Range = "(" + tag.HighLimit + ", " + tag.LowLimit + ")";
-            Value =  Math.Round(this.calculateAnalogValue(tag, value), 2).ToString() + " " + tag.Units;
-        }
-
-        private double calculateAnalogValue(AITag tag, double value)
-        {
-            return value > tag.HighLimit ? tag.HighLimit : (value < tag.LowLimit ? tag.LowLimit : value);
+            Value =  Math.Round(value, 2).ToString() + " " + tag.Units;
+            Alarm = alarm;
         }
     }
 }

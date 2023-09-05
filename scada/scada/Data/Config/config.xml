@@ -6,19 +6,9 @@
     <Description>lalalal</Description>
     <TagName>DI_Tag</TagName>
     <Description>Ovo je tag</Description>
-    <Address>adresa33</Address>
     <IsScanning>true</IsScanning>
     <ScanTime>1000</ScanTime>
     <Driver>SIM</Driver>
-  </Tag>
-  <Tag xsi:type="DITag">
-    <Id>7</Id>
-    <TagName>DI_Tag</TagName>
-    <Description>Ovo je tag</Description>
-    <Address>adresa1</Address>
-    <IsScanning>false</IsScanning>
-    <ScanTime>1000</ScanTime>
-    <Driver>RTU</Driver>
   </Tag>
   <Tag xsi:type="AOTag">
     <Id>2</Id>
@@ -40,29 +30,28 @@
   </Tag>
   <Tag xsi:type="AITag">
     <Id>3</Id>
-    <TagName>AI_Tag</TagName>
+    <TagName>AI_Tag3</TagName>
     <Description>neki opis lalalal</Description>
-    <Address>adresa ai taga</Address>
     <IsScanning>true</IsScanning>
     <ScanTime>2000</ScanTime>
     <Driver>RTU</Driver>
     <Units>C</Units>
     <Address>a1</Address>
     <Description>neki tag</Description>
-    <LowLimit>-10</LowLimit>
-    <HighLimit>50</HighLimit>
+    <LowLimit>-50</LowLimit>
+    <HighLimit>150</HighLimit>
     <Alarms>
       <Alarm>
         <Id>1</Id>
         <Type>HIGH</Type>
         <Priority>1</Priority>
-        <Limit>0</Limit>
+        <Limit>45</Limit>
       </Alarm>
       <Alarm>
         <Id>2</Id>
         <Type>LOW</Type>
         <Priority>2</Priority>
-        <Limit>0</Limit>
+        <Limit>5</Limit>
       </Alarm>
     </Alarms>
   </Tag>
@@ -70,25 +59,25 @@
     <Id>5</Id>
     <TagName>AI_Tag</TagName>
     <IsScanning>true</IsScanning>
-    <ScanTime>2000</ScanTime>
+    <ScanTime>5000</ScanTime>
     <Driver>RTU</Driver>
     <Units>C</Units>
     <Address>a2</Address>
     <Description>novi taaaag</Description>
-    <LowLimit>-10</LowLimit>
-    <HighLimit>50</HighLimit>
+    <LowLimit>-20</LowLimit>
+    <HighLimit>120</HighLimit>
     <Alarms>
       <Alarm>
         <Id>3</Id>
         <Type>HIGH</Type>
-        <Priority>1</Priority>
+        <Priority>3</Priority>
         <Limit>40</Limit>
       </Alarm>
       <Alarm>
         <Id>4</Id>
         <Type>LOW</Type>
         <Priority>2</Priority>
-		  <Limit>-5</Limit>
+        <Limit>-5</Limit>
       </Alarm>
     </Alarms>
   </Tag>
@@ -101,20 +90,20 @@
     <Units>C</Units>
     <Address>a3</Address>
     <Description>jos jedan ai tag</Description>
-    <LowLimit>-10</LowLimit>
-    <HighLimit>50</HighLimit>
+    <LowLimit>0</LowLimit>
+    <HighLimit>100</HighLimit>
     <Alarms>
       <Alarm>
         <Id>5</Id>
         <Type>HIGH</Type>
         <Priority>1</Priority>
-		  <Limit>40</Limit>
+        <Limit>90</Limit>
       </Alarm>
       <Alarm>
         <Id>6</Id>
         <Type>LOW</Type>
         <Priority>2</Priority>
-		  <Limit>-5</Limit>
+        <Limit>5</Limit>
       </Alarm>
     </Alarms>
   </Tag>
