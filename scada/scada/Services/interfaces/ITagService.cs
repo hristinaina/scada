@@ -25,9 +25,16 @@ namespace scada.Services.interfaces
 
         public void ReceiveRTUValue(RTUData rtu);
 
+        public Alarm InsertAlarm(AlarmDTO alarmDTO);
+
         public List<Alarm> GetAllAlarms();
 
         public Alarm GetAlarmById(int id);
+        
         public AITag GetTagByAlarmId(int id);
+
+        public bool DeleteAlarm(int alarmId);
+
+        public List<Alarm> GetAlarmsByTagId(int id);
     }
 }

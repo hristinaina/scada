@@ -4,7 +4,6 @@ using scada.Data.Config;
 using scada.Drivers;
 using scada.Models;
 using scada.Repositories;
-using scada.Services.interfaces;
 using Microsoft.AspNetCore.SignalR;
 using scada.Hubs;
 using Google.Protobuf.WellKnownTypes;

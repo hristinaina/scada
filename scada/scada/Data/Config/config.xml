@@ -68,13 +68,13 @@
     <HighLimit>120</HighLimit>
     <Alarms>
       <Alarm>
-        <Id>1</Id>
+        <Id>3</Id>
         <Type>HIGH</Type>
         <Priority>3</Priority>
         <Limit>40</Limit>
       </Alarm>
       <Alarm>
-        <Id>2</Id>
+        <Id>4</Id>
         <Type>LOW</Type>
         <Priority>2</Priority>
         <Limit>-5</Limit>
@@ -94,13 +94,13 @@
     <HighLimit>100</HighLimit>
     <Alarms>
       <Alarm>
-        <Id>3</Id>
+        <Id>5</Id>
         <Type>HIGH</Type>
         <Priority>1</Priority>
         <Limit>90</Limit>
       </Alarm>
       <Alarm>
-        <Id>4</Id>
+        <Id>6</Id>
         <Type>LOW</Type>
         <Priority>2</Priority>
         <Limit>5</Limit>

@@ -1,4 +1,5 @@
 ﻿using Google.Protobuf.WellKnownTypes;
+﻿using scada.DTO;
 
 namespace scada.Models
 {
@@ -13,6 +14,16 @@ namespace scada.Models
         public override string ToString()
         {
             return $"{Id}|{Type.ToString()}|{Limit}|{Priority}";
+        }
+
+        public Alarm() { }
+
+        public Alarm(AlarmDTO alarmDTO)
+        {
+            if (alarmDTO.Type == "LOW") Type = AlarmType.LOW;
+            else Type = AlarmType.HIGH;
+            Priority = alarmDTO.Priority;
+            Limit = alarmDTO.Limit;
         }
 
     }

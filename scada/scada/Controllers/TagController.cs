@@ -103,5 +103,52 @@ namespace scada.Controllers
             _service.ReceiveRTUValue(rtu);
             return Ok(new { Message = "Value changed." });
         }
+
+        [HttpPost("alarm")]
+        public IActionResult InsertAlarm([FromBody] AlarmDTO alarmDTO)
+        {
+            try
+            {
+                _service.InsertAlarm(alarmDTO);
+                return Ok(new { Message = "Alarm added successfully." });
+            }
+            catch (BadRequestException ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
+
+        }
+
+        [HttpDelete("alarm/{id}")]
+        public IActionResult DeleteAlarm([FromRoute] int id)
+        {
+            try
+            {
+                _service.DeleteAlarm(id);
+                return Ok(new { Message = "Alarm deleted successfully!" });
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(new { error = ex.Message });
+            }
+            catch (BadRequestException ex)
+            {
+                return NotFound(new { error = ex.Message });
+            }
+        }
+
+        [HttpGet("alarm/{id}")]
+        public IActionResult GetAlarms(int id)
+        {
+            try
+            {
+                List<Alarm> alarms =_service.GetAlarmsByTagId(id);
+                return Ok(alarms);
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(new { error = ex.Message });
+            }
+        }
     }
 }

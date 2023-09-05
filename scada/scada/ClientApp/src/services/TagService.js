@@ -23,6 +23,12 @@ class TagService {
         const data = await response.json();
         return data;
     }
+
+    static async getAlarms(tagId) {
+        const response = await fetch('http://localhost:5083/api/tag/alarm/' + tagId);
+        const data = await response.json();
+        return data;
+    }
 }
 
 export default TagService;
