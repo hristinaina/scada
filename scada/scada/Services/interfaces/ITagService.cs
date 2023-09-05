@@ -29,5 +29,6 @@ namespace scada.Services.interfaces
 
         void InsertTag(Tag tag);
         void ChangeScan(int id);
+        void EditTag(EditTagDTO th);
     }
 }

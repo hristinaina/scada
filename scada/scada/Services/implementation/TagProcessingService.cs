@@ -61,6 +61,17 @@ namespace scada.Services
                 threads[tag.Id] = t;
                 t.Start(tag);
             }
+
+            foreach (var tag in ConfigHelper.ParseTags<DOTag>(_tagService.Get()))
+            {
+                RTUDriver.SetValue(tag.Address, tag.Value);
+            }
+
+            foreach (var tag in ConfigHelper.ParseTags<AOTag>(_tagService.Get()))
+            {
+                RTUDriver.SetValue(tag.Address, tag.Value);
+            }
+
         }
 
         private void ScanAnalog(object param)

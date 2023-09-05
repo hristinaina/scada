@@ -137,12 +137,23 @@ export class DatabaseManager extends Component {
         this.setState({ editValue: event.target.value });
     };
 
-    saveEditedValue = () => {
-        this.setState({
-            showDigitalEditDialog: false,
-            showAnalogEditDialog: false
-        });
-        //todo send api
+    saveEditedValue = async() => {
+        console.log("You clicked: " + this.state.chosenTag);
+        try {
+            const tagId = this.state.chosenTag;
+            const value = this.state.editValue;
+            const filterOptions = {
+                tagId,
+                value,
+            };
+            await axios.put('http://localhost:5083/api/tag/edit', filterOptions);
+            console.log("Successfully edited!");
+        }
+        catch (error) {
+            console.log("Error ocurred: ", error);
+        }
+        this.closeEditDialog();
+        this.componentDidMount();
     };
 
     closeEditDialog = () => {

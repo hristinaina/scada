@@ -127,7 +127,6 @@ namespace scada.Services.implementation
                 aitag.IsScanning = !aitag.IsScanning;
                 _tags.Remove(aitag);
                 _tags.Add(aitag);
-                XmlSerializationHelper.SaveToXml(_tags);
             }
             else if (tag is DITag)
             {
@@ -135,8 +134,29 @@ namespace scada.Services.implementation
                 ditag.IsScanning = !ditag.IsScanning;
                 _tags.Remove(ditag);
                 _tags.Add(ditag);
-                XmlSerializationHelper.SaveToXml(_tags);
             }
+            XmlSerializationHelper.SaveToXml(_tags);
+        }
+
+        public void EditTag(EditTagDTO th)
+        {
+            Tag tag = Get(th.TagId);
+            if (tag is AOTag)
+            {
+                AOTag aotag = (AOTag)tag;
+                aotag.Value = th.Value;
+                _tags.Remove(aotag);
+                _tags.Add(aotag);
+            }
+            else if (tag is DOTag)
+            {
+                DOTag dotag = (DOTag)tag;
+                dotag.Value = (int)th.Value;
+                _tags.Remove(dotag);
+                _tags.Add(dotag);
+            }
+            XmlSerializationHelper.SaveToXml(_tags);
+            RTUDriver.SetValue(tag.Address, th.Value);
         }
     }
 }

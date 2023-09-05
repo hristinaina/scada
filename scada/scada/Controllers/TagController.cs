@@ -86,6 +86,21 @@ namespace scada.Controllers
             }
         }
 
+
+        [HttpPut("edit")]
+        public IActionResult EditTag([FromBody] EditTagDTO th)
+        {
+            try
+            {
+                _service.EditTag(th);
+                return Ok("Successfully changed value!");
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(new { error = ex.Message });
+            }
+        }
+
         [HttpDelete("{id}")]
         public IActionResult Delete([FromRoute] int id)
         {
