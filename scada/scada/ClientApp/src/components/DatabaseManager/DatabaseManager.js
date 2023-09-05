@@ -24,7 +24,10 @@ export class DatabaseManager extends Component {
             isDO: false,
             isDI: false,
             showDeleteDialog: false,
-            chosenTag: -1
+            showAnalogEditDialog: false,
+            showDigitalEditDialog: false,
+            editValue: '',
+            chosenTag: -1,
         };
     }
 
@@ -114,6 +117,41 @@ export class DatabaseManager extends Component {
         this.componentDidMount();
     }
 
+    openDigitalEditDialog = (item) => {
+        this.setState({
+            showDigitalEditDialog: true,
+            chosenTag: item.id,
+            editValue: item.value,
+        });
+    }
+
+    openAnalogEditDialog = (item) => {
+        this.setState({
+            showAnalogEditDialog: true,
+            chosenTag: item.id,
+            editValue: item.value,
+        });
+    }
+
+    handleEditedValueChange = (event) => {
+        this.setState({ editValue: event.target.value });
+    };
+
+    saveEditedValue = () => {
+        this.setState({
+            showDigitalEditDialog: false,
+            showAnalogEditDialog: false
+        });
+        //todo send api
+    };
+
+    closeEditDialog = () => {
+        this.setState({
+            showDigitalEditDialog: false,
+            showAnalogEditDialog: false
+        });
+    }
+
     async componentDidMount() {
         const AOData = await TagService.getAOData(); 
         const DOData = await TagService.getDOData(); 
@@ -125,7 +163,7 @@ export class DatabaseManager extends Component {
 
 
     render() {
-        const { isDropdownOpen, selectedItem, isDO, isDI, AOData, DOData, AIData, DIData, showDeleteDialog } = this.state;
+        const { isDropdownOpen, selectedItem, isDO, isDI, AOData, DOData, AIData, DIData, showDeleteDialog, showAnalogEditDialog, showDigitalEditDialog } = this.state;
 
         return (
             <div>
@@ -159,6 +197,42 @@ export class DatabaseManager extends Component {
                     </div>
                 )}
 
+                {showAnalogEditDialog && (
+                    <div className="dialog-container">
+                        <div className="delete-dialog">
+                            <h2 className="dialog-title">Edit Value</h2>
+                            <input className="input"
+                                type="text"
+                                value={this.state.editValue}
+                                onChange={this.handleEditedValueChange}
+                            />
+                            <div id="buttons">
+                                <button className="btn" id="save" onClick={this.saveEditedValue}>Save</button>
+                                <button className="btn" onClick={this.closeEditDialog}>Close</button>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                {showDigitalEditDialog && (
+                    <div className="dialog-container">
+                        <div className="delete-dialog">
+                            <h2 className="dialog-title">Edit Value</h2>
+                            <select className="input"
+                                value={this.state.editValue}
+                                onChange={this.handleEditedValueChange}
+                            >
+                                <option value="0">0</option>
+                                <option value="1">1</option>
+                            </select>
+                            <div id="buttons">
+                                <button className="btn" id="save" onClick={this.saveEditedValue}>Save</button>
+                                <button className="btn" onClick={this.closeEditDialog}>Close</button>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
                 {/*Dialogs */}
                 {selectedItem === "AI" && <AITag onClose={this.closeDialog} />}
                 {selectedItem === "AO" && <AOTag onClose={this.closeDialog} />}
@@ -187,7 +261,7 @@ export class DatabaseManager extends Component {
                                     <p className="value">{item.value} {item.units}</p>
                                     <div className="edit-delete-icons">
                                         <img src="/images/delete.png" alt="Delete" className="icon" onClick={() => this.openDeleteDialog(item.id)} />
-                                        <img src="/images/pencil.png" alt="Edit" className="icon" />
+                                        <img src="/images/pencil.png" alt="Edit" className="icon" onClick={() => this.openAnalogEditDialog(item)} />
                                     </div>
                                 </div>
                             ))
@@ -202,7 +276,7 @@ export class DatabaseManager extends Component {
                                     <p className="value">{item.value === 0 ? 'Off' : 'On'}</p>
                                     <div className="edit-delete-icons">
                                         <img src="/images/delete.png" alt="Delete" className="icon" onClick={() => this.openDeleteDialog(item.id)} />
-                                        <img src="/images/pencil.png" alt="Edit" className="icon" />
+                                        <img src="/images/pencil.png" alt="Edit" className="icon" onClick={() => this.openDigitalEditDialog(item)} />
                                     </div>
                                 </div>
                             ))
