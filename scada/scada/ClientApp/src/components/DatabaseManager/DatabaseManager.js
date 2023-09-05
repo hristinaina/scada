@@ -28,6 +28,8 @@ export class DatabaseManager extends Component {
             showDigitalEditDialog: false,
             editValue: '',
             chosenTag: -1,
+            highLimit: 0,
+            lowLimit: 0
         };
     }
 
@@ -130,6 +132,8 @@ export class DatabaseManager extends Component {
             showAnalogEditDialog: true,
             chosenTag: item.id,
             editValue: item.value,
+            lowLimit: item.lowLimit,
+            highLimit: item.highLimit
         });
     }
 
@@ -139,6 +143,14 @@ export class DatabaseManager extends Component {
 
     saveEditedValue = async() => {
         console.log("You clicked: " + this.state.chosenTag);
+        if (this.state.showAnalogEditDialog)
+        {
+            if (this.state.editValue > this.state.highLimit || this.state.editValue < this.state.lowLimit)
+            {
+                console.log("Value not in range!");
+                return;
+            }
+        }
         try {
             const tagId = this.state.chosenTag;
             const value = this.state.editValue;
@@ -233,8 +245,8 @@ export class DatabaseManager extends Component {
                                 value={this.state.editValue}
                                 onChange={this.handleEditedValueChange}
                             >
-                                <option value="0">0</option>
-                                <option value="1">1</option>
+                                <option value="0">Off</option>
+                                <option value="1">On</option>
                             </select>
                             <div id="buttons">
                                 <button className="btn" id="save" onClick={this.saveEditedValue}>Save</button>
