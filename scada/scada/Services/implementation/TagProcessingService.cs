@@ -111,7 +111,7 @@ namespace scada.Services
                     {
                         if (alarm.Type == AlarmType.HIGH && currentValue >= alarm.Limit || alarm.Type == AlarmType.LOW && currentValue <= alarm.Limit)
                         {
-                            alarmDTO.Description = alarm.Type + " then " + alarm.Limit;
+                            alarmDTO.Description = alarm.Type + "ER than " + alarm.Limit;
                             alarmDTO.Priority = alarm.Priority;
                             
                             lock (_lock)
