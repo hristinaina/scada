@@ -14,7 +14,7 @@
     <Id>2</Id>
     <TagName>AO_Tag</TagName>
     <Description>ao tag jeeeee</Description>
-    <Address>neka adresa</Address>
+    <Address>adresa1</Address>
     <Units>V</Units>
     <LowLimit>0</LowLimit>
     <HighLimit>10</HighLimit>
@@ -23,9 +23,9 @@
   </Tag>
   <Tag xsi:type="DOTag">
     <Id>6</Id>
-    <TagName>Neki tag</TagName>
+    <TagName>DO_Tag</TagName>
     <Description>alalala</Description>
-    <Address>adresica</Address>
+    <Address>adresa2</Address>
     <Value>1</Value>
   </Tag>
   <Tag xsi:type="AITag">
@@ -86,9 +86,9 @@
     <TagName>AI_Tag2</TagName>
     <IsScanning>true</IsScanning>
     <ScanTime>2000</ScanTime>
-    <Driver>RTU</Driver>
+    <Driver>SIM</Driver>
     <Units>C</Units>
-    <Address>a3</Address>
+    <Address>s1</Address>
     <Description>jos jedan ai tag</Description>
     <LowLimit>0</LowLimit>
     <HighLimit>100</HighLimit>
