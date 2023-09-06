@@ -16,6 +16,9 @@ namespace scada.Services.implementation
 
         private readonly object _lock = new object();
 
+        private ITagHistoryService _tagHistoryService = new TagHistoryService();
+        private IAlarmHistoryService _alarmHistoryService = new AlarmHistoryService();
+
         public TagService() 
         {
             _tags = Load();    
@@ -157,6 +160,77 @@ namespace scada.Services.implementation
             }
             XmlSerializationHelper.SaveToXml(_tags);
             RTUDriver.SetValue(tag.Address, th.Value);
+        }
+
+        public Alarm InsertAlarm(AlarmDTO alarmDTO)
+        {
+            Alarm alarm = new Alarm(alarmDTO);
+            alarm.Id = generateAlarmId(alarmDTO.TagId);
+            AITag aiTag = GetAITags().FirstOrDefault(item => item.Id == alarmDTO.TagId);
+            if (isAlarmAdded(aiTag, alarm.Type)) throw new BadRequestException("Alarm already added.");
+            if (!checkAlarmLimit(aiTag, alarm)) throw new BadRequestException("Invalid data!");
+            _tags.Remove(aiTag);
+            aiTag.Alarms.Add(alarm);
+            _tags.Add(aiTag);
+            XmlSerializationHelper.SaveToXml(_tags);
+            return alarm;
+        }
+
+        private bool isAlarmAdded(AITag aiTag, AlarmType type)
+        {
+            foreach (Alarm alarm in aiTag.Alarms) if (alarm.Type == type) return true;
+            return false;
+        }
+
+        private bool checkAlarmLimit(AITag aiTag, Alarm alarm)
+        {
+            bool isLow = alarm.Type == AlarmType.LOW;
+
+            foreach (Alarm a in aiTag.Alarms)
+            {
+                if ((isLow && a.Type == AlarmType.HIGH && a.Limit < alarm.Limit) ||
+                    (!isLow && a.Type == AlarmType.LOW && a.Limit > alarm.Limit))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        private int generateAlarmId(int tagId)
+        {
+            List<Alarm> alarms = GetAllAlarms();
+            int id = 0;
+            foreach (Alarm alarm in alarms) if (alarm.Id > id) id = alarm.Id;
+            return ++id;
+        }
+
+        public bool DeleteAlarm(int alarmId)
+        {
+            AITag aiTag = GetTagByAlarmId(alarmId);
+            if (aiTag == null) throw new NotFoundException("Tag with specified alarm not found!");
+            
+            foreach (Alarm alarm in aiTag.Alarms) 
+            { 
+                if (alarm.Id == alarmId) 
+                {
+                    _tags.Remove(aiTag);
+                    aiTag.Alarms.Remove(alarm);
+                    _tags.Add(aiTag);
+                    _alarmHistoryService.Delete(alarmId);
+                    XmlSerializationHelper.SaveToXml(_tags); 
+                    return true;
+                } 
+            }
+            throw new NotFoundException("Alarm not found!");
+        }
+
+        public List<Alarm> GetAlarmsByTagId(int id)
+        {
+            AITag aiTag = GetAITags().FirstOrDefault(item => item.Id == id);
+            if (aiTag == null) throw new NotFoundException("Tag not found!");
+            return aiTag.Alarms;
         }
     }
 }

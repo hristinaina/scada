@@ -1,5 +1,4 @@
-﻿using scada.Models;
-using System.Xml.Serialization;
+﻿using System.Xml.Serialization;
 
 namespace scada.Data
 {
@@ -7,7 +6,7 @@ namespace scada.Data
     {
 
         private static String _filePath = "Data/Config/config.xml";
-        private static object fileLock = new object(); // Shared lock object
+        private static object fileLock = new object(); // shared lock object
 
 
         public static List<T> LoadFromXml<T>()

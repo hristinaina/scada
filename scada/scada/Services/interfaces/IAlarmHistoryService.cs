@@ -8,5 +8,6 @@ namespace scada.Services
         public List<AlarmHistory> Get();
         List<AlarmHistoryDTO> GetAlarmsByTime(FilterDTO filterDTO);
         List<AlarmHistoryDTO> GetByPriority(int priority);
+        public bool Delete(int id);
     }
 }
