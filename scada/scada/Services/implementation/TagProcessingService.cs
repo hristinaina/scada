@@ -164,22 +164,32 @@ namespace scada.Services
 
         public bool Delete(int id)
         {
+            List<Tag> tagsToRemove = new List<Tag>();
+
             foreach (Tag tag in _tagService.Get())
             {
                 if (tag.Id == id)
                 {
                     _tagHistoryService.Delete(id);
-                    _tagService.RemoveTag(tag);
+                    tagsToRemove.Add(tag);
 
                     //delete a thread
                     if (tag is AITag || tag is DITag)
                     {
-                        Thread t = threads[tag.Id];
-                        threads.Remove(tag.Id);
+                        if (threads.ContainsKey(tag.Id))
+                        {
+                            threads.Remove(tag.Id);
+                        }
                         return true;
                     }
                 }
             }
+
+            foreach (var tagToRemove in tagsToRemove)
+            {
+                _tagService.RemoveTag(tagToRemove);
+            }
+
             throw new NotFoundException("Tag not found!");
         }
 
