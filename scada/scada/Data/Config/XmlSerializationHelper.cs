@@ -32,7 +32,6 @@ namespace scada.Data
                 File.WriteAllText(_filePath, string.Empty);
 
                 XmlSerializer serializer = new XmlSerializer(typeof(List<T>));
-
                 using (TextWriter writer = new StreamWriter(_filePath))
                 {
                     serializer.Serialize(writer, objects);

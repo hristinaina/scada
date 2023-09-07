@@ -7,28 +7,31 @@ using scada.Repositories;
 using Microsoft.AspNetCore.SignalR;
 using scada.Hubs;
 using Google.Protobuf.WellKnownTypes;
+using scada.Exceptions;
+using Newtonsoft.Json;
+using scada.Services.implementation;
+using Azure;
+using System.Threading;
 using scada.Logging;
+using scada.Services.interfaces;
 
 namespace scada.Services
 {
     public class TagProcessingService : ITagProcessingService
     {
-        private List<Tag> _tags;
-        private List<AITag> _analog;
-        private List<DITag> _digital;
         private readonly IHubContext<TagHub> _tagHub;
-
+        private ITagHistoryService _tagHistoryService;
         private TagHistoryRepository _tagHistoryRepository;
         private AlarmHistoryRepository _alarmHistoryRepository;
 
         private AlarmLogging _alarmLogging;
+        private ITagService _tagService;
+        private static IDictionary<int, Thread> threads = new Dictionary<int, Thread>();
 
-        public TagProcessingService(TagHistoryRepository tagHistoryRepository, AlarmHistoryRepository alarmHistoryRepository, IHubContext<TagHub> tagHub, AlarmLogging alarmLogging)
-        {
-            _tags = XmlSerializationHelper.LoadFromXml<Tag>();
-            _analog = ConfigHelper.ParseTags<AITag>(_tags);
-            _digital = ConfigHelper.ParseTags<DITag>(_tags);
+        public TagProcessingService(TagHistoryRepository tagHistoryRepository, AlarmHistoryRepository alarmHistoryRepository, ITagService tagService, ITagHistoryService tagHistoryService,IHubContext<TagHub> tagHub, AlarmLogging alarmLogging) {
             _tagHistoryRepository = tagHistoryRepository;
+            _tagService = tagService;
+            _tagHistoryService = tagHistoryService;
             _alarmHistoryRepository = alarmHistoryRepository;
             _tagHub = tagHub;
             _alarmLogging = alarmLogging;
@@ -48,26 +51,34 @@ namespace scada.Services
             _alarmHistoryRepository.Insert(alarmHistory);
         }
 
-        private void receiveRTUValue(RTUData rtu)
-        {
-            RTUDriver.SetValue(rtu.Address, rtu.Value);
-        }
-
         public void Run()
         {
-            foreach (var tag in _analog) 
+            foreach (var tag in ConfigHelper.ParseTags<AITag>(_tagService.Get()))
             { 
-                    Thread t;
-                    t = new Thread(ScanAnalog);
-                    t.Start(tag);
+                Thread t;
+                t = new Thread(ScanAnalog);
+                threads[tag.Id] = t;
+                t.Start(tag);
             }
 
-            foreach (var tag in _digital)
+            foreach (var tag in ConfigHelper.ParseTags<DITag>(_tagService.Get()))
             {
-                    Thread t;
-                    t = new Thread(ScanDigital);
-                    t.Start(tag);
+                Thread t;
+                t = new Thread(ScanDigital);
+                threads[tag.Id] = t;
+                t.Start(tag);
             }
+
+            foreach (var tag in ConfigHelper.ParseTags<DOTag>(_tagService.Get()))
+            {
+                RTUDriver.SetValue(tag.Address, tag.Value);
+            }
+
+            foreach (var tag in ConfigHelper.ParseTags<AOTag>(_tagService.Get()))
+            {
+                RTUDriver.SetValue(tag.Address, tag.Value);
+            }
+
         }
 
         private void ScanAnalog(object param)
@@ -81,28 +92,26 @@ namespace scada.Services
             else
                 driver = new RTUDriver();
 
-            while (true) 
+            while (threads.ContainsKey(tag.Id)) 
             {
-                if (tag.IsScanning)
+                if ( ((AITag)_tagService.Get(tag.Id)).IsScanning)
                 {
                     try
                     {
                         currentValue = this.calculateAnalogValue(tag, driver.GetValue(tag.Address));
-                        Console.WriteLine("SCANING " + tag.Id + " " + currentValue);
+                        Console.WriteLine("SCANING " + tag.TagName + " | " + currentValue);
                     }
                     catch (Exception ex) { continue; }
 
-                    lock (_lock)
-                    {
-                        this.saveTagValue(tag.Id, currentValue); 
-                    }
+                    saveTagValue(tag.Id, currentValue); 
+                    // dodaj u config
 
                     TrendingAlarmDTO alarmDTO = new TrendingAlarmDTO();
                     foreach (Alarm alarm in tag.Alarms)
                     {
                         if (alarm.Type == AlarmType.HIGH && currentValue >= alarm.Limit || alarm.Type == AlarmType.LOW && currentValue <= alarm.Limit)
                         {
-                            alarmDTO.Description = alarm.Type + " then " + alarm.Limit;
+                            alarmDTO.Description = alarm.Type + "ER than " + alarm.Limit;
                             alarmDTO.Priority = alarm.Priority;
                             
                             lock (_lock)
@@ -132,21 +141,19 @@ namespace scada.Services
             else
                 driver = new RTUDriver();
 
-            while (true)
+            while (threads.ContainsKey(tag.Id))
             {
-                if (tag.IsScanning)
+                if (((DITag)_tagService.Get(tag.Id)).IsScanning)
                 {
                     try
                     {
                         currentValue = this.calculateDigitalValue(driver.GetValue(tag.Address));
-                        Console.WriteLine("SCANING " + tag.Id + " " + currentValue);
+                        Console.WriteLine("SCANING " + tag.TagName + " | " + currentValue);
                     }
                     catch (Exception ex) { continue; }
 
-                    lock (_lock)
-                    {
-                        this.saveTagValue(tag.Id, currentValue); 
-                    }
+                    saveTagValue(tag.Id, currentValue);
+                    // dodaj u config
 
                     this.sendCurrentValue(new TrendingTagDTO(tag, currentValue));
                 }
@@ -155,11 +162,116 @@ namespace scada.Services
             }
         }
 
+        public bool Delete(int id)
+        {
+            List<Tag> tagsToRemove = new List<Tag>();
+
+            foreach (Tag tag in _tagService.Get())
+            {
+                if (tag.Id == id)
+                {
+                    _tagHistoryService.Delete(id);
+                    tagsToRemove.Add(tag);
+
+                    //delete a thread
+                    if (tag is AITag || tag is DITag)
+                    {
+                        if (threads.ContainsKey(tag.Id))
+                        {
+                            threads.Remove(tag.Id);
+                        }
+                        
+                    }
+                }
+            }
+
+            if (tagsToRemove.Count == 0)
+            {
+                throw new NotFoundException("Tag not found!");
+            }
+
+            foreach (var tagToRemove in tagsToRemove)
+            {
+                _tagService.RemoveTag(tagToRemove);
+            }
+            return true;
+        }
+
+        public Tag Insert(TagDTO tagDTO)
+        {
+            List<String> addresses = RTUDriver.GetAddresses();
+            Tag tag = convert(tagDTO);
+
+            if (tag != null)
+            {
+                if (tagDTO.Type == "AOTag" || tagDTO.Type == "DOTag")
+                {
+                    if (addresses.Contains(tag.Address))
+                        throw new BadRequestException("Address already in use!");
+
+                    if (tagDTO.Type == "DOTag")
+                    {
+                        DOTag dotag = (DOTag)tag;
+                        RTUDriver.SetValue(tag.Address, dotag.Value);
+                    }
+                    else if (tagDTO.Type == "AOTag")
+                    {
+                        AOTag aotag = (AOTag)tag;
+                        RTUDriver.SetValue(tag.Address, aotag.Value);
+                    }
+                }
+                tag.Id = generateId();
+                _tagService.InsertTag(tag);
+                createThread(tag, tagDTO.Type);
+                return tag;
+            }
+
+            throw new BadRequestException("Invalid tag data"); ;
+        }
+
+        private void createThread(Tag tag, string type)
+        {
+            Thread t;
+            if (type == "AITag")
+            {
+                t = new Thread(ScanAnalog);
+                threads.Add(tag.Id, t);
+                t.Start(tag);
+            }
+
+            else if (type == "DITag")
+            {
+                t = new Thread(ScanDigital);
+                threads.Add(tag.Id, t);
+                t.Start(tag);
+            }
+            //if the type is not input then do nothing
+        }
+
         private async Task sendCurrentValue(TrendingTagDTO tag)
         {           
             await _tagHub.Clients.All.SendAsync("ReceiveMessage", tag);
         }
 
+        private Tag convert(TagDTO tagDTO)
+        {
+            return tagDTO.Type switch
+            {
+                "DOTag" => JsonConvert.DeserializeObject<DOTag>(tagDTO.Data.ToString()),
+                "DITag" => JsonConvert.DeserializeObject<DITag>(tagDTO.Data.ToString()),
+                "AOTag" => JsonConvert.DeserializeObject<AOTag>(tagDTO.Data.ToString()),
+                "AITag" => JsonConvert.DeserializeObject<AITag>(tagDTO.Data.ToString()),
+                _ => null // handle unknown types
+            };
+        }
+
+        private int generateId()
+        {
+            int id = 1;
+            foreach (Tag tag in _tagService.Get()) if (tag.Id > id) id = tag.Id;
+            return ++id;
+        }
+        
         private double calculateAnalogValue(AITag tag, double value)
         {
             return value > tag.HighLimit ? tag.HighLimit : (value < tag.LowLimit ? tag.LowLimit : value);

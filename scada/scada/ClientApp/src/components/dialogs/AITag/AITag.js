@@ -47,7 +47,8 @@ const AITag = ({ onClose }) => {
                 Units: units,
                 LowLimit: lowLimit,
                 HighLimit: highLimit,
-                Driver: driver
+                Driver: driver,
+                IsScanning: true,
             }
         }
 
