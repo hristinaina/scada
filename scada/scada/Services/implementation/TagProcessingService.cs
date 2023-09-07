@@ -180,17 +180,21 @@ namespace scada.Services
                         {
                             threads.Remove(tag.Id);
                         }
-                        return true;
+                        
                     }
                 }
+            }
+
+            if (tagsToRemove.Count == 0)
+            {
+                throw new NotFoundException("Tag not found!");
             }
 
             foreach (var tagToRemove in tagsToRemove)
             {
                 _tagService.RemoveTag(tagToRemove);
             }
-
-            throw new NotFoundException("Tag not found!");
+            return true;
         }
 
         public Tag Insert(TagDTO tagDTO)

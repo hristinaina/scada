@@ -25,8 +25,16 @@ namespace scada.Controllers
         [HttpGet()]
         public IActionResult Get()
         {
-            List<Tag> tags = _service.Get();
-            return Ok(tags);
+            try
+            {
+                List<Tag> tags = _service.Get();
+                return Ok(tags);
+            }
+            catch(NotFoundException ex)
+            {
+                return NotFound(new { error = ex.Message });
+            }
+
         }
 
         [HttpGet("do")]
