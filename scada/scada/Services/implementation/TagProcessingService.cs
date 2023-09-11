@@ -14,6 +14,7 @@ using Azure;
 using System.Threading;
 using scada.Logging;
 using scada.Services.interfaces;
+using scada.Database;
 
 namespace scada.Services
 {
@@ -41,6 +42,20 @@ namespace scada.Services
 
         private void saveTagValue(int tag, double value)
         {
+            using (var dbContext = new ApplicationDbContext())
+            {
+                List<TagHistory> tagHistories = dbContext.TagHistory.ToList();
+                TagHistory lastTagHistory = tagHistories
+                .Where(history => history.TagId == tag)
+                .OrderByDescending(history => history.Timestamp)
+                .FirstOrDefault();
+
+                if (lastTagHistory != null)
+                {
+                    if (lastTagHistory.Value == value) return;
+                }
+            }
+
             TagHistory tagHistory = new TagHistory(tag, value);
             _tagHistoryRepository.Insert(tagHistory);
         }
@@ -153,7 +168,7 @@ namespace scada.Services
                     catch (Exception ex) { continue; }
 
                     saveTagValue(tag.Id, currentValue);
-                    // dodaj u config
+                    
 
                     this.sendCurrentValue(new TrendingTagDTO(tag, currentValue));
                 }
