@@ -122,7 +122,9 @@ namespace scada.Services
                     // dodaj u config
 
                     TrendingAlarmDTO alarmDTO = new TrendingAlarmDTO();
-                    foreach (Alarm alarm in tag.Alarms)
+                    AITag aitag = (AITag) _tagService.Get(tag.Id);
+
+                    foreach (Alarm alarm in aitag.Alarms)
                     {
                         if (alarm.Type == AlarmType.HIGH && currentValue >= alarm.Limit || alarm.Type == AlarmType.LOW && currentValue <= alarm.Limit)
                         {
