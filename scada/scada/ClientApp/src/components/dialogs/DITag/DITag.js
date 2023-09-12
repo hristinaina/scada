@@ -32,7 +32,8 @@ const DITag = ({ onClose }) => {
                 Description: description,
                 Address: address,
                 ScanTime: scanTime,
-                Driver: driver
+                Driver: driver,
+                isScanning: true,
             }
         }
 

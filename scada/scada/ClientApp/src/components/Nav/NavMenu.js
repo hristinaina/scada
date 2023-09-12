@@ -35,21 +35,20 @@ export class NavMenu extends Component {
                         <ul className="navbar-nav flex-grow">
                             {isAdmin && (
                                 <React.Fragment>
-                                    <NavItem>
+                                    <NavItem className="nav-text">
                                         <NavLink tag={Link} className="text-light" to="/trending">Trending</NavLink>
                                     </NavItem>                          
-                                    <NavItem>
+                                    <NavItem className="nav-text">
                                         <NavLink tag={Link} className="text-light" to="/database-manager">DB Manager</NavLink>
                                     </NavItem>
-                                    <NavItem>
+                                    <NavItem className="nav-text">
                                         <NavLink tag={Link} className="text-light" to="/reports">Reports</NavLink>
                                     </NavItem>
                                 </React.Fragment>
                             )}
-                            
-                            <NavItem>
+                            <NavItem className="nav-text">
                                 <NavLink tag={Link} className="text-light" to="/">Log out</NavLink>
-                            </NavItem>
+                                </NavItem>
                         </ul>
                     </Collapse>
                 </Navbar>

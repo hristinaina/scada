@@ -1,8 +1,13 @@
 #add-tag {
     text-align: right;
     width: 100%;
- 
     font-size: large;
+}
+
+#plus {
+    height: 17px;
+    text-align: right;
+    padding-bottom: 2px;
 }
 
 #add-tag:hover {

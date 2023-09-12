@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import { NavMenu } from '../Nav/NavMenu';
 import './Trending.css';
 import '../../fonts.css';
-import { HubConnectionBuilder } from "@microsoft/signalr";
-
+import TrendingService from '../../services/TrendingService';
 
 export class Trending extends Component {
   static displayName = Trending.name;
@@ -15,23 +14,12 @@ export class Trending extends Component {
          tags: []
       };
 
-      this.connection = new HubConnectionBuilder()
-          .withUrl("http://localhost:5083/Hub/tag") 
-          .build();
+      this.tagConnection = TrendingService.createConnection("http://localhost:5083/Hub/tag");
   }
 
   componentDidMount() {
 
-      this.connection
-          .start()
-          .then(() => {
-              console.log("Connected to WebSocket server");
-          })
-          .catch((error) => {
-              console.error(error);
-          });
-
-      this.connection.on("ReceiveMessage", (tag) => {
+      this.tagConnection?.on("ReceiveMessage", (tag) => {
           const currentTags = [...this.state.tags];
           const existingTagIndex = currentTags.findIndex(t => t.tagName === tag.tagName);
 
@@ -39,30 +27,48 @@ export class Trending extends Component {
               currentTags.push(tag);
           } else {
               currentTags[existingTagIndex].value = tag.value;
+              currentTags[existingTagIndex].alarm = tag.alarm;
           }
-
           this.setState({ tags: currentTags });   
       });
 
-      this.interval = setInterval(this.renderForecastsTable, 1000);
+      this.interval = setInterval(this.renderTagsTable, 1000);
     }
 
     componentWillUnmount() {
         clearInterval(this.interval);
-        this.connection.stop();
+        this.tagConnection.stop();
+    }
+
+    static getAlarmPriorityClass(priority) {
+        switch (priority) {
+           case 1:
+                return "low-priority-row";
+           case 2:
+                return "medium-priority-row";
+           case 3:
+                return "high-priority-row";
+           default:
+                return "";
+        }
     }
 
 
-    static renderForecastsTable(tags) {
+    static renderTagsTable(tags) {
         if (!tags || tags.length === 0) {
-            return <p>No data available.</p>;
+            return <p>No data available</p>;
         }
+
+        tags.sort((a, b) => b.alarm.priority - a.alarm.priority);
+
         return (
-          <table className="table table-striped" aria-labelledby="tableLabel">
+          <table className="table" aria-labelledby="tableLabel">
             <thead>
               <tr>
                 <th>Tag name</th>
                 <th>Type</th>
+                <th>Address</th>
+                <th>Driver</th>
                 <th>Description</th>
                 <th>Scan Time (ms)</th>
                 <th>Range</th>
@@ -71,15 +77,17 @@ export class Trending extends Component {
               </tr>
             </thead>
             <tbody>
-              {tags.map(tag =>
-                <tr key={tag.tagName}>
-                  <td>{tag.tagName}</td>
-                  <td>{tag.type}</td>
-                  <td>{tag.description}</td>
-                  <td>{tag.scanTime}</td>
-                  <td>{tag.range}</td>
-                  <td>{tag.value}</td>
-                  <td></td>
+                {tags.map(tag =>
+                <tr key={tag.tagName} className={Trending.getAlarmPriorityClass(tag.alarm.priority)}>
+                    <td>{tag.tagName}</td>
+                    <td>{tag.type}</td>
+                    <td>{tag.address}</td>
+                    <td>{tag.driver}</td>
+                    <td>{tag.description}</td>
+                    <td>{tag.scanTime}</td>
+                    <td>{tag.range}</td>
+                    <td>{tag.value}</td>
+                    <td>{tag.alarm.description}</td>
                 </tr>
               )}
             </tbody>
@@ -88,7 +96,7 @@ export class Trending extends Component {
     }
 
   render() {
-    let contents = Trending.renderForecastsTable(this.state.tags);
+    let contents = Trending.renderTagsTable(this.state.tags);
 
     return (
         <div>

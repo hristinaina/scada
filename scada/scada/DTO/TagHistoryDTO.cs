@@ -1,4 +1,5 @@
 ﻿using Azure;
+using Google.Protobuf.WellKnownTypes;
 using scada.Models;
 
 namespace scada.DTO
@@ -8,7 +9,7 @@ namespace scada.DTO
         public int TagId { get; set; }
         public string Name { get; set; }
         public string Type { get; set; }
-        public double Value { get; set; }
+        public string Value { get; set; }
         public string Units { get; set; }
         public DateTime Date { get; set; }
 
@@ -17,7 +18,10 @@ namespace scada.DTO
             TagId = tag.Id;
             Name = tag.TagName;
             Type = getType(tag);
-            if (tagHistory != null) Value = tagHistory.Value;
+            if (tagHistory != null) {
+                Value = tagHistory.Value.ToString();
+                if (tag is DITag || tag is DOTag)  Value = (tagHistory.Value > 0) ? "on" : "off";
+            }
             if (tagHistory != null) Date = tagHistory.Timestamp;
             if (tag is AITag aiTag) Units = aiTag.Units;
             if (tag is AOTag aoTag) Units = aoTag.Units;

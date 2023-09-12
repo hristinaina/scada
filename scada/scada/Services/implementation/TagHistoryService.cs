@@ -1,11 +1,8 @@
-﻿using Azure;
-using scada.Database;
+﻿using scada.Database;
 using scada.DTO;
-using scada.Exceptions;
 using scada.Models;
 using scada.Services.implementation;
 using scada.Repositories;
-using System.Reflection.Metadata.Ecma335;
 
 namespace scada.Services
 {
@@ -67,7 +64,7 @@ namespace scada.Services
                         })
                     .Select(result => new TagHistoryDTO(result.AITag, result.LastTagHistory))
                     .ToList();
-                result = result.OrderBy(item => item.Date).ToList();
+                result = result.OrderByDescending(item => item.Date).ToList();
                 return result;
             }
         }
@@ -91,7 +88,7 @@ namespace scada.Services
                         })
                     .Select(result => new TagHistoryDTO(result.DITag, result.LastTagHistory))
                     .ToList();
-                result = result.OrderBy(item => item.Date).ToList();
+                result = result.OrderByDescending(item => item.Date).ToList();
                 return result;
             }
         }
@@ -111,7 +108,7 @@ namespace scada.Services
                     dto.Add(new TagHistoryDTO(new TagService().Get(th.TagId), th));
                 }
             }
-            dto = dto.OrderBy(item => item.Date).ToList();
+            dto = dto.OrderByDescending(item => item.Date).ToList();
             return dto;
         }
 

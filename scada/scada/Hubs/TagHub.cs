@@ -1,11 +1,11 @@
 using Microsoft.AspNetCore.SignalR;
 using scada.Models;
 
-namespace scada.WebSockets
+namespace scada.Hubs
 {
-    public class WebSocket : Hub
+    public class TagHub : Hub
     {
-        public async Task SendMessage(DITag tag)
+        public async Task SendTag(DITag tag)
         {
             await Clients.All.SendAsync("ReceiveMessage", tag);
         }

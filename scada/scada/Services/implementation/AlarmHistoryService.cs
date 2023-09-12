@@ -2,19 +2,27 @@
 using scada.Database;
 using scada.DTO;
 using scada.Models;
+using scada.Repositories;
 using scada.Services.implementation;
 
 namespace scada.Services
 {
     public class AlarmHistoryService : IAlarmHistoryService
     {
+        private AlarmHistoryRepository _repository;
+
+        public AlarmHistoryService() 
+        { 
+        }
+
+        public AlarmHistoryService(AlarmHistoryRepository alarmHistoryRepository)
+        {
+            this._repository = alarmHistoryRepository;
+        }
+
         public List<AlarmHistory> Get()
         {
-            using (var dbContext = new ApplicationDbContext())
-            {
-                var alarmHistory = dbContext.AlarmHistory.ToList();
-                return alarmHistory;
-            }
+            return _repository.Get();
         }
 
         List<AlarmHistoryDTO> IAlarmHistoryService.GetAlarmsByTime(FilterDTO filter)
@@ -36,7 +44,7 @@ namespace scada.Services
             if (filter.SortingType == "priority")
                 dto = dto.OrderBy(item => item.Priority).ToList();
             else if (filter.SortingType == "time")
-                dto = dto.OrderBy(item => item.Date).ToList();
+                dto = dto.OrderByDescending(item => item.Date).ToList();
 
             return dto;
         }
@@ -58,9 +66,25 @@ namespace scada.Services
                 }
             }
 
-            dto = dto.OrderBy(item => item.Date).ToList();
+            dto = dto.OrderByDescending(item => item.Date).ToList();
 
             return dto;
+        }
+
+        public bool Delete(int id)
+        {
+            using (var dbContext = new ApplicationDbContext())
+            {
+                List <AlarmHistory> alarmsToDelete = dbContext.AlarmHistory.Where(u => u.AlarmId == id).ToList();
+
+                if (alarmsToDelete != null)
+                {
+                    dbContext.AlarmHistory.RemoveRange(alarmsToDelete);
+                    dbContext.SaveChanges();
+                    return true;
+                }
+                return false;
+            }
         }
     }
 }

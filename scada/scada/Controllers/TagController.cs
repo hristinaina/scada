@@ -13,18 +13,28 @@ namespace scada.Controllers
     {
 
         private readonly ITagService _service;
+        private readonly ITagProcessingService _tagProcessingService ;
 
 
-        public TagController(ITagService tagService)
+        public TagController(ITagService tagService, TagProcessingService tagProcessingService)
         {
             _service = tagService;
+            _tagProcessingService = tagProcessingService;
         }
 
         [HttpGet()]
         public IActionResult Get()
         {
-            List<Tag> tags = _service.Get();
-            return Ok(tags);
+            try
+            {
+                List<Tag> tags = _service.Get();
+                return Ok(tags);
+            }
+            catch(NotFoundException ex)
+            {
+                return NotFound(new { error = ex.Message });
+            }
+
         }
 
         [HttpGet("do")]
@@ -70,11 +80,40 @@ namespace scada.Controllers
             }
         }
 
+        [HttpPut("scan{id}")]
+        public IActionResult ChangeScan([FromRoute] int id)
+        {
+            try
+            {
+                _service.ChangeScan(id);
+                return Ok("Successfully changed scan!");
+            }
+            catch (BadRequestException ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
+        }
+
+
+        [HttpPut("edit")]
+        public IActionResult EditTag([FromBody] EditTagDTO th)
+        {
+            try
+            {
+                _service.EditTag(th);
+                return Ok("Successfully changed value!");
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(new { error = ex.Message });
+            }
+        }
+
         [HttpDelete("{id}")]
         public IActionResult Delete([FromRoute] int id)
         {
             try { 
-                _service.Delete(id);
+                _tagProcessingService.Delete(id);
                 return Ok("Successfully deleted!"); 
             }
             catch (NotFoundException ex)
@@ -88,7 +127,7 @@ namespace scada.Controllers
         {
             try
             {
-                Tag tag = _service.Insert(tagInput);
+                Tag tag = _tagProcessingService.Insert(tagInput);
                 return Ok(tag);
             }
             catch (BadRequestException ex)
@@ -102,6 +141,53 @@ namespace scada.Controllers
         {
             _service.ReceiveRTUValue(rtu);
             return Ok(new { Message = "Value changed." });
+        }
+
+        [HttpPost("alarm")]
+        public IActionResult InsertAlarm([FromBody] AlarmDTO alarmDTO)
+        {
+            try
+            {
+                _service.InsertAlarm(alarmDTO);
+                return Ok(new { Message = "Alarm added successfully." });
+            }
+            catch (BadRequestException ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
+
+        }
+
+        [HttpDelete("alarm/{id}")]
+        public IActionResult DeleteAlarm([FromRoute] int id)
+        {
+            try
+            {
+                _service.DeleteAlarm(id);
+                return Ok(new { Message = "Alarm deleted successfully!" });
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(new { error = ex.Message });
+            }
+            catch (BadRequestException ex)
+            {
+                return NotFound(new { error = ex.Message });
+            }
+        }
+
+        [HttpGet("alarm/{id}")]
+        public IActionResult GetAlarms(int id)
+        {
+            try
+            {
+                List<Alarm> alarms =_service.GetAlarmsByTagId(id);
+                return Ok(alarms);
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(new { error = ex.Message });
+            }
         }
     }
 }

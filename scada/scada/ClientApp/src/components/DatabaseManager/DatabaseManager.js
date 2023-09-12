@@ -8,6 +8,8 @@ import { NavMenu } from "../Nav/NavMenu";
 import './DatabaseManager.css';
 import TagService from "../../services/TagService";
 import axios from 'axios';
+import Alarms from "../dialogs/Alarm/Alarms";
+import CreateAlarmDialog from "../dialogs/CreateAlarm/CreateAlarmDialog";
 
 
 export class DatabaseManager extends Component {
@@ -24,7 +26,14 @@ export class DatabaseManager extends Component {
             isDO: false,
             isDI: false,
             showDeleteDialog: false,
-            chosenTag: -1
+            showAnalogEditDialog: false,
+            showDigitalEditDialog: false,
+            editValue: '',
+            chosenTag: -1,
+            highLimit: 0,
+            lowLimit: 0,
+            showAlarmsDialog: false,
+            showCreateAlarmDialog: false,
         };
     }
 
@@ -40,8 +49,32 @@ export class DatabaseManager extends Component {
         }));
     };
 
-    toggleValue = (itemId) => {
-        // TODO Implementirati logiku za promenu isScanning atributa sa dati itemId
+    toggleValue = async(item) => {
+        const newItem = { ...item };
+        newItem.isScanning = !newItem.isScanning;
+
+        this.setState(prevState => ({
+            DIData: prevState.DIData.map(dataItem => {
+                if (dataItem.id === newItem.id) {
+                    return newItem;
+                }
+                return dataItem;
+            }),
+            AIData: prevState.AIData.map(dataItem => {
+                if (dataItem.id === newItem.id) {
+                    return newItem;
+                }
+                return dataItem;
+            })
+        }));
+
+        try {
+            await axios.put('http://localhost:5083/api/tag/scan' + item.id);
+            console.log("Successfully changed scan on/off!");
+        }
+        catch (error) {
+            console.log("Error ocurred: ", error);
+        }
     }
 
     toggleDropdown = () => {
@@ -77,8 +110,34 @@ export class DatabaseManager extends Component {
         });
     }
 
+    openAlarmsDialog = (id) => {
+        this.setState({
+            showAlarmsDialog: true,
+            chosenTag: id,
+        });
+    }
+
+    closeAlarmsDialog = () => {
+        this.setState({
+            showAlarmsDialog: false,
+            chosenTag: null,
+        });
+    }
+
+    openCreateAlarmDialog = () => {
+        this.setState({
+            showCreateAlarmDialog: true,
+        });
+    }
+
+    closeCreateAlarmDialog = () => {
+        this.setState({
+            showCreateAlarmDialog: false,
+            showAlarmsDialog: false,
+        });
+    }
+
     delete = async () => {
-        console.log("You clicked: " + this.state.chosenTag);
         try {
             await axios.delete('http://localhost:5083/api/tag/' + this.state.chosenTag);
             console.log("Successfully deleted!");
@@ -88,6 +147,62 @@ export class DatabaseManager extends Component {
         }
         this.closeDeleteDialog();
         this.componentDidMount();
+    }
+
+    openDigitalEditDialog = (item) => {
+        this.setState({
+            showDigitalEditDialog: true,
+            chosenTag: item.id,
+            editValue: item.value,
+        });
+    }
+
+    openAnalogEditDialog = (item) => {
+        this.setState({
+            showAnalogEditDialog: true,
+            chosenTag: item.id,
+            editValue: item.value,
+            lowLimit: item.lowLimit,
+            highLimit: item.highLimit
+        });
+    }
+
+    handleEditedValueChange = (event) => {
+        this.setState({ editValue: event.target.value });
+    };
+
+    saveEditedValue = async() => {
+        console.log("You clicked: " + this.state.chosenTag);
+        if (this.state.showAnalogEditDialog)
+        {
+            if (this.state.editValue > this.state.highLimit || this.state.editValue < this.state.lowLimit)
+            {
+                console.log("Value not in range!");
+                return;
+            }
+        }
+        try {
+            const tagId = this.state.chosenTag;
+            const value = this.state.editValue;
+            const filterOptions = {
+                tagId,
+                value,
+            };
+            await axios.put('http://localhost:5083/api/tag/edit', filterOptions);
+            console.log("Successfully edited!");
+        }
+        catch (error) {
+            console.log("Error ocurred: ", error);
+        }
+        this.closeEditDialog();
+        this.componentDidMount();
+    };
+
+    closeEditDialog = () => {
+        this.setState({
+            showDigitalEditDialog: false,
+            showAnalogEditDialog: false
+        });
     }
 
     async componentDidMount() {
@@ -101,15 +216,15 @@ export class DatabaseManager extends Component {
 
 
     render() {
-        const { isDropdownOpen, selectedItem, isDO, isDI, AOData, DOData, AIData, DIData, showDeleteDialog } = this.state;
+        const { isDropdownOpen, selectedItem, isDO, isDI, AOData, DOData, AIData, DIData,
+                showDeleteDialog, showAlarmsDialog, showCreateAlarmDialog, chosenTag, showAnalogEditDialog, showDigitalEditDialog } = this.state;
 
         return (
             <div>
                 <NavMenu showNavbar={true} />
                 <h1 id="tableLabel">Database Manager</h1>
-                {/*<img alt="." src="../..images/plus.png"/>*/}
-
-                <p id="add-tag" onClick={this.toggleDropdown}>Add tag</p>
+                <p id="add-tag" onClick={this.toggleDropdown}>
+                    <img alt="." src="/images/plus.png" id="plus" /> Add tag</p>
 
                 {isDropdownOpen && (
                     <div id="dropdown">
@@ -134,6 +249,46 @@ export class DatabaseManager extends Component {
                         </div>
                     </div>
                 )}
+
+                {showAnalogEditDialog && (
+                    <div className="dialog-container">
+                        <div className="delete-dialog">
+                            <h2 className="dialog-title">Edit Value</h2>
+                            <input className="input"
+                                type="text"
+                                value={this.state.editValue}
+                                onChange={this.handleEditedValueChange}
+                            />
+                            <div id="buttons">
+                                <button className="btn" id="save" onClick={this.saveEditedValue}>Save</button>
+                                <button className="btn" onClick={this.closeEditDialog}>Close</button>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                {showDigitalEditDialog && (
+                    <div className="dialog-container">
+                        <div className="delete-dialog">
+                            <h2 className="dialog-title">Edit Value</h2>
+                            <select className="input"
+                                value={this.state.editValue}
+                                onChange={this.handleEditedValueChange}
+                            >
+                                <option value="0">Off</option>
+                                <option value="1">On</option>
+                            </select>
+                            <div id="buttons">
+                                <button className="btn" id="save" onClick={this.saveEditedValue}>Save</button>
+                                <button className="btn" onClick={this.closeEditDialog}>Close</button>
+                            </div>
+                        </div>
+                    </div>
+                )}
+                {/*TODO : add here alarms dialog tag*/}
+                {showAlarmsDialog && <Alarms onClose={this.closeAlarmsDialog} openCreateAlarmDialog={this.openCreateAlarmDialog} tagId={chosenTag} />}
+
+                {showCreateAlarmDialog && <CreateAlarmDialog onClose={this.closeCreateAlarmDialog} tagId={chosenTag} />}
 
                 {/*Dialogs */}
                 {selectedItem === "AI" && <AITag onClose={this.closeDialog} />}
@@ -163,7 +318,7 @@ export class DatabaseManager extends Component {
                                     <p className="value">{item.value} {item.units}</p>
                                     <div className="edit-delete-icons">
                                         <img src="/images/delete.png" alt="Delete" className="icon" onClick={() => this.openDeleteDialog(item.id)} />
-                                        <img src="/images/pencil.png" alt="Edit" className="icon" />
+                                        <img src="/images/pencil.png" alt="Edit" className="icon" onClick={() => this.openAnalogEditDialog(item)} />
                                     </div>
                                 </div>
                             ))
@@ -178,7 +333,7 @@ export class DatabaseManager extends Component {
                                     <p className="value">{item.value === 0 ? 'Off' : 'On'}</p>
                                     <div className="edit-delete-icons">
                                         <img src="/images/delete.png" alt="Delete" className="icon" onClick={() => this.openDeleteDialog(item.id)} />
-                                        <img src="/images/pencil.png" alt="Edit" className="icon" />
+                                        <img src="/images/pencil.png" alt="Edit" className="icon" onClick={() => this.openDigitalEditDialog(item)} />
                                     </div>
                                 </div>
                             ))
@@ -210,10 +365,10 @@ export class DatabaseManager extends Component {
                                     <p className="value">{item.driver === 0 ? 'SIMULATION' : 'RTU'}</p>
                                     <div className="edit-delete-icons">
                                         <img style={{ marginRight: '15px' }} src="/images/delete.png" alt="Delete" className="icon" onClick={() => this.openDeleteDialog(item.id)} />
-                                        <img style={{ marginRight: '15px', marginBottom: '2px', marginTop: '2px' }} src="/images/bell.png" alt="Alarm" className="icon" />
+                                        <img style={{ marginRight: '15px', marginBottom: '2px', marginTop: '2px' }} src="/images/bell.png" alt="Alarm" className="icon" onClick={() => this.openAlarmsDialog(item.id)} />
                                         <div
                                             className={`toggle-button ${item.isScanning ? 'on' : ''}`}
-                                            onClick={() => this.toggleValue(item.id)}>
+                                            onClick={() => this.toggleValue(item)}>
                                             {item.isScanning ? 'on' : 'off'}
                                         </div>
                                     </div>
@@ -233,7 +388,7 @@ export class DatabaseManager extends Component {
                                         <img style={{ marginRight: '15px' }} src="/images/delete.png" alt="Delete" className="icon" onClick={() => this.openDeleteDialog(item.id)} />
                                         <div
                                             className={`toggle-button ${item.isScanning ? 'on' : ''}`}
-                                            onClick={() => this.toggleValue(item.id)}>
+                                            onClick={() => this.toggleValue(item)}>
                                             {item.isScanning ? 'on' : 'off'}
                                         </div>
                                     </div>
